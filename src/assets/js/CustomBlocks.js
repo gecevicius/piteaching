@@ -35,27 +35,14 @@ Blockly.Blocks['set_gpio'] = {
 };
 
 Blockly.JavaScript['set_gpio'] = function(block) {
-
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
-  var Gpio = require('onoff').Gpio;
-  var component = new Gpio(pin,'out')
-  var blinkInterval = setInterval(blinkLED, 250);
-  function blinkLED() { //function to start blinking
-  if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
-    component.writeSync(1); //set pin state to 1 (turn LED on)
-  } else {
-    component.writeSync(0); //set pin state to 0 (turn LED off)
-  }
-}
-function endBlink() { //function to stop blinking
-  clearInterval(blinkInterval); // Stop blink intervals
-  component.writeSync(0); // Turn LED off
-  component.unexport(); // Unexport GPIO to free resources
-}
+  var code = 'setOutput('+pin+','+output+');';
+  return code;
 
-setTimeout(endBlink, 5000); //stop blinking after 5 seconds
 };
 
 
 export default Blockly
+
+
