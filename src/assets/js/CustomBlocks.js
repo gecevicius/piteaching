@@ -46,7 +46,7 @@ Blockly.JavaScript['set_gpio'] = function(block) {
 var setOutput = Blockly.JavaScript.provideFunction_(
     'setOutput',
     [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(pin,output,Gpio,component) {',
-      "var fs = require('fs')"
+      "var fs = require('fs');",
       "var blinkInterval = setInterval(blinkLED, 250);",
       "function blinkLED() {",
       "if (LED.readSync() === 0) {",
