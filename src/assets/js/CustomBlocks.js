@@ -35,26 +35,25 @@ Blockly.Blocks['set_gpio'] = {
 };
 
 Blockly.JavaScript['set_gpio'] = function(block) {
-	  var setOutput = function(pin,output){
-    var Gpio = require('onoff').Gpio;
-    var component = new Gpio(pin,'out')
-    var blinkInterval = setInterval(blinkLED, 250);
-  function blinkLED() { //function to start blinking
-  if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
-    component.writeSync(1); //set pin state to 1 (turn LED on)
-  } else {
-    component.writeSync(0); //set pin state to 0 (turn LED off)
-  }
-  function endBlink() { //function to stop blinking
-  clearInterval(blinkInterval); // Stop blink intervals
-  component.writeSync(0); // Turn LED off
-  component.unexport(); // Unexport GPIO to free resources
-}
-setTimeout(endBlink, 5000); //stop blinking after 5 seconds
-}
+	  
+    
+    
+   //function to start blinking
+   //check the pin state, if the state is 0 (or off)
+     //set pin state to 1 (turn LED on)
+  
+     //set pin state to 0 (turn LED off)
+  
+  //function to stop blinking
+   // Stop blink intervals
+   // Turn LED off
+   // Unexport GPIO to free resources
+
+ //stop blinking after 5 seconds
 
 
-}
+
+
 
 
   var pin = block.getFieldValue('PIN')
@@ -63,6 +62,29 @@ setTimeout(endBlink, 5000); //stop blinking after 5 seconds
   return code;
 
 };
+
+
+var functionName = Blockly.JavaScript.provideFunction_(
+    'list_lastElement',
+    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(aList) {',
+        "var Gpio = require('onoff').Gpio;",
+      '  return aList[aList.length - 1];',
+      "var component = new Gpio(pin,'out')",
+      "    var component = new Gpio(pin,'out')",
+      "var blinkInterval = setInterval(blinkLED, 250);",
+      "function blinkLED() {",
+      "if (LED.readSync() === 0) {",
+      "component.writeSync(1);",
+      "} else {",
+      "component.writeSync(0);}",
+      " function endBlink() {",
+      "clearInterval(blinkInterval);",
+      "component.writeSync(0);",
+      "component.unexport();",
+      "}setTimeout(endBlink, 5000);}",
+      "",
+      "",
+      '}']);
 
 
 export default Blockly
