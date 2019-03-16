@@ -37,6 +37,15 @@ Blockly.Blocks['set_gpio'] = {
 Blockly.JavaScript['set_gpio'] = function(block) {
 	  
 
+
+
+
+
+  var Gpio = require('onoff').Gpio;
+  var pin = block.getFieldValue('PIN')
+  var output = block.getFieldValue('OUTPUT')
+  var code = setOutput + '(' + pin + ',' + output  + + ',' + Gpio +')';
+
 var setOutput = Blockly.JavaScript.provideFunction_(
     'setOutput',
     [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(pin,output,Gpio) {',
@@ -56,15 +65,8 @@ var setOutput = Blockly.JavaScript.provideFunction_(
       "",
       "",
       '}']);
-
-
-
-  var Gpio = require('onoff').Gpio;
-  var pin = block.getFieldValue('PIN')
-  var output = block.getFieldValue('OUTPUT')
-  var code = setOutput + '(' + pin + ',' + output  + + ',' + Gpio+')';
+  
   return code;
-
 };
 
 
