@@ -39,9 +39,7 @@ Blockly.JavaScript['set_gpio'] = function(block) {
 
 var setOutput = Blockly.JavaScript.provideFunction_(
     'setOutput',
-    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(aList) {',
-        "var Gpio = require('onoff').Gpio;",
-      '  return aList[aList.length - 1];',
+    [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(pin,output,Gpio) {',
       "var component = new Gpio(pin,'out')",
       "    var component = new Gpio(pin,'out')",
       "var blinkInterval = setInterval(blinkLED, 250);",
@@ -61,10 +59,10 @@ var setOutput = Blockly.JavaScript.provideFunction_(
 
 
 
-
+  var Gpio = require('onoff').Gpio;
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
-  var code = setOutput + '(' + pin + ',' + output  + ')';
+  var code = setOutput + '(' + pin + ',' + output  + + ',' + Gpio')';
   return code;
 
 };
