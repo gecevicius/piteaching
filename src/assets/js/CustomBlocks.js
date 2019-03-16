@@ -36,36 +36,9 @@ Blockly.Blocks['set_gpio'] = {
 
 Blockly.JavaScript['set_gpio'] = function(block) {
 	  
-    
-    
-   //function to start blinking
-   //check the pin state, if the state is 0 (or off)
-     //set pin state to 1 (turn LED on)
-  
-     //set pin state to 0 (turn LED off)
-  
-  //function to stop blinking
-   // Stop blink intervals
-   // Turn LED off
-   // Unexport GPIO to free resources
 
- //stop blinking after 5 seconds
-
-
-
-
-
-
-  var pin = block.getFieldValue('PIN')
-  var output = block.getFieldValue('OUTPUT')
-  var code = 'setOutput('+pin+','+output+');';
-  return code;
-
-};
-
-
-var functionName = Blockly.JavaScript.provideFunction_(
-    'list_lastElement',
+var setOutput = Blockly.JavaScript.provideFunction_(
+    'setOutput',
     [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(aList) {',
         "var Gpio = require('onoff').Gpio;",
       '  return aList[aList.length - 1];',
@@ -85,6 +58,19 @@ var functionName = Blockly.JavaScript.provideFunction_(
       "",
       "",
       '}']);
+
+
+
+
+  var pin = block.getFieldValue('PIN')
+  var output = block.getFieldValue('OUTPUT')
+  var code = setOutput + '(' + pin + ',' + output  + ')';
+  return code;
+
+};
+
+
+
 
 
 export default Blockly
