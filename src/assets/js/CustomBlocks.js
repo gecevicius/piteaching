@@ -62,7 +62,7 @@ var setOutput = Blockly.JavaScript.provideFunction_(
   var Gpio = require('onoff').Gpio;
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
-  var code = setOutput + '(' + pin + ',' + output  + + ',' + Gpio')';
+  var code = setOutput + '(' + pin + ',' + output  + + ',' + Gpio+')';
   return code;
 
 };
