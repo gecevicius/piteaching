@@ -16,7 +16,7 @@
       </xml>
     </div>
     <div id="code-generation">
-      <button @click="generate">GENERATOR</button>
+      <button @click="setOutput">GENERATOR</button>
       <label>js</label>
       <textarea id="js-code"></textarea>
     </div>
@@ -72,7 +72,6 @@
 
 methods : {
   generate : function(){
-    setOutput()
     /* 
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
@@ -85,25 +84,22 @@ methods : {
     }*/
   },
   setOutput : function(){
-    var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
-var LED = new Gpio(4, 'out'); //use GPIO pin 4, and specify that it is output
-var blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
+    var Gpio = require('onoff').Gpio, // Constructor function for Gpio objects.
+    led = new Gpio(4, 'out'),    // Export GPIO #17 as an output.
+    iv;
+    
+// Toggle the state of the LED on GPIO #17 every 200ms.
+// Here synchronous methods are used. Asynchronous methods are also available.
+iv = setInterval(function() {
+    led.writeSync(led.readSync() === 0 ? 1 : 0); // 1 = on, 0 = off :)
+  }, 200);
 
-function blinkLED() { //function to start blinking
-  if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
-    LED.writeSync(1); //set pin state to 1 (turn LED on)
-  } else {
-    LED.writeSync(0); //set pin state to 0 (turn LED off)
-  }
-}
-
-function endBlink() { //function to stop blinking
-  clearInterval(blinkInterval); // Stop blink intervals
-  LED.writeSync(0); // Turn LED off
-  LED.unexport(); // Unexport GPIO to free resources
-}
-
-setTimeout(endBlink, 5000); //stop blinking after 5 seconds
+// Stop blinking the LED and turn it off after 5 seconds.
+setTimeout(function() {
+    clearInterval(iv); // Stop blinking
+    led.writeSync(0);  // Turn LED off.
+    led.unexport();    // Unexport GPIO and free resources
+  }, 5000);
 
 }
 
