@@ -84,23 +84,25 @@ methods : {
     }*/
   },
   setOutput : function(){
-    var wpi = require('wiring-pi');
+    cvar Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+var LED = new Gpio(4, 'out'); //use GPIO pin 4, and specify that it is output
+var blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
 
-// GPIO pin of the led
-var configPin = 7;
-// Blinking interval in usec
-var configTimeout = 1000;
+function blinkLED() { //function to start blinking
+  if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+    LED.writeSync(1); //set pin state to 1 (turn LED on)
+  } else {
+    LED.writeSync(0); //set pin state to 0 (turn LED off)
+  }
+}
 
-wpi.setup('wpi');
-wpi.pinMode(configPin, wpi.OUTPUT);
+function endBlink() { //function to stop blinking
+  clearInterval(blinkInterval); // Stop blink intervals
+  LED.writeSync(0); // Turn LED off
+  LED.unexport(); // Unexport GPIO to free resources
+}
 
-var isLedOn = 0;
-
-setInterval(function() {
-  isLedOn = +!isLedOn;
-  //isLedOn = !isLedOn;
-  wpi.digitalWrite(configPin, isLedOn );
-}, configTimeout);
+setTimeout(endBlink, 5000); //stop blinking after 5 seconds
 
 }
 
