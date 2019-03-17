@@ -13,10 +13,11 @@
   },
   "dependencies": {
     "cookie-parser": "^1.4.4",
+    "epoll": "^2.0.9",
     "morgan": "^1.9.1",
     "node-blockly": "^1.0.35",
     "node-gyp": "^3.8.0",
-    "onoff": "^4.1.0",
+    "onoff": "^4.1.1",
     "pigpio": "^1.2.2",
     "rebuild": "^0.1.2",
     "vue": "^2.5.2",

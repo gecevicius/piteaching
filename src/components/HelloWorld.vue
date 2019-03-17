@@ -84,25 +84,27 @@ methods : {
     }*/
   },
   setOutput : function(){
-    const Gpio = require('pigpio').Gpio;
-
-    const led = new Gpio(4, {mode: Gpio.OUTPUT});
-
-    let dutyCycle = 0;
-
-    setInterval(() => {
-      led.pwmWrite(dutyCycle);
-
-      dutyCycle += 5;
-      if (dutyCycle > 255) {
-        dutyCycle = 0;
-      }
-    }, 20);
-
-  }
-
-
+	const Gpio = require('onoff').Gpio;
+ 
+const useLed = (led, value) => led.writeSync(value);
+ 
+let led;
+ 
+if (Gpio.accessible) {
+  led = new Gpio(17, 'out');
+  // more real code here
+} else {
+  led = {
+    writeSync: (value) => {
+      console.log('virtual led now uses value: ' + value);
+    }
+  };
 }
+ 
+useLed(led, 1);
+}
+}
+
 
 }
 
