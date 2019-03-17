@@ -86,6 +86,11 @@ methods : {
   },
 
   setOutput : function(){
+    var fs = require('fs');
+    console.log(fs.existsSync);
+
+
+    
     var Gpio = require('onoff').Gpio;
 var LED = new Gpio(17, 'out'); //use GPIO pin 4, and specify that it is output
 var blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
