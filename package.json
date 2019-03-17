@@ -22,7 +22,7 @@
     "rebuild": "^0.1.2",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
-    "vuetify": "^1.5.5",
+    "vuetify": "^1.5.6",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {

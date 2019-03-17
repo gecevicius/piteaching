@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Nav></Nav>
     <div id="blocklyArea">
       <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
 
@@ -28,11 +29,11 @@
 
 <script>
   import Blockly from '../assets/js/CustomBlocks'
+  import Nav from '../components/Nav'
   export default {
     name: 'HelloWorld',
     data () {
       return {
-        msg: 'Welcome to Your Vue.js App',
         blocklyArea : '',
         blocklyDiv :'',
         workspace :'', 
@@ -72,36 +73,35 @@
 
 methods : {
   generate : function(){
-    /* 
+
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
-    var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+    var code = Blockly.Python.workspaceToCode(this.workspace);
     document.getElementById('js-code').innerHTML = code
 
     try {
       eval(code);
     } catch (e) {
       alert(e);
-    }*/
-  },
-  setOutput : function(){
-	const Gpio = require('onoff').Gpio;
- 
-const useLed = (led, value) => led.writeSync(value);
- 
-let led;
- 
-if (Gpio.accessible) {
-  led = new Gpio(17, 'out');
-  // more real code here
-} else {
-  led = {
-    writeSync: (value) => {
-      console.log('virtual led now uses value: ' + value);
     }
-  };
+  },
+
+  setOutput : function(){
+    var Gpio = require('onoff').Gpio;
+var LED = new Gpio(17, 'out'); //use GPIO pin 4, and specify that it is output
+var blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
+function blinkLED() { //function to start blinking
+  if (LED.readSync() === 0) { //check the pin state, if the state is 0 (or off)
+    LED.writeSync(1); //set pin state to 1 (turn LED on)
+  } else {
+    LED.writeSync(0); //set pin state to 0 (turn LED off)
+  }
 }
- 
-useLed(led, 1);
+function endBlink() { //function to stop blinking
+  clearInterval(blinkInterval); // Stop blink intervals
+  LED.writeSync(0); // Turn LED off
+  LED.unexport(); // Unexport GPIO to free resources
+}
+setTimeout(endBlink, 5000); //stop blinking after 5 seconds
 }
 }
 
