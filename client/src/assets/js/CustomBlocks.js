@@ -28,20 +28,15 @@ Blockly.Blocks['set_gpio'] = {
 
    this.setColour(160);
    this.setPreviousStatement(true, 'Action');
-   this.setTooltip('Returns number of letters in the provided text.');
-   this.setHelpUrl('http://www.w3schools.com/jsref/jsref_length_string.asp');
    this.setPreviousStatement(true);
  }
 };
 
 Blockly.JavaScript['set_gpio'] = function(block) {
 
-
-  var Gpio = require('onoff').Gpio;
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
-  var component = new Gpio(pin,'out')	
-  var code = setOutput + '(' + pin + ',' + output  + ')';
+  var code = 'setOutput(' + pin + ',' + output  + ')';
 
   return code;
 };

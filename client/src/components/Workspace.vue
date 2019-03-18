@@ -90,18 +90,19 @@
 methods : {
   generate : function(){
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
-    var code = Blockly.Python.workspaceToCode(this.workspace);
+    var code = Blockly.JavaScript.workspaceToCode(this.workspace);
     this.code = code;
-   /*  try {
-      eval(code);
+
+    try {
+      eval("this."+code);
     } catch (e) {
       alert(e);
-    }*/
+    }
   },
 
-  setOutput : function(){
+  setOutput : function(pin){
     const apiService = new APIService();
-    apiService.setOutput().then((data) => {
+    apiService.setOutput(pin).then((data) => {
       console.log(data)
     });
   }
