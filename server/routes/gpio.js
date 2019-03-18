@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Gpio = require('../onoff').Gpio; // Gpio class
+const Gpio = require('onoff').Gpio; // Gpio class
 
 /* GET users listing. */
 router.get('/set-output', function(req, res, next) {
