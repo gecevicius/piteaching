@@ -28,7 +28,7 @@ Blockly.Blocks['set_gpio'] = {
 
    this.setColour(160);
    this.setPreviousStatement(true, 'Action');
-   this.setPreviousStatement(true);
+   this.setNextStatement(true, 'Action');
  }
 };
 
