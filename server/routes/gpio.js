@@ -4,8 +4,8 @@ const Gpio = require('onoff').Gpio; // Gpio class
 
 /* GET users listing. */
 router.post('/set-output', function(req, res, next) {
-  	var pin = req.body.pin,
-  	var output = req.body.output,
+  	var pin = req.body.pin;
+  	var output = req.body.output;
 	const led = new Gpio(pin, 'out'); 
 	const iv = setInterval(_ => led.writeSync(led.readSync() ^ 1), 200);
 	setTimeout(_ => {
