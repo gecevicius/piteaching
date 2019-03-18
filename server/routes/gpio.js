@@ -3,9 +3,10 @@ var router = express.Router();
 const Gpio = require('onoff').Gpio; // Gpio class
 
 /* GET users listing. */
-router.get('/set-output', function(req, res, next) {
-  
-	const led = new Gpio(4, 'out'); 
+router.post('/set-output', function(req, res, next) {
+  	var pin = req.body.pin,
+  	var output = req.body.output,
+	const led = new Gpio(pin, 'out'); 
 	const iv = setInterval(_ => led.writeSync(led.readSync() ^ 1), 200);
 	setTimeout(_ => {
 	  clearInterval(iv); 

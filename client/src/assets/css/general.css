@@ -1,0 +1,20 @@
+@font-face {
+	font-family: SourceSansPro;
+	src: url(./fonts/SourceSansPro-Regular.ttf);
+}
+
+body {
+	font-family:SourceSansPro;
+}
+
+#blocklyArea{
+	display: flex;
+	justify-content: space-between;
+}
+
+#code{
+	width:33%;
+	background: #fff;
+	z-index: 100;
+	padding:24px;
+}

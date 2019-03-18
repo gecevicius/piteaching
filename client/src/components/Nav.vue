@@ -1,8 +1,6 @@
 <template>
 	<div>
-		AAA
 		<v-toolbar>
-			<v-toolbar-side-icon></v-toolbar-side-icon>
 			<v-toolbar-title><Logo></Logo></v-toolbar-title>
 			<v-spacer></v-spacer>
 			<v-toolbar-items class="hidden-sm-and-down">
@@ -17,6 +15,9 @@
 	import Logo from './Logo'
 	export default{
 		name:'Nav',
+		components:{
+			'Logo':Logo
+		},
 		data(){
 			return {
 

@@ -1,44 +1,58 @@
 <template>
   <div>
-    <Nav></Nav>
+    <v-toolbar>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn icon  @click="generate">
+          <v-icon large>mdi-play</v-icon>
+        </v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
     <div id="blocklyArea">
-      <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-
-      <xml id="toolbox" style="display: none">
-        <block type="controls_if"></block>
-        <block type="controls_repeat_ext"></block>
-        <block type="logic_compare"></block>
-        <block type="math_number"></block>
-        <block type="math_arithmetic"></block>
-        <block type="text"></block>
-        <block type="text_print"></block>
-        <block type="string_length"></block>
-        <block type="set_gpio"></block>
-      </xml>
+      <div id="blocklyDiv" style="height: 600px; width: 600px;"></div>
+      <div id="code">
+        <div id="code-generation">
+          <v-textarea
+          solo
+          id="js-code"
+          name="input-7-4"
+          label="Generated Python code"
+          v-model="code">
+        </v-textarea>
+        
+      </div>
     </div>
-    <div id="code-generation">
-      <button @click="setOutput">GENERATOR</button>
-      <label>js</label>
-      <textarea id="js-code"></textarea>
-    </div>
-    <div id="pi-emu">
-
-    </div>
+    <xml id="toolbox" style="display: none">
+      <block type="controls_if"></block>
+      <block type="controls_repeat_ext"></block>
+      <block type="logic_compare"></block>
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="text"></block>
+      <block type="text_print"></block>
+      <block type="string_length"></block>
+      <block type="set_gpio"></block>
+    </xml>
   </div>
+
+  <div id="pi-emu">
+
+  </div>
+</div>
 </template>
 
 <script>
   import Blockly from '../assets/js/CustomBlocks'
-  import Nav from '../components/Nav'
-  import {APIService} from '../services/APIService';
+  import {APIService} from '../services/APIService'
 
   export default {
-    name: 'HelloWorld',
+    name: 'Workspace',
     data () {
       return {
         blocklyArea : '',
         blocklyDiv :'',
         workspace :'', 
+        code:''
       }
     },
     mounted(){
@@ -75,16 +89,14 @@
 
 methods : {
   generate : function(){
-
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
     var code = Blockly.Python.workspaceToCode(this.workspace);
-    document.getElementById('js-code').innerHTML = code
-
-    try {
+    this.code = code;
+   /*  try {
       eval(code);
     } catch (e) {
       alert(e);
-    }
+    }*/
   },
 
   setOutput : function(){

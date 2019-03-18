@@ -1,22 +1,25 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+  <v-app>
+    <div id="app">
+      <Nav></Nav>
+      <router-view/>
+    </div>
+  </v-app>
 </template>
 
 <script>
+  import Nav from './components/Nav'
   export default {
-    name: 'App'
+    name: 'App',
+    components:{
+      'Nav':Nav
+    }
   }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
