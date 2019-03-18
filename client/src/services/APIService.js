@@ -8,9 +8,10 @@ export class APIService{
 	}
 
 	setOutput(pin,output) {
-		const url = `${API_URL}/gpio/set-output/`;
+		const url = `${API_URL}/gpio`;
 		return axios.post(url,{
-			pin:pin
+			pin:pin,
+			output:output
 		}).then(function (response) {
 			console.log(response);
 		})
