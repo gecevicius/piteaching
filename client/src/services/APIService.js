@@ -5,9 +5,13 @@ export class APIService{
 		
 	}
 
-	setOutput() {
+	setOutput(pin,output) {
     const url = `${API_URL}/gpio/set-output/`;
-     return axios.post(url,'high');
+     return axios.post(url,{
+     	pin:pin
+     }).then(function (response) {
+    console.log(response);
+  })
 }
 
 }
