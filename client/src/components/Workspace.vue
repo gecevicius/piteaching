@@ -94,17 +94,21 @@ methods : {
     this.code = code;
 
     try {
-      eval("this."+code);
+      eval(code);
     } catch (e) {
       alert(e);
     }
+
   },
 
-  setOutput : function(pin){
+  setOutput : function(pin,output){
     const apiService = new APIService();
-    apiService.setOutput(pin).then((data) => {
+    apiService.setOutput(pin,output).then((data) => {
       console.log(data)
     });
+  },
+  gpioClose : function(){
+    
   }
 }
 
