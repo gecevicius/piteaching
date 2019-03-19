@@ -15,7 +15,7 @@ export class APIService{
 		}).then(function (response) {
 			console.log(response);
 		})
-	},
+	}
 	close(){
 		const url = `${API_URL}/gpio`;
 		return axios.delete(url).then(function (response) {

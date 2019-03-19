@@ -8,13 +8,32 @@ router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
 	
-	if(!gpioArray.includes(pin)){
+	if(!gpioPinsArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
-		gpioArray.push(gpio)
-	}
-	gpio.writeSync(1)
-	res.send(pin+' LED with value ' + output);
 
+		gpioArray.push({
+			gpio:gpio,
+			pin:pin
+		})
+	}
+	else {
+		gpio = gpioArray.filter(obj => {
+  		return obj.pin === pin
+	})
+
+	}
+	if (Gpio.accessible) {
+		gpio.writeSync(output)
+		res.send(pin+' LED with value ' + output);
+	}
+	else {
+		res.send(pin+' pin GPIO not supported. please check pin numbers. App must be hosted on a RaspberryPi.');
+ 	 /*gpio = {
+    writeSync: (value) => {
+      res.send(pin+' LED with value ' + output);
+    }
+  };*/
+}
 });
 
 /* DELETE close GPIO connections. */
