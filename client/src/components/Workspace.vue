@@ -108,7 +108,10 @@ methods : {
     });
   },
   gpioClose : function(){
-    
+    const apiService = new APIService();
+    apiService.close().then((data) => {
+      console.log(data)
+    });
   }
 }
 
