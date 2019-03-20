@@ -7,7 +7,7 @@ var gpioArray = []
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
-	
+	if(gpioArray){
 	if(!gpioArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
 
@@ -34,6 +34,7 @@ router.post('/', function(req, res, next) {
       res.send(pin+' LED with value ' + output);
     }
   };*/
+}
 }
 });
 
