@@ -15,9 +15,9 @@ export class APIService{
 		}).then(function (response) {
 			console.log(response);
 		})
-	},
+	}
 	sendOutput(pin,output){
-		
+
 	}
 	close(){
 		const url = `${API_URL}/gpio`;

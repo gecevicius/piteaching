@@ -109,7 +109,7 @@ methods : {
     });
   },
 
-  function gpioClose() {
+  gpioClose() {
     const apiService = new APIService();
     apiService.close().then((data) => {
       console.log(data)
