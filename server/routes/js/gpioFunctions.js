@@ -1,7 +1,7 @@
 
 const Gpio = require('onoff').Gpio; // Gpio class
 
-var gpioFunctions = function(){
+export class gpiojs{
 
 	constructor(){
 		this.gpioArray = []
@@ -33,5 +33,3 @@ var gpioFunctions = function(){
 	gpioArray = []
 	}
 }
-
- module.exports = gpioFunctions;
