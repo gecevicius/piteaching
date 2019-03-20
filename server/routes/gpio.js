@@ -8,7 +8,7 @@ router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
 	
-	if(!gpioPinsArray.includes(pin)){
+	if(!gpioArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
 
 		gpioArray.push({
@@ -17,7 +17,8 @@ router.post('/', function(req, res, next) {
 		})
 	}
 	else {
-		gpio = gpioArray.filter(obj => {
+		console.log(pin)
+		const gpio = gpioArray.filter(obj => {
   		return obj.pin === pin
 	})
 
