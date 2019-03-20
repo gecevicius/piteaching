@@ -1,7 +1,7 @@
 
 
 const Gpio = require('onoff').Gpio;
-function gpiojs(){
+class gpiojs(){
 	
 	constructor(){
 		this.gpioArray = []
