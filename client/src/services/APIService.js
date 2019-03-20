@@ -15,10 +15,13 @@ export class APIService{
 		}).then(function (response) {
 			console.log(response);
 		})
+	},
+	sendOutput(pin,output){
+		
 	}
 	close(){
 		const url = `${API_URL}/gpio`;
-		return axios.delete(url).then(function (response) {
+		return axios.get(url+'/close').then(function (response) {
 			console.log(response);
 		})
 	}

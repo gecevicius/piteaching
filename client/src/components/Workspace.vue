@@ -88,7 +88,7 @@
 },
 
 methods : {
-  generate : function(){
+  generate : async function(){
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
     this.code = code;
@@ -101,7 +101,7 @@ methods : {
 
   },
 
-  setOutput : function(pin,output){
+  setOutput : async function(pin,output){
     const apiService = new APIService();
     apiService.setOutput(pin,output).then((data) => {
       console.log(data)

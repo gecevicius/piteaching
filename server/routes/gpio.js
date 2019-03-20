@@ -1,29 +1,13 @@
 var express = require('express');
 var router = express.Router();
-const Gpio = require('onoff').Gpio; // Gpio class
-var gpioArray = []
+var gpiojs = require('./js/gpioFunctions.js')
 
 /* POST set GPIO value. */
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
 	if (Gpio.accessible) {
-	if(!gpioArray.includes(pin)){
-		const gpio = new Gpio(pin, 'out'); 
-
-		gpioArray.push({
-			gpio:gpio,
-			pin:pin
-		})
-		gpio.writeSync(output)
-	}
-	else {
-		const gpio = gpioArray.filter(obj => {
-  		return obj.pin === pin
-  		gpio.writeSync(output)
-	})
-
-	}
+		gpiojs.setOutput(pin,output);
 		res.send(pin+' LED with value ' + output);
 	}
 	else {
@@ -34,11 +18,8 @@ router.post('/', function(req, res, next) {
 });
 
 /* DELETE close GPIO connections. */
-router.delete('/', function(req, res, next) {
-	gpioArray.forEach(function(i){
-		i.unexport()
-	})
-	gpioArray = []
+router.get('/close', function(req, res, next) {
+	gpiojs.close();
 });
 
 //SPRENDIMO BUDAS DEL UNEXPORT :
