@@ -2,7 +2,7 @@
 
 const Gpio = require('onoff').Gpio;
 class gpiojs{
-	
+	var
 	constructor(){
 		this.gpioArray = []
 	}
@@ -10,10 +10,10 @@ class gpiojs{
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output){
 	if (Gpio.accessible) {
-		if(!gpioArray.includes(pin)){
+		if(!this.gpioArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
 
-		gpioArray.push({
+		this.gpioArray.push({
 			gpio:gpio,
 			pin:pin
 		})
@@ -21,7 +21,7 @@ class gpiojs{
 		
 		}
 		else {
-			const gpio = gpioArray.filter(obj => {
+			const gpio = this.gpioArray.filter(obj => {
 	  		return obj.pin === pin
 	  		gpio.writeSync(output)
 		})
@@ -35,10 +35,10 @@ class gpiojs{
 	}
 
 	close(){
-		gpioArray.forEach(function(i){
+		this.gpioArray.forEach(function(i){
 		i.unexport()
 	})
-	gpioArray = []
+	this.gpioArray = []
 	}
 }
 
