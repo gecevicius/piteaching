@@ -1,11 +1,11 @@
 
 
 const Gpio = require('onoff').Gpio;
-class gpiojs(){
+class gpiojs{
 	
 	constructor(){
 		this.gpioArray = []
-	},
+	}
 
 	setOutput(pin,output){
 		if(!gpioArray.includes(pin)){
@@ -24,7 +24,7 @@ class gpiojs(){
 	})
 
 	}
-	},
+	}
 
 	close(){
 		gpioArray.forEach(function(i){
@@ -34,4 +34,4 @@ class gpiojs(){
 	}
 }
 
-export gpiojs
+module.exports = Hero;

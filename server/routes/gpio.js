@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const gpiojs = require("./js/gpioFunctions")
+const gpioFunctions = require("./js/gpioFunctions.js")
+const gpiojs = new gpioFunctions()
 
 /* POST set GPIO value. */
 router.post('/', function(req, res, next) {
