@@ -88,7 +88,7 @@
 },
 
 methods : {
-  generate : async function(){
+  async function generate(){
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
     this.code = code;
@@ -101,13 +101,14 @@ methods : {
 
   },
 
-  setOutput : async function(pin,output){
+  async function setOutput (pin,output){
     const apiService = new APIService();
     apiService.setOutput(pin,output).then((data) => {
       console.log(data)
+      this.gpioClose()
     });
   },
-  gpioClose : function(){
+  function gpioClose() {
     const apiService = new APIService();
     apiService.close().then((data) => {
       console.log(data)
