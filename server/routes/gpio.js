@@ -7,8 +7,7 @@ const gpiojs = new gpioFunctions()
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
-	if (Gpio.accessible) {
-		gpiojs.setOutput(pin,output);
+	if (gpiojs.setOutput(pin,output)) {
 		res.send(pin+' LED with value ' + output);
 	}
 	else {

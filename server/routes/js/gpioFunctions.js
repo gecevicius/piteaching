@@ -7,7 +7,9 @@ class gpiojs{
 		this.gpioArray = []
 	}
 
+	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output){
+	if (Gpio.accessible) {
 		if(!gpioArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
 
@@ -16,14 +18,20 @@ class gpiojs{
 			pin:pin
 		})
 		gpio.writeSync(output)
+		
+		}
+		else {
+			const gpio = gpioArray.filter(obj => {
+	  		return obj.pin === pin
+	  		gpio.writeSync(output)
+		})
+			
+		}
+		return true
+		
 	}
-	else {
-		const gpio = gpioArray.filter(obj => {
-  		return obj.pin === pin
-  		gpio.writeSync(output)
-	})
-
-	}
+		
+	return false
 	}
 
 	close(){
@@ -34,4 +42,4 @@ class gpiojs{
 	}
 }
 
-module.exports = Hero;
+module.exports = gpiojs;
