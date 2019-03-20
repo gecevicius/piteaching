@@ -2,7 +2,7 @@
 
 const Gpio = require('onoff').Gpio;
 class gpiojs{
-	var
+	
 	constructor(){
 		this.gpioArray = []
 	}
@@ -36,7 +36,7 @@ class gpiojs{
 
 	close(){
 		this.gpioArray.forEach(function(i){
-		i.unexport()
+		i.gpio.unexport()
 	})
 	this.gpioArray = []
 	}
