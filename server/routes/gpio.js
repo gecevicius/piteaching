@@ -7,7 +7,7 @@ var gpioArray = []
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
-	if(gpioArray){
+	if (Gpio.accessible) {
 	if(!gpioArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
 
@@ -15,27 +15,22 @@ router.post('/', function(req, res, next) {
 			gpio:gpio,
 			pin:pin
 		})
+		gpio.writeSync(output)
 	}
 	else {
-		console.log(pin)
 		const gpio = gpioArray.filter(obj => {
   		return obj.pin === pin
+  		gpio.writeSync(output)
 	})
 
 	}
-	if (Gpio.accessible) {
-		gpio.writeSync(output)
 		res.send(pin+' LED with value ' + output);
 	}
 	else {
 		res.send(pin+' pin GPIO not supported. please check pin numbers. App must be hosted on a RaspberryPi.');
- 	 /*gpio = {
-    writeSync: (value) => {
-      res.send(pin+' LED with value ' + output);
-    }
-  };*/
+ 	
 }
-}
+
 });
 
 /* DELETE close GPIO connections. */
