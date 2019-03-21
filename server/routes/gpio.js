@@ -17,6 +17,22 @@ router.post('/', function(req, res, next) {
 
 });
 
+router.get('/', function(req, res, next) {
+	var pin = req.body.pin
+	var val = gpiojs.read(pin)
+	if (val) {
+		res.send({
+			"pin":pin,
+			"val":val
+		});
+	}
+	else {
+		res.send(pin+' pin read failure. Please check if pin is connected.');
+ 	
+}
+
+});
+
 /* DELETE close GPIO connections. */
 router.get('/close', function(req, res, next) {
 	gpiojs.close();
