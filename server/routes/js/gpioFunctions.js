@@ -12,9 +12,9 @@ class gpiojs{
 
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
-	async setOutput(pin,output){
+	setOutput(pin,output){
 	if (Gpio.accessible) {
-		if(!this.gpioArray.includes(pin)){
+		if(!getByPin(pin).length > 0){
 		const gpio = new Gpio(pin, 'out'); 
 
 		this.gpioArray.push({
@@ -22,17 +22,16 @@ class gpiojs{
 			pin:pin
 		})
 
-		gpio.writeSync(output)
+
+		
+ 		 gpio.writeSync(output);
+		
 		
 		}
 		else {
-			const gpio = this.gpioArray.filter(obj => {
-	  		return obj.pin === pin
-	  		gpio.writeSync(output)
-		})
-			
+		 const gpio = getByPin(pin);
+		 gpio.writeSync(output);			
 		}
-		await this.sleep(1000);
 		return true
 		
 	}
@@ -40,6 +39,21 @@ class gpiojs{
 	return false
 	}
 
+	read(pin){
+		if(Gpio.accessible){
+			var gpio = getByPin(pin)
+			if(gpio.length > 0 ){
+				return gpio.read()
+			}
+			else return false
+		}
+	}
+
+	getByPin(pin){
+		return this.gpioArray.filter(obj => {
+	  		return obj.pin === pin
+		})
+	}
 	close(){
 		this.gpioArray.forEach(function(i){
 		i.gpio.unexport()
@@ -47,9 +61,7 @@ class gpiojs{
 	this.gpioArray = []
 	}
 
- sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+
 }
 
 module.exports = gpiojs;

@@ -53,7 +53,8 @@
         blocklyDiv :'',
         workspace :'', 
         code:'',
-        apiService : new APIService()
+        apiService : new APIService(),
+        setCalls:0
       }
     },
     mounted(){
@@ -95,22 +96,29 @@ methods : {
     this.code = code;
 
     try {
-      eval(code + " this.gpioClose();");
+      eval(code );
     } catch (e) {
       alert(e);
     }
   },
 
   setOutput (pin,output){
-    this.apiService.setOutput(pin,output).then((data) => {
-      console.log(data)
-    });
+    var self = this
+    setTimeout(function(){
+      self.apiService.setOutput(pin,output).then((data) => {
+        console.log(data)
+      })}, 500 * this.setCalls
+      )
+    console.log(500 * this.setCalls)
+    this.setCalls = this.setCalls+ 1
   },
 
   gpioClose() {
+    console.log('closed')
+   /* this.setCalls = 0
     this.apiService.close().then((data) => {
       console.log(data)
-    });
+    });*/
   }
 }
 
