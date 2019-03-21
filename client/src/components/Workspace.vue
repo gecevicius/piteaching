@@ -98,14 +98,13 @@ methods : {
     } catch (e) {
       alert(e);
     }
-
+    this.gpioClose()
   },
 
   async  setOutput (pin,output){
     const apiService = new APIService();
     apiService.setOutput(pin,output).then((data) => {
       console.log(data)
-      this.gpioClose()
     });
   },
 
