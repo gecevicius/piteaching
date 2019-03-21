@@ -19,7 +19,7 @@ router.post('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
 	var pin = req.body.pin
-	var val = gpiojs.read(pin)
+	var val = gpiojs.readVal(pin)
 	if (val) {
 		res.send({
 			"pin":pin,
