@@ -12,13 +12,13 @@ export class APIService{
 		return axios.post(url,{
 			pin:pin,
 			output:output
-		}).then(sleeper(1000)).then(function (response) {
+		}).then(this.sleeper(1000)).then(function (response) {
 			console.log(response);
 		})
 	}
 	close(){
 		const url = `${API_URL}/gpio`;
-		return axios.get(url+'/close').then(sleeper(1000)).then(function (response) {
+		return axios.get(url+'/close').then(function (response) {
 			console.log(response);
 
 		})

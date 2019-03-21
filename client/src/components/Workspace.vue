@@ -52,7 +52,8 @@
         blocklyArea : '',
         blocklyDiv :'',
         workspace :'', 
-        code:''
+        code:'',
+        apiService : new APIService()
       }
     },
     mounted(){
@@ -88,29 +89,26 @@
 },
 
 methods : {
-  async  generate(){
+  generate(){
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
     this.code = code;
 
     try {
-      eval(code);
+      eval(code + " this.gpioClose();");
     } catch (e) {
       alert(e);
     }
-    this.gpioClose()
   },
 
-  async  setOutput (pin,output){
-    const apiService = new APIService();
-    apiService.setOutput(pin,output).then((data) => {
+  setOutput (pin,output){
+    this.apiService.setOutput(pin,output).then((data) => {
       console.log(data)
     });
   },
 
   gpioClose() {
-    const apiService = new APIService();
-    apiService.close().then((data) => {
+    this.apiService.close().then((data) => {
       console.log(data)
     });
   }

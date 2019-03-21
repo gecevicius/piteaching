@@ -7,6 +7,7 @@ class gpiojs{
 		this.gpioArray = []
 	}
 
+
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output){
 	if (Gpio.accessible) {
@@ -17,6 +18,7 @@ class gpiojs{
 			gpio:gpio,
 			pin:pin
 		})
+
 		gpio.writeSync(output)
 		
 		}
@@ -27,6 +29,7 @@ class gpiojs{
 		})
 			
 		}
+		await sleep(1000);
 		return true
 		
 	}
@@ -40,6 +43,10 @@ class gpiojs{
 	})
 	this.gpioArray = []
 	}
+
+ sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 }
 
 module.exports = gpiojs;

@@ -24,9 +24,9 @@ Blockly.JavaScript['set_gpio'] = function(block) {
 
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
-  var code = 'setTimeout(()=>this.setOutput(' + pin + ',' + output  + '),500);';
+  var code = 'this.setOutput(' + pin + ',' + output  + ');';
 
-  return code;
+  return code ;
 };
 
 
