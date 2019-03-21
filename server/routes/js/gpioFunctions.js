@@ -14,17 +14,13 @@ class gpiojs{
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output){
 	if (Gpio.accessible) {
-		if(!this.getByPin(pin).length > 0){
-		const gpio = new Gpio(pin, 'out'); 
-
-		this.gpioArray.push({
-			"gpio":gpio,
-			"pin":pin
-		})
- 		 gpio.writeSync(output);
+		if(!this.gpioArray[pin]){
+		const gpio = new Gpio(pin, 'out') 
+		 this.gpioArray[pin] = gpio
+ 		 gpio.writeSync(output)
 		}
 		else {
-		 const gpio = this.getByPin(pin).gpio;
+		 const gpio = this.gpioArray[pin]
 		 gpio.writeSync(output);			
 		}
 		return true
@@ -35,26 +31,14 @@ class gpiojs{
 	}
 
 	readVal(pin){
-		try{
-		var gpioArrObj = this.getByPin(pin);
-		if(Gpio.accessible){
-			
-			if(gpioArrObj){
-				return gpio.read()
-			}
-			else return false
-		}
-		}
-		catch(e){
-			return "error : " + e
-		}
+			return this.gpioArray[pin].readSync()
+					
 	}
 
 	getByPin(pin){
 		this.gpioArray.filter(obj => {
 	  		return obj.pin === pin
 		})
-		return false
 	}
 	close(){
 		this.gpioArray.forEach(function(i){
