@@ -9,7 +9,7 @@ class gpiojs{
 
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
-	setOutput(pin,output){
+	async setOutput(pin,output){
 	if (Gpio.accessible) {
 		if(!this.gpioArray.includes(pin)){
 		const gpio = new Gpio(pin, 'out'); 
