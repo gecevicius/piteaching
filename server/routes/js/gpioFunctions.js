@@ -31,7 +31,10 @@ class gpiojs{
 	}
 
 	readVal(pin){
-			return this.gpioArray[pin].readSync()
+		var val =this.gpioArray[pin].readSync();
+		if ( val.length > 0)
+			return this.gpioArray[pin].readSync();
+		else return false
 					
 	}
 
