@@ -1,6 +1,9 @@
 
 
 const Gpio = require('onoff').Gpio;
+
+
+
 class gpiojs{
 	
 	constructor(){
@@ -29,7 +32,7 @@ class gpiojs{
 		})
 			
 		}
-		await sleep(1000);
+		await this.sleep(1000);
 		return true
 		
 	}
