@@ -10,7 +10,7 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import io from 'socket.io-client';
  
-const socket = io('http://192.168.1.247:3000/');
+const socket = io('http://192.168.1.247:3001/');
  socket.on('connect', function(){ alert("connected")});
 
 Vue.use(Vuetify,{
