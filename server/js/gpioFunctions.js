@@ -1,8 +1,5 @@
 
-
 const Gpio = require('onoff').Gpio;
-
-
 
 class gpiojs{
 	
@@ -31,9 +28,9 @@ class gpiojs{
 	}
 
 	readVal(pin){
-		var val =this.gpioArray[pin].readSync();
-		if ( val.length > 0)
-			return this.gpioArray[pin].readSync();
+		var val = this.gpioArray[pin].readSync();
+		if ( val != "undefined" && typeof val != "undefined ")
+			return val
 		else return false
 					
 	}
@@ -42,6 +39,17 @@ class gpiojs{
 		this.gpioArray.filter(obj => {
 	  		return obj.pin === pin
 		})
+	}
+
+	senseGpio(pin){
+		const button = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
+ 		this.gpioArray[pin] = button
+		button.watch((err, value) => {
+  		if (err) {
+   		 throw err;
+  		}
+ 		return readVal(pin)
+		});
 	}
 	close(){
 		this.gpioArray.forEach(function(i){

@@ -22,28 +22,44 @@
         
       </div>
     </div>
-    <xml id="toolbox" style="display: none">
-      <block type="controls_if"></block>
-      <block type="controls_repeat_ext"></block>
-      <block type="logic_compare"></block>
-      <block type="math_number"></block>
-      <block type="math_arithmetic"></block>
-      <block type="text"></block>
-      <block type="text_print"></block>
-      <block type="string_length"></block>
-      <block type="set_gpio"></block>
-    </xml>
+    <div id="console-container">
+      <div id="console">
+        <v-textarea
+        solo
+        id="console-text"
+        label="RaspberryPi Console Output"
+        v-model="console">
+      </v-textarea>
+      
+    </div>
   </div>
+  <xml id="toolbox" style="display: none">
+    <block type="controls_if"></block>
+    <block type="controls_repeat_ext"></block>
+    <block type="logic_compare"></block>
+    <block type="math_number"></block>
+    <block type="math_arithmetic"></block>
+    <block type="text"></block>
+    <block type="text_print"></block>
+    <block type="set_gpio"></block>
+    <block type="read_gpio"></block>
+    <block type="sense_gpio"></block>
+    <block type="wait_seconds"></block>
+  </xml>
+</div>
 
-  <div id="pi-emu">
+<div id="pi-emu">
 
-  </div>
+</div>
 </div>
 </template>
 
 <script>
   import Blockly from '../assets/js/CustomBlocks'
   import {APIService} from '../services/APIService'
+  import Interpreter from 'js-interpreter';
+  import initApi from '../assets/js/interpreterApi';
+  import io from 'socket.io-client';
 
   export default {
     name: 'Workspace',
@@ -54,7 +70,9 @@
         workspace :'', 
         code:'',
         apiService : new APIService(),
-        setCalls:0
+        setCalls:0,
+        interpreter:'',
+        console:''
       }
     },
     mounted(){
@@ -90,29 +108,24 @@
 },
 
 methods : {
-  generate(){
+  async generate(){
     Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
     var code = Blockly.JavaScript.workspaceToCode(this.workspace);
     this.code = code;
-
-    try {
-      eval(code );
-    } catch (e) {
-      alert(e);
-    }
+    var interpreter = new Interpreter(code, initApi);
+    this.interpreter = interpreter
+    this.runner()
   },
+  
+  runner() { 
+    if (this.interpreter.run()) { 
 
-  setOutput (pin,output){
-    var self = this
-    setTimeout(function(){
-      self.apiService.setOutput(pin,output).then((data) => {
-        console.log(data)
-      })}, 500 * this.setCalls
-      )
-    console.log(500 * this.setCalls)
-    this.setCalls = this.setCalls+ 1
-  },
-
+      setTimeout(function(){
+        this.runner
+      }, 1000); 
+      
+    } 
+  } ,
   gpioClose() {
     console.log('closed')
    /* this.setCalls = 0

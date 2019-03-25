@@ -5,6 +5,7 @@
 const path = require('path')
 
 module.exports = {
+
 devServer: {
     host: "raspberrypi", // Your Computer Name
     port: 8080
@@ -44,7 +45,8 @@ devServer: {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true
+    cssSourceMap: true,
+     
   },
 
   build: {
@@ -76,6 +78,7 @@ devServer: {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report
-  }
-
+  },
+  
+  
 }

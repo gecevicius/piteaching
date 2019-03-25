@@ -8,6 +8,11 @@ import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import './assets/css/general.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+import io from 'socket.io-client';
+ 
+const socket = io('http://192.168.1.247:3000/');
+ socket.on('connect', function(){ alert("connected")});
+
 Vue.use(Vuetify,{
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 })
