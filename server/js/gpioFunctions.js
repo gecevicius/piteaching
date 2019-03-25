@@ -20,6 +20,7 @@ class gpiojs{
 		 const gpio = this.gpioArray[pin]
 		 gpio.writeSync(output);			
 		}
+		io.emit('output update')
 		return true
 		
 	}

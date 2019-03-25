@@ -55,7 +55,7 @@ app.use(function(err, req, res, next) {
 // SOCKET
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-global.io.on('connection', () => { io.emit('hello', 'can you hear me?', 1, 2, 'abc'); });
+app.set('socketio', io);
 server.listen(3001);
 
 

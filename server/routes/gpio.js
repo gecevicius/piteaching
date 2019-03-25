@@ -7,7 +7,8 @@ const gpiojs = new gpioFunctions()
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
-	if (gpiojs.setOutput(pin,output)) {
+	const io = req.app.get('socketio');
+	if (gpiojs.setOutput(pin,output,io)) {
 		res.send(pin+' LED with value ' + output);
 	}
 	else {
@@ -22,6 +23,7 @@ router.get('/', function(req, res, next) {
 	var sense = req.query.sense
 
 	if(sense){
+		const io = req.app.get('socketio');
 		gpiojs.senseGpio(pin,io)
 	}
 	var val = gpiojs.readVal(pin)
