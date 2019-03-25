@@ -41,14 +41,15 @@ class gpiojs{
 		})
 	}
 
+	//
 	senseGpio(pin){
-		const button = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
+		const sensor = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
  		this.gpioArray[pin] = button
-		button.watch((err, value) => {
+		sensor.watch((err, value) => {
   		if (err) {
    		 throw err;
   		}
- 		return readVal(pin)
+ 		console.log(pin)
 		});
 	}
 	close(){

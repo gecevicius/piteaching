@@ -19,19 +19,16 @@
           label="Generated Python code"
           v-model="code">
         </v-textarea>
-        
+        <div id="console">
+          <v-textarea
+          solo
+          id="console-text"
+          label="RaspberryPi Console Output"
+          v-model="console">
+        </v-textarea>
       </div>
     </div>
-    <div id="console-container">
-      <div id="console">
-        <v-textarea
-        solo
-        id="console-text"
-        label="RaspberryPi Console Output"
-        v-model="console">
-      </v-textarea>
-      
-    </div>
+    
   </div>
   <xml id="toolbox" style="display: none">
     <block type="controls_if"></block>

@@ -43,7 +43,7 @@ Blockly.Blocks['read_gpio'] = {
 Blockly.JavaScript['read_gpio'] = function(block) {
 
   var pin = block.getFieldValue('PIN')
-  var code = 'readGpio(' + pin  +')';
+  var code = 'readGpio(' + pin  + ')';
 
   return code ;
 };
@@ -89,9 +89,9 @@ Blockly.Blocks['sense_gpio'] = {
 
 
 Blockly.JavaScript['sense_gpio'] = function(block) {
-
+  var sense = true;
   var pin = block.getFieldValue('PIN')
-  var code = 'senseGpio(' + pin  +')';
+  var code = 'readGpio(' + pin  + ','+sense+')';
 
   return code ;
 };

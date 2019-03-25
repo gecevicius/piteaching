@@ -19,6 +19,11 @@ router.post('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
 	var pin = req.query.pin
+	var sense = req.query.sense
+	
+	if(sense){
+		gpiojs.senseGpio(pin)
+	}
 	var val = gpiojs.readVal(pin)
 	if (val) {
 		res.send({
@@ -27,8 +32,8 @@ router.get('/', function(req, res, next) {
 	}
 	else {
 		res.send(pin+' pin read failure. Please check if pin is connected.');
+		}
  	
-}
 
 });
 

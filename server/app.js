@@ -30,10 +30,6 @@ const speedLimiter = slowDown({
   windowMs: 2000, // 15 minutes
   delayAfter: 1, // allow 100 requests per 15 minutes, then...
   delayMs: 2000 // begin adding 500ms of delay per request above 100:
-  // request # 101 is delayed by  500ms
-  // request # 102 is delayed by 1000ms
-  // request # 103 is delayed by 1500ms
-  // etc.
 });
 
 app.use(speedLimiter);
@@ -59,7 +55,7 @@ app.use(function(err, req, res, next) {
 // SOCKET
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-io.on('connection', () => { io.emit('hello', 'can you hear me?', 1, 2, 'abc'); });
+global.io.on('connection', () => { io.emit('hello', 'can you hear me?', 1, 2, 'abc'); });
 server.listen(3001);
 
 

@@ -13,11 +13,11 @@ export class APIService{
 			pin = pin.data
 			output = output.data
 		}
-
+		console.log(pin)
 		return axios.post(this.gpioUrl,{
 			pin:pin,
 			output:output
-		}).then(this.sleeper(1000)).then(function (response) {
+		}).then(function (response) {
 			console.log(response);
 		})
 	}
@@ -45,9 +45,5 @@ export class APIService{
 
 		})
 	}
-	sleeper(ms) {
-		return function(x) {
-			return new Promise(resolve => setTimeout(() => resolve(x), ms));
-		};
-	}
+
 }

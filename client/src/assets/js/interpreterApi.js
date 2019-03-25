@@ -3,6 +3,7 @@ import axios from 'axios';
 
 var apiService = new APIService();
 var setCalls = 0;
+
 function initApi(interpreter, scope) {
   // Add an API function for the alert() block.
   var wrapper = function(text) {
@@ -32,7 +33,7 @@ function initApi(interpreter, scope) {
       /* GPIO Api */
       wrapper = function(pin,output) {
         setTimeout(function(){
-          apiService.setOutput(pin,output).then((data) => {
+          apiService.setOutput(pin.data,output.data).then((data) => {
           })}, 500 * setCalls
           )
         setCalls = setCalls+ 1;
@@ -41,8 +42,14 @@ function initApi(interpreter, scope) {
       interpreter.setProperty(scope, 'setOutput',
         interpreter.createNativeFunction(wrapper));
 
-      wrapper =  function(pin,callback){
-        axios.get("http://192.168.1.247:3000/gpio/?pin="+pin,
+      wrapper =  function(pin,callback,sense){
+
+
+        axios.get("http://192.168.1.247:3000/gpio",{params : {
+
+          "pin" : pin.data,
+          "sense" : sense.data
+        }}
           ).then(function (response) {
             callback(response.data.val)
           })
