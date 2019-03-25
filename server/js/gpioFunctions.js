@@ -42,14 +42,14 @@ class gpiojs{
 	}
 
 	//
-	senseGpio(pin){
+	senseGpio(pin,io){
 		const sensor = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
  		this.gpioArray[pin] = button
 		sensor.watch((err, value) => {
   		if (err) {
    		 throw err;
   		}
- 		console.log(pin)
+ 		io.emit('sensor update',value)
 		});
 	}
 	close(){

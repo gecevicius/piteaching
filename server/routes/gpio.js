@@ -20,9 +20,9 @@ router.post('/', function(req, res, next) {
 router.get('/', function(req, res, next) {
 	var pin = req.query.pin
 	var sense = req.query.sense
-	
+
 	if(sense){
-		gpiojs.senseGpio(pin)
+		gpiojs.senseGpio(pin,io)
 	}
 	var val = gpiojs.readVal(pin)
 	if (val) {
