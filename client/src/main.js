@@ -10,8 +10,9 @@ import '@mdi/font/css/materialdesignicons.css'
 
 import io from 'socket.io-client';
  
-const socket = io('http://192.168.1.247:3001/');
- socket.on('sensor update', function(){ alert("sesnor update")});
+var socket = io('http://192.168.1.247:3001/');
+
+socket.on('sensor update', function(){ alert("sesnor update")});
 
 Vue.use(Vuetify,{
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'

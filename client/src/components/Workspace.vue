@@ -42,6 +42,8 @@
     <block type="read_gpio"></block>
     <block type="sense_gpio"></block>
     <block type="wait_seconds"></block>
+    <block type="variables_set"></block>
+    <block type="variables_get"></block>
   </xml>
 </div>
 
@@ -105,26 +107,40 @@
 },
 
 methods : {
-  async generate(){
-    Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
-    var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-    this.code = code;
-    var interpreter = new Interpreter(code, initApi);
-    this.interpreter = interpreter
-    this.runner()
-  },
-  
-  runner() { 
-    if (this.interpreter.run()) { 
+ generate(){
+  Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
+  var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+  this.code = code;
+  var interpreter = new Interpreter(code, initApi);
+  this.interpreter = interpreter
+  /*Assuming pin is numeric
+  this.interpreter = new Interpreter(
+  'readGpio(4);', initApi);
+  //initApi.wrapper(4,false,function(output){
+    console.log("output: " + output)
+  })*/
+  this.runner();
+  //console.log('Done:', this.interpreter.value);
+},
 
+runner() { 
+  try{
+    if (this.interpreter.run()) { 
       setTimeout(function(){
         this.runner
-      }, 1000); 
-      
+
+      }, 25); 
     } 
-  } ,
-  gpioClose() {
-    console.log('closed')
+    else{
+      console.log("finished : " + interpreter.global.properties['result']);
+    }
+  }
+  catch(e){
+    console.log("error:"+e);
+  }
+} ,
+gpioClose() {
+  console.log('closed')
    /* this.setCalls = 0
     this.apiService.close().then((data) => {
       console.log(data)

@@ -26,7 +26,7 @@ Blockly.JavaScript['set_gpio'] = function(block) {
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
   var code = 'setOutput(' + pin + ',' + output  + ');';
-  return code ;
+  return [code, Blockly.JavaScript.ORDER_CALL]; ;
 };
 
 Blockly.Blocks['read_gpio'] = {
@@ -43,9 +43,9 @@ Blockly.Blocks['read_gpio'] = {
 Blockly.JavaScript['read_gpio'] = function(block) {
 
   var pin = block.getFieldValue('PIN')
-  var code = 'readGpio(' + pin  + ')';
+  var code = 'readGpio(' + pin  + ',' + false + ')';
 
-  return code ;
+  return [code, Blockly.JavaScript.ORDER_CALL];
 };
 
 Blockly.defineBlocksWithJsonArray([{
@@ -70,7 +70,7 @@ Blockly.defineBlocksWithJsonArray([{
 Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
   var code = 'waitForSeconds(' + seconds + ');\n';
-  return code;
+  return [code, Blockly.JavaScript.ORDER_CALL];;
 };
 
 
@@ -93,8 +93,42 @@ Blockly.JavaScript['sense_gpio'] = function(block) {
   var pin = block.getFieldValue('PIN')
   var code = 'readGpio(' + pin  + ','+sense+')';
 
-  return code ;
+  return [code, Blockly.JavaScript.ORDER_CALL];
 };
+
+
+// Block for variable getter.
+Blockly.defineBlocksWithJsonArray([{
+  "type": "variables_get",
+  "message0": "%1",
+  "args0": [
+    {    // Beginning of the field variable dropdown
+      "type": "field_variable",
+      "name": "VAR",    // Static name of the field
+      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"    // Given at runtime
+    }    // End of the field variable dropdown
+  ],
+  "output": null,    // Null means the return value can be of any type
+}])
+
+
+// Block for variable setter.
+Blockly.defineBlocksWithJsonArray([{
+  "type": "variables_set",
+  "message0": "%{BKY_VARIABLES_SET}",
+  "args0": [
+    {
+      "type": "field_variable",
+      "name": "VAR",
+      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
+    },
+    {
+      "type": "input_value",    // This expects an input of any type
+      "name": "VALUE"
+    }
+  ],
+
+}])
 
 
 

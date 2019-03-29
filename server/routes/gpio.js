@@ -25,7 +25,9 @@ router.get('/', function(req, res, next) {
 	if(sense){
 		const io = req.app.get('socketio');
 		gpiojs.senseGpio(pin,io)
+		res.send("listening to pin" + pin)
 	}
+	else{
 	var val = gpiojs.readVal(pin)
 	if (val) {
 		res.send({
@@ -36,6 +38,7 @@ router.get('/', function(req, res, next) {
 		res.send(pin+' pin read failure. Please check if pin is connected.');
 		}
  	
+ 	}
 
 });
 

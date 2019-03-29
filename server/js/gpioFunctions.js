@@ -9,7 +9,7 @@ class gpiojs{
 
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
-	setOutput(pin,output){
+	setOutput(pin,output,io){
 	if (Gpio.accessible) {
 		if(!this.gpioArray[pin]){
 		const gpio = new Gpio(pin, 'out') 
@@ -45,7 +45,7 @@ class gpiojs{
 	//
 	senseGpio(pin,io){
 		const sensor = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
- 		this.gpioArray[pin] = button
+ 		this.gpioArray[pin] = sensor
 		sensor.watch((err, value) => {
   		if (err) {
    		 throw err;
