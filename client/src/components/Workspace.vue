@@ -6,6 +6,9 @@
         <v-btn icon  @click="generate">
           <v-icon large>mdi-play</v-icon>
         </v-btn>
+        <v-btn icon @click="stop">
+          <v-icon medium>mdi-square</v-icon>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <div id="blocklyArea">
@@ -120,7 +123,6 @@ methods : {
     console.log("output: " + output)
   })*/
   this.runner();
-  //console.log('Done:', this.interpreter.value);
 },
 
 runner() { 
@@ -139,13 +141,12 @@ runner() {
     console.log("error:"+e);
   }
 } ,
-gpioClose() {
-  console.log('closed')
-   /* this.setCalls = 0
-    this.apiService.close().then((data) => {
-      console.log(data)
-    });*/
-  }
+stop() {
+ this.setCalls = 0
+ this.apiService.close().then((data) => {
+  console.log(data)
+});
+}
 }
 
 
