@@ -101,6 +101,8 @@ Blockly.JavaScript['sense_gpio'] = function(block) {
 Blockly.defineBlocksWithJsonArray([{
   "type": "variables_get",
   "message0": "%1",
+  "previousStatement": true,
+  "nextStatement": true,
   "args0": [
     {    // Beginning of the field variable dropdown
       "type": "field_variable",
@@ -116,6 +118,8 @@ Blockly.defineBlocksWithJsonArray([{
 Blockly.defineBlocksWithJsonArray([{
   "type": "variables_set",
   "message0": "%{BKY_VARIABLES_SET}",
+   "previousStatement": true,
+  "nextStatement": true,
   "args0": [
     {
       "type": "field_variable",

@@ -50,8 +50,6 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
 
       //read gpio pin val from server
    var wrapper =  function(pin,sense,callback){
-      console.log(pin.data)
-      console.log(sense.data)
       axios.get("http://192.168.1.247:3000/gpio",{params : {
         "pin" : pin.data,
         "sense" : sense.data

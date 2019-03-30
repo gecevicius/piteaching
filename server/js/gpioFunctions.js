@@ -20,7 +20,7 @@ class gpiojs{
 		 const gpio = this.gpioArray[pin]
 		 gpio.writeSync(output);			
 		}
-		io.emit('output update')
+		io.emit('pinUpdate',{pin:pin,val:value})
 		return true
 		
 	}
@@ -50,12 +50,13 @@ class gpiojs{
   		if (err) {
    		 throw err;
   		}
- 		io.emit('sensor update',value)
+ 		io.emit('pinUpdate', {pin:pin,val:value})
 		});
 	}
 	close(){
 		this.gpioArray.forEach(function(i){
-		i.gpio.unexport()
+		i.unexport()
+		i = '';
 	})
 	this.gpioArray = []
 	}

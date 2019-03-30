@@ -11,7 +11,12 @@ import '@mdi/font/css/materialdesignicons.css'
 import VueSocketio from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 
-Vue.use(VueSocketio, io('http://192.168.1.247:3001'));
+
+const socketInstance = io('http://192.168.1.247:3001', {
+  transports: ['websocket'],
+});
+
+Vue.use(VueSocketio,socketInstance) ;
 
 Vue.use(Vuetify,{
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
@@ -28,8 +33,8 @@ new Vue({
 	template: '<App/>',
 	sockets: {
     connect() {
-     alert('socket connected')
-    },
+     console.log('socket connected')
+    }
 
 }
 	

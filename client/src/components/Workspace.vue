@@ -74,7 +74,8 @@
         apiService : new APIService(),
         setCalls:0,
         interpreter:'',
-        console:''
+        console:'',
+        pinValArray:[]
       }
     },
     mounted(){
@@ -111,9 +112,9 @@
 
 },
 sockets: {
-
   sensorUpdate: function (data) {
-    console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+    pinValArray[data.pin] = data.val
+    this.updateConsole("Sensor update : " + data)
   }
 },
 methods : {
@@ -140,9 +141,6 @@ runner() {
 
       }, 25); 
     } 
-    else{
-      console.log("finished : " + interpreter.global.properties['result']);
-    }
   }
   catch(e){
     console.log("error:"+e);
@@ -156,7 +154,6 @@ stop() {
 },
 
 updateConsole(text){
-  alert(text)
   this.console = this.console +"\n"+text;
 }
 }
