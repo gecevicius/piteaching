@@ -107,8 +107,15 @@
   window.addEventListener('resize', onresize, false);
   onresize();
   Blockly.svgResize(workspace);
-},
 
+
+},
+sockets: {
+
+  sensorUpdate: function (data) {
+    console.log('this method was fired by the socket server. eg: io.emit("customEmit", data)')
+  }
+},
 methods : {
  generate(){
   Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
@@ -146,6 +153,11 @@ stop() {
  this.apiService.close().then((data) => {
   console.log(data)
 });
+},
+
+updateConsole(text){
+  alert(text)
+  this.console = this.console +"\n"+text;
 }
 }
 

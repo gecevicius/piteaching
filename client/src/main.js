@@ -8,11 +8,10 @@ import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import './assets/css/general.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+import VueSocketio from 'vue-socket.io-extended';
 import io from 'socket.io-client';
- 
-var socket = io('http://192.168.1.247:3001/');
 
-socket.on('sensor update', function(){ alert("sesnor update")});
+Vue.use(VueSocketio, io('http://192.168.1.247:3001'));
 
 Vue.use(Vuetify,{
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
@@ -26,7 +25,14 @@ new Vue({
 	el: '#app',
 	router,
 	components:  {App} ,
-	template: '<App/>'
+	template: '<App/>',
+	sockets: {
+    connect() {
+     alert('socket connected')
+    },
+
+}
+	
 })
 
 
