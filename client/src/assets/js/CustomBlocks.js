@@ -40,10 +40,28 @@ Blockly.Blocks['read_gpio'] = {
 };
 
 
-Blockly.JavaScript['read_gpio'] = function(block) {
 
+Blockly.JavaScript['read_gpio'] = function(block) {
   var pin = block.getFieldValue('PIN')
   var code = 'readGpio(' + pin  + ',' + false + ')';
+
+  return [code, Blockly.JavaScript.ORDER_CALL];
+};
+
+Blockly.Blocks['get_sensor'] = {
+  init: function() {
+   this.appendDummyInput()
+   .appendField('get sensor value of pin : ')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+   this.setColour(280);
+   this.setOutput(true);
+ }
+};
+
+Blockly.JavaScript['get_sensor'] = function(block) {
+
+  var pin = block.getFieldValue('PIN')
+  var code = 'getSensor(' + pin  + ')';
 
   return [code, Blockly.JavaScript.ORDER_CALL];
 };

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 var apiService = new APIService();
 var setCalls = 0;
+var pinValArray = []
 
 function initApi(interpreter, scope) {
 
@@ -28,6 +29,13 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
   };
   interpreter.setProperty(scope, 'prompt',
     interpreter.createNativeFunction(wrapper));
+
+ /* GPIO Api */
+      wrapper = function(pin) {
+        return pilValArray[pin]
+      };
+      interpreter.setProperty(scope, 'getSensor',
+        interpreter.createNativeFunction(wrapper));
 
       //block highlight
       wrapper = function(id) {
@@ -55,7 +63,7 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
         "sense" : sense.data
       }}
       ).then(function (response) {
-        //console.log(response.data.val)
+         pinValArray[response.data.pin] = response.data.val
         callback(response.data.val)
       }).catch(function(error) {
 
