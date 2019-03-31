@@ -8,13 +8,20 @@ import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import './assets/css/general.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
+import {store} from './store/store.js'
+
 import VueSocketio from 'vue-socket.io-extended';
 import io from 'socket.io-client';
-
 
 const socketInstance = io('http://192.168.1.247:3001', {
   transports: ['websocket'],
 });
+
+
 
 Vue.use(VueSocketio,socketInstance) ;
 
@@ -31,12 +38,7 @@ new Vue({
 	router,
 	components:  {App} ,
 	template: '<App/>',
-	sockets: {
-    connect() {
-     console.log('socket connected')
-    }
-
-}
+	store
 	
 })
 

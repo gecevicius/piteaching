@@ -31,7 +31,7 @@
         </v-textarea>
       </div>
     </div>
-    
+
   </div>
   <xml id="toolbox" style="display: none">
     <block type="controls_if"></block>
@@ -44,6 +44,7 @@
     <block type="set_gpio"></block>
     <block type="read_gpio"></block>
     <block type="sense_gpio"></block>
+    <block type="get_sensor"></block>
     <block type="wait_seconds"></block>
     <block type="variables_set"></block>
     <block type="variables_get"></block>
@@ -74,8 +75,7 @@
         apiService : new APIService(),
         setCalls:0,
         interpreter:'',
-        console:'',
-        pinValArray:[]
+        console:''
       }
     },
     mounted(){
@@ -112,12 +112,19 @@
 
 },
 sockets: {
-  sensorUpdate: function (data) {
-    pinValArray[data.pin] = data.val
-    this.updateConsole("Sensor update : " + data)
+  pinUpdate (data) {
+    console.log(data)
+    this.updateConsole("Sensor update. *PIN :"+data.pin+" , VAL:"+data.val+"*");
+  },
+},
+computed: {
+  pinValArray() {
+    return this.$store.getters.pinValArray[4]
   }
 },
 methods : {
+
+
  generate(){
   Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
   var code = Blockly.JavaScript.workspaceToCode(this.workspace);
@@ -129,10 +136,11 @@ methods : {
   'readGpio(4);', initApi);
   //initApi.wrapper(4,false,function(output){
     console.log("output: " + output)
-  })*/
+  })
+  this.interpreter = new Interpreter(
+  "alert('abc');", initApi);*/
   this.runner();
 },
-
 runner() { 
   try{
     if (this.interpreter.run()) { 
@@ -145,7 +153,8 @@ runner() {
   catch(e){
     console.log("error:"+e);
   }
-} ,
+},
+
 stop() {
  this.setCalls = 0
  this.apiService.close().then((data) => {
@@ -155,7 +164,9 @@ stop() {
 
 updateConsole(text){
   this.console = this.console +"\n"+text;
-}
+},
+
+
 }
 
 

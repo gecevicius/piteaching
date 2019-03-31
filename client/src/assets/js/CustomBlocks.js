@@ -96,12 +96,12 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
 Blockly.Blocks['sense_gpio'] = {
   init: function() {
    this.appendDummyInput()
-   .appendField('sensor pin ')
+   .appendField('watch GPIO at pin ')
    .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
-   .appendField(' reading = ')
-   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'VAL')
+ 
+    this.appendStatementInput('DO')
+     .appendField('on change, do');
    this.setColour(280);
-   this.setOutput(true);
  }
 };
 
@@ -109,8 +109,9 @@ Blockly.Blocks['sense_gpio'] = {
 Blockly.JavaScript['sense_gpio'] = function(block) {
   var sense = true;
   var pin = block.getFieldValue('PIN')
-  var code = 'readGpio(' + pin  + ','+sense+')';
-
+  var innerCode = Blockly.JavaScript.statementToCode(block, 'DO');
+  var code = 'readGpio(' + pin  + ','+{enabled:true, code : innerCode }+')';
+  console.log(code)
   return [code, Blockly.JavaScript.ORDER_CALL];
 };
 

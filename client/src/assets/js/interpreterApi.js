@@ -1,9 +1,10 @@
 import {APIService} from '../../services/APIService';
 import axios from 'axios';
 
+import {store} from '../../store/store.js'; 
+
 var apiService = new APIService();
 var setCalls = 0;
-var pinValArray = []
 
 function initApi(interpreter, scope) {
 
@@ -32,6 +33,7 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
 
  /* GPIO Api */
       wrapper = function(pin) {
+        console.log(pinValArray[pin])
         return pilValArray[pin]
       };
       interpreter.setProperty(scope, 'getSensor',
@@ -46,9 +48,12 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
         interpreter.createNativeFunction(wrapper));
 
       /* GPIO Api */
+
+      //Set Pin Output
       wrapper = function(pin,output) {
         setTimeout(function(){
           apiService.setOutput(pin.data,output.data).then((data) => {
+            store.dispatch('pinValUpdate',{pin : pin.data, val : output.data});console.log(store.getters.pinValArray)
           })}, 500 * setCalls
           )
         setCalls = setCalls+ 1;
@@ -60,35 +65,23 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
    var wrapper =  function(pin,sense,callback){
       axios.get("http://192.168.1.247:3000/gpio",{params : {
         "pin" : pin.data,
-        "sense" : sense.data
+        "sense" : sense.data.enabled
       }}
       ).then(function (response) {
-         pinValArray[response.data.pin] = response.data.val
-        callback(response.data.val)
+         if(sense.data.enabled == true){
+          
+         }
+         
+        callback(response.data.val);
       }).catch(function(error) {
 
-        console.log("error:"+error)
+        console.log("error:"+error);
       })
     };
      interpreter.setProperty(scope, 'readGpio', interpreter.createAsyncFunction(wrapper));
+
+     
     }
 
-
-var wrapper =  function(pin,sense,callback){
-      axios.get("http://192.168.1.247:3000/gpio",{params : {
-        "pin" : pin,
-        "sense" : sense
-      }}
-      ).then(function (response) {
-        //console.log(response.data.val)
-        callback(response.data.val)
-      }).catch(function(error) {
-
-        console.log("error:"+error)
-      })
-    };
-
-    initApi.wrapper = wrapper;
- 
 
     export default initApi;
