@@ -2,27 +2,21 @@ import {APIService} from '../../services/APIService';
 import axios from 'axios';
 
 import {store} from '../../store/store.js'; 
+import Element from './element.js'
 
 var apiService = new APIService();
 var setCalls = 0;
 
 function initApi(interpreter, scope) {
 
-//console.log
-var  myConsole = interpreter.createObject(interpreter.OBJECT);
-interpreter.setProperty(scope, 'console', myConsole);
+//alert
 var wrapper = function(obj) {
-  return interpreter.createPrimitive(console.alert(obj));
+  return interpreter.createPrimitive(window.alert(obj));
 };
-interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wrapper));
+interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
 
 
-  //alert
-  wrapper = function(text) {
-    return alert(text)
-  };
-  interpreter.setProperty(scope, 'alert',
-    interpreter.createNativeFunction(wrapper));
+
 
   //prompt
   wrapper = function(text) {
@@ -61,9 +55,19 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
       interpreter.setProperty(scope, 'setOutput',
         interpreter.createNativeFunction(wrapper));
 
+
+      wrapper = function(pin,type) {
+       var newElem = new Element(pin,type);
+       return newElem;
+      };
+      interpreter.setProperty(scope, 'newElem',
+        interpreter.createNativeFunction(wrapper));
+
       //read gpio pin val from server
    var wrapper =  function(pin,sense,callback){
-      axios.get("http://192.168.1.247:3000/gpio",{params : {
+      console.log(store.state.pinValArray[pin])
+      return store.getters.pinValArray[pin]
+      /*axios.get("http://192.168.1.247:3000/gpio",{params : {
         "pin" : pin.data,
         "sense" : sense.data.enabled
       }}
@@ -76,9 +80,19 @@ interpreter.setProperty(myConsole, 'alert', interpreter.createNativeFunction(wra
       }).catch(function(error) {
 
         console.log("error:"+error);
-      })
+      })*/
     };
      interpreter.setProperty(scope, 'readGpio', interpreter.createAsyncFunction(wrapper));
+
+
+     //For some reason this does not work.
+    var wrapper = function(d, next) {
+        window.setTimeout(function() {
+            next();
+        }, d);
+    };
+    interpreter.setProperty(scope, 'wait',
+        interpreter.createAsyncFunction(wrapper));
 
      
     }

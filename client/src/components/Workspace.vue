@@ -41,6 +41,7 @@
     <block type="math_arithmetic"></block>
     <block type="text"></block>
     <block type="text_print"></block>
+    <block type="new_element"></block>
     <block type="set_gpio"></block>
     <block type="read_gpio"></block>
     <block type="sense_gpio"></block>
@@ -79,7 +80,6 @@
       }
     },
     mounted(){
-
       var blocklyArea = document.getElementById('blocklyArea')
       var blocklyDiv =  document.getElementById('blocklyDiv')
       var workspace = Blockly.inject(blocklyDiv,
@@ -163,7 +163,7 @@ stop() {
 },
 
 updateConsole(text){
-  this.console = this.console +"\n"+text;
+  this.console = this.console +text+"\n";
 },
 
 

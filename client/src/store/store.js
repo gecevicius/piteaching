@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
@@ -27,6 +28,7 @@ Vue.use(Vuex)
   	pinValUpdate(context,{pin,val}){
    		context.commit('pinValUpdate',{pin,val});
   	}
-  }
+  },
+   plugins: [createPersistedState()]
 })
 export {store}

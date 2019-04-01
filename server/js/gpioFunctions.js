@@ -43,7 +43,7 @@ getByPin(pin){
 }
 
 	//
-	senseGpio(pin,io){
+	senseGpio(pin,type,io){
 		const sensor = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
 		this.gpioArray[pin] = sensor
 		sensor.watch((err, value) => {

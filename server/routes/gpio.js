@@ -20,14 +20,6 @@ router.post('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
 	var pin = req.query.pin
-	var sense = req.query.sense
-
-	if(sense){
-		const io = req.app.get('socketio');
-		gpiojs.senseGpio(pin,io)
-		res.send("listening to pin" + pin)
-	}
-	else{
 	var val = gpiojs.readVal(pin)
 	if (val) {
 		res.send({
@@ -37,9 +29,15 @@ router.get('/', function(req, res, next) {
 	else {
 		res.send(pin+' pin read failure. Please check if pin is connected.');
 		}
- 	
- 	}
+});
 
+router.post('/sensor', function(req, res, next) {
+	var pin = req.body.pin
+	var type = req.body.type
+	const io = req.app.get('socketio');
+	gpiojs.senseGpio(pin,type,io);
+	res.send("sensing gpio at pin " + pin);
+		
 });
 
 /* DELETE close GPIO connections. */

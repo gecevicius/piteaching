@@ -40,9 +40,57 @@ Blockly.Blocks['read_gpio'] = {
 };
 
 
+Blockly.Blocks['new_element'] = {
+  init: function() {
+   this.appendDummyInput()
+   .appendField('create new')
+   .appendField(new Blockly.FieldDropdown([
+     ['Button', 'BUTTON'],
+     ['LED', 'LED'],
+     ['LCD Screen', 'LCD'],
+     ['Ranger', 'RANGER'],
+     ]),
+   'TYPE')
+   .appendField(' at pin ')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+
+   this.setColour(120);
+   this.setPreviousStatement(true, 'Action');
+   this.setNextStatement(true, 'Action');
+    this.setOutput(true);
+ }
+};
+
+
+Blockly.JavaScript['new_element'] = function(block) {
+
+  var pin = block.getFieldValue('PIN');
+  var type = block.getFieldValue('TYPE');
+  var code = 'newElem(' + pin + ',"' + type  + '");';
+  return [code, Blockly.JavaScript.ORDER_CALL]; 
+};
+
+Blockly.Blocks['read_gpio'] = {
+  init: function() {
+   this.appendDummyInput()
+   .appendField('get value of pin')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+   this.setColour(280);
+   this.setOutput(true);
+ }
+};
+
+
+
+
+Blockly.JavaScript['text_print'] = function(block) {
+  var text = Blockly.JavaScript.valueToCode(block,"TEXT",Blockly.JavaScript.ORDER_NONE);
+  var code = 'window.alert('+text+')';
+  return code;
+};
 
 Blockly.JavaScript['read_gpio'] = function(block) {
-  var pin = block.getFieldValue('PIN')
+  var pin = block.getFieldValue('PIN');
   var code = 'readGpio(' + pin  + ',' + false + ')';
 
   return [code, Blockly.JavaScript.ORDER_CALL];
@@ -60,7 +108,7 @@ Blockly.Blocks['get_sensor'] = {
 
 Blockly.JavaScript['get_sensor'] = function(block) {
 
-  var pin = block.getFieldValue('PIN')
+  var pin = block.getFieldValue('PIN');
   var code = 'getSensor(' + pin  + ')';
 
   return [code, Blockly.JavaScript.ORDER_CALL];
@@ -87,8 +135,10 @@ Blockly.defineBlocksWithJsonArray([{
  */
 Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
-  var code = 'waitForSeconds(' + seconds + ');\n';
-  return [code, Blockly.JavaScript.ORDER_CALL];;
+  var code = 'wait(' + seconds + ')';
+  setTimeout(function(){  
+    return [code, Blockly.JavaScript.ORDER_NONE];
+     },seconds);
 };
 
 
