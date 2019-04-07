@@ -1,47 +1,65 @@
 import {APIService} from '../../services/APIService';
 var apiService = new APIService();
+
 import io from 'socket.io-client';
 const socketInstance = io('http://192.168.1.247:3001', {
-  transports: ['websocket'],
+	transports: ['websocket'],
 });
 
 class Element{
 	constructor(pin,type){
-		this.type = type.data;
-		this.pin = pin.data;
+		this.type = type;
+		this.pin = pin;
 		this.val = 0;
+		this.interpreterListener = false;
 		this.initListener();
 	}
 
 	getVal(){
-		return this.val
+		return this.val;
 	}
 
 	getPin(){
-		return this.pin
+		return this.pin;
 	}
 
 	getType(){
-		return this.pin
+		return this.pin;
 	}
 
 	initListener(){
-		if(this.type == 'BUTTON'){
-			apiService.get(pin.data,output.data).then((data) => {
-            console.log(data)
-         })
-			socketInstance.on('pinUpdate', function(pin,val){
-			if(this.pin == pin){ 
-					alert("success" + pin)
+		apiService.sense(this.pin,this.type).then((data) => {
+			console.log(data)
+		})
+		var self = this;
+		socketInstance.on('pinUpdate', function(data){
+			if(self.getPin() == data.pin){
+				if(self.getType != 'BUTTON'){
+					self.getVal = data.val;
 				}
-			});
-		}
+				console.log(self.interpreterListener)
+				if(self.interpreterListener){
+					self.interpreterListener.emit('watcherUpdate');
+				}
+
+			}
+		});
+	}
+
+	toggleInterpreterListener(watcher){
+		this.interpreterListener = watcher;
 	}
 
 	setOutput(output){
-		 apiService.setOutput(pin.data,output.data).then((data) => {
-            console.log(data)
-         })
+		console.log(this.getPin())
+		console.log(output.data)
+		apiService.setOutput(this.getPin(),output.data).then((data) => {
+			console.log(data)
+		})
+	}
+
+	removeInterpreterListener(){
+		this.interpreterListener = false;
 	}
 
 }

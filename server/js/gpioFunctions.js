@@ -29,9 +29,10 @@ class gpiojs{
 	}
 
 	readVal(pin){
-		var val = this.gpioArray[pin].readSync();
-		if ( val != "undefined" && typeof val != "undefined ")
+		if ( pin !== undefined && typeof pin !== undefined && pin!== null){
+			var val = this.gpioArray[pin].readSync();
 			return val
+		}
 		else return false
 			
 	}

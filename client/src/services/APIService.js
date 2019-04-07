@@ -22,6 +22,7 @@ export class APIService{
 			console.log(response);
 		})
 	}
+
 	read(pin){
 		if(typeof pin == 'object'){
 			pin = pin.data
@@ -39,7 +40,18 @@ export class APIService{
     // handle error
     
 })
+}
+
+	sense(pin,type){
+			return axios.post(this.gpioUrl+"/sensor",{
+			pin:pin,
+			type:type
+		}).then(function (response) {
+			console.log(response);
+		})
 	}
+
+
 	close(){
 		return axios.get(this.gpioUrl+'/close').then(function (response) {
 			return console.log(response);

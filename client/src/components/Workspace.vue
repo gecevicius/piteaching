@@ -12,7 +12,9 @@
       </v-toolbar-items>
     </v-toolbar>
     <div id="blocklyArea">
-      <div id="blocklyDiv" style="height: 600px; width: 600px;"></div>
+      <div id="blocklyDiv" style="height: 600px; width: 600px;">
+        
+      </div>
       <div id="code">
         <div id="code-generation">
           <v-textarea
@@ -34,21 +36,28 @@
 
   </div>
   <xml id="toolbox" style="display: none">
-    <block type="controls_if"></block>
-    <block type="controls_repeat_ext"></block>
-    <block type="logic_compare"></block>
-    <block type="math_number"></block>
-    <block type="math_arithmetic"></block>
-    <block type="text"></block>
-    <block type="text_print"></block>
-    <block type="new_element"></block>
-    <block type="set_gpio"></block>
-    <block type="read_gpio"></block>
-    <block type="sense_gpio"></block>
-    <block type="get_sensor"></block>
-    <block type="wait_seconds"></block>
-    <block type="variables_set"></block>
-    <block type="variables_get"></block>
+    <category name="math">
+      <block type="controls_if"></block>
+      <block type="controls_repeat_ext"></block>
+      <block type="logic_compare"></block>
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+      <block type="text"></block>
+      <block type="text_print"></block>
+    </category>
+    <category name="variables and elements">
+      <button text="Add new variable" callbackKey="TEST"></button>
+      <block type="new_element"></block>
+      <block type="variables_set"></block>
+      <block type="variables_get"></block>
+    </category>
+    <category name="gpio controls">
+      <block type="set_gpio"></block>
+      <block type="read_gpio"></block>
+      <block type="sense_gpio"></block>
+      <block type="wait_seconds"></block>
+      
+    </category>
   </xml>
 </div>
 
@@ -85,6 +94,8 @@
       var workspace = Blockly.inject(blocklyDiv,
         {toolbox: document.getElementById('toolbox')})
 
+
+
       this.blocklyArea = blocklyArea;
       this.blocklyDiv = blocklyDiv;
       this.workspace = workspace;
@@ -104,16 +115,20 @@
     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(workspace);
+
+
   };
   window.addEventListener('resize', onresize, false);
   onresize();
   Blockly.svgResize(workspace);
 
+  workspace.registerButtonCallback('TEST',function(button){Blockly.Variables.createVariable(button.getTargetWorkspace(), null) })
+  this.$store.state.blocklyWs = this.workspace;
+  console.log(this.$store.state.blocklyWs)
 
 },
 sockets: {
   pinUpdate (data) {
-    console.log(data)
     this.updateConsole("Sensor update. *PIN :"+data.pin+" , VAL:"+data.val+"*");
   },
 },
@@ -124,13 +139,12 @@ computed: {
 },
 methods : {
 
-
- generate(){
-  Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
-  var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-  this.code = code;
-  var interpreter = new Interpreter(code, initApi);
-  this.interpreter = interpreter
+  generate(){
+    Blockly.Xml.domToWorkspace(this.blocklyDiv , this.workspace);
+    var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+    this.code = code;
+    var interpreter = new Interpreter(code, initApi);
+    this.interpreter = interpreter
   /*Assuming pin is numeric
   this.interpreter = new Interpreter(
   'readGpio(4);', initApi);
@@ -140,6 +154,9 @@ methods : {
   this.interpreter = new Interpreter(
   "alert('abc');", initApi);*/
   this.runner();
+
+
+
 },
 runner() { 
   try{
@@ -151,7 +168,7 @@ runner() {
     } 
   }
   catch(e){
-    console.log("error:"+e);
+    console.log("error:"+e.stack);
   }
 },
 

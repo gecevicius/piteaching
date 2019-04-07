@@ -1,6 +1,11 @@
 
 var Blockly = require('node-blockly/browser');
+import {store} from '../../store/store.js';
 
+
+
+import Interpreter from 'js-interpreter';
+import initApi from './interpreterApi';
 
 
 Blockly.Blocks['set_gpio'] = {
@@ -25,7 +30,7 @@ Blockly.JavaScript['set_gpio'] = function(block) {
 
   var pin = block.getFieldValue('PIN')
   var output = block.getFieldValue('OUTPUT')
-  var code = 'setOutput(' + pin + ',' + output  + ');';
+  var code = 'setOutput(' + pin + ',' + output  + ')';
   return [code, Blockly.JavaScript.ORDER_CALL]; ;
 };
 
@@ -57,18 +62,19 @@ Blockly.Blocks['new_element'] = {
    this.setColour(120);
    this.setPreviousStatement(true, 'Action');
    this.setNextStatement(true, 'Action');
-    this.setOutput(true);
+   this.setOutput(true);
  }
 };
 
 
 Blockly.JavaScript['new_element'] = function(block) {
-
   var pin = block.getFieldValue('PIN');
   var type = block.getFieldValue('TYPE');
-  var code = 'newElem(' + pin + ',"' + type  + '");';
+  var code = 'newElem(' + pin + ',"' + type  + '")';
   return [code, Blockly.JavaScript.ORDER_CALL]; 
 };
+
+
 
 Blockly.Blocks['read_gpio'] = {
   init: function() {
@@ -85,34 +91,17 @@ Blockly.Blocks['read_gpio'] = {
 
 Blockly.JavaScript['text_print'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block,"TEXT",Blockly.JavaScript.ORDER_NONE);
+  console.log('blockly text print : ' + text)
   var code = 'window.alert('+text+')';
-  return code;
+  return [code, Blockly.JavaScript.ORDER_CALL];
 };
 
 Blockly.JavaScript['read_gpio'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var code = 'readGpio(' + pin  + ',' + false + ')';
-
   return [code, Blockly.JavaScript.ORDER_CALL];
 };
 
-Blockly.Blocks['get_sensor'] = {
-  init: function() {
-   this.appendDummyInput()
-   .appendField('get sensor value of pin : ')
-   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
-   this.setColour(280);
-   this.setOutput(true);
- }
-};
-
-Blockly.JavaScript['get_sensor'] = function(block) {
-
-  var pin = block.getFieldValue('PIN');
-  var code = 'getSensor(' + pin  + ')';
-
-  return [code, Blockly.JavaScript.ORDER_CALL];
-};
 
 Blockly.defineBlocksWithJsonArray([{
   "type": "wait_seconds",
@@ -133,73 +122,94 @@ Blockly.defineBlocksWithJsonArray([{
  * Generator for wait block creates call to new method
  * <code>waitForSeconds()</code>.
  */
-Blockly.JavaScript['wait_seconds'] = function(block) {
+ Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
   var code = 'wait(' + seconds + ')';
   setTimeout(function(){  
     return [code, Blockly.JavaScript.ORDER_NONE];
-     },seconds);
+  },seconds);
 };
 
 
 
 Blockly.Blocks['sense_gpio'] = {
   init: function() {
-   this.appendDummyInput()
-   .appendField('watch GPIO at pin ')
-   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
- 
-    this.appendStatementInput('DO')
-     .appendField('on change, do');
-   this.setColour(280);
+   this
+   .appendValueInput('GPIO')
+   .appendField('watch GPIO')
+  this.appendDummyInput()   
+   this.appendStatementInput('DO')
+   .appendField('DO');
+
+   this.setColour(280)
+  
  }
 };
 
 
+
 Blockly.JavaScript['sense_gpio'] = function(block) {
   var sense = true;
-  var pin = block.getFieldValue('PIN')
-  var innerCode = Blockly.JavaScript.statementToCode(block, 'DO');
-  var code = 'readGpio(' + pin  + ','+{enabled:true, code : innerCode }+')';
-  console.log(code)
-  return [code, Blockly.JavaScript.ORDER_CALL];
+  var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
+  console.log(selectedVar);
+  var innerCode = '"' + Blockly.JavaScript.statementToCode(block, 'DO') + '"'
+
+  var code = "enableWatcher("+selectedVar+","+String(innerCode)+")";
+  return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
+function varsDropdown(){
+  var options = [];
+  var allVars = store.getters.blocklyWs.getAllVariables();
+  console.log(allVars)
+  allVars.forEach(function(element) {
+    options.push([element.name,element.id_])
+
+  });
+console.log(allVars[0])
+  if(options.length == 0){
+    options.push(['Variables appear here','0'])
+  }
+  return options;
+}
 
 
 // Block for variable getter.
-Blockly.defineBlocksWithJsonArray([{
+Blockly.defineBlocksWithJsonArray([ {
   "type": "variables_get",
   "message0": "%1",
-  "previousStatement": true,
-  "nextStatement": true,
   "args0": [
-    {    // Beginning of the field variable dropdown
-      "type": "field_variable",
-      "name": "VAR",    // Static name of the field
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"    // Given at runtime
-    }    // End of the field variable dropdown
+  {
+    "type": "field_variable",
+    "name": "VAR",
+    "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+  },
+
   ],
-  "output": null,    // Null means the return value can be of any type
+  "output": null
 }])
+
+
 
 
 // Block for variable setter.
 Blockly.defineBlocksWithJsonArray([{
   "type": "variables_set",
   "message0": "%{BKY_VARIABLES_SET}",
-   "previousStatement": true,
-  "nextStatement": true,
   "args0": [
-    {
-      "type": "field_variable",
-      "name": "VAR",
-      "variable": "%{BKY_VARIABLES_DEFAULT_NAME}"
-    },
-    {
-      "type": "input_value",    // This expects an input of any type
-      "name": "VALUE"
-    }
+  {
+    "type": "field_variable",
+    "name": "VAR",
+    "variable": "%{BKY_VARIABLES_DEFAULT_NAME}",
+  },
+  {
+    "type": "input_value",
+    "name": "VALUE",
+
+  }
   ],
+  "previousStatement": true,
+  "nextStatement": true,
 
 }])
 
