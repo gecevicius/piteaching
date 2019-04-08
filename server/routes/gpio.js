@@ -3,6 +3,7 @@ var router = express.Router();
 const gpioFunctions = require("../js/gpioFunctions.js")
 const gpiojs = new gpioFunctions()
 
+
 /* POST set GPIO value. */
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
@@ -42,7 +43,11 @@ router.post('/sensor', function(req, res, next) {
 
 /* DELETE close GPIO connections. */
 router.get('/close', function(req, res, next) {
-	gpiojs.close();
+	if(req.query.pin >= 0){
+		var pin = req.query.pin
+		gpiojs.close(pin);
+	}
+	else gpiojs.close();
 });
 
    module.exports = router;

@@ -16,8 +16,8 @@ export class APIService{
 		}
 		console.log(pin)
 		return axios.post(this.gpioUrl,{
-			pin:pin,
-			output:output
+			"pin":pin,
+			"output":output
 		}).then(function (response) {
 			console.log(response);
 		})
@@ -52,11 +52,28 @@ export class APIService{
 	}
 
 
-	close(){
-		return axios.get(this.gpioUrl+'/close').then(function (response) {
+	close(pin){
+		if (pin !== undefined || pin >= 0 ){
+		return axios.get(this.gpioUrl+'/close',{params : {
+			pin:pin
+		}
+		}).then(function (response) {
 			return console.log(response);
+		})
+		}
+		else{
+			return axios.get(this.gpioUrl+'/close').then(function (response) {
+			return console.log(response);
+		})
+		}
+	}
 
+	getLocals(){
+		return axios.get(this.API_URL).then(function(response){
+			return response
 		})
 	}
+
+	
 
 }

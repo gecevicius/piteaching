@@ -54,12 +54,18 @@ getByPin(pin){
 			io.emit('pinUpdate', {pin:pin,val:value})
 		});
 	}
-	close(){
-		this.gpioArray.forEach(function(i){
+	close(pin){
+		if(pin != undefined){
+			this.gpioArray[pin].unexport()
+			this.gpioArray[pin] = null;
+		}
+		else{
+			this.gpioArray.forEach(function(i){
 			i.unexport()
 			i = '';
 		})
 		this.gpioArray = []
+		}
 	}
 
 

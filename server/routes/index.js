@@ -1,9 +1,14 @@
 var express = require('express');
 var router = express.Router();
+import find from 'local-devices'
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/users', function(req, res, next) {
+	find().then(devices => {
+  		res.send(devices); 
+	})
+   	
 });
+	
 
 module.exports = router;

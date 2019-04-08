@@ -33,19 +33,42 @@ interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper
   interpreter.setProperty(scope, 'prompt',
     interpreter.createNativeFunction(wrapper));
 
- /* GPIO Api */
-      wrapper = function(item,code) {
-        console.log(code)
-        var watcher = new EventEmitter();
-        item.toggleInterpreterListener(watcher);
-        watcher.on('watcherUpdate',function(){
-          interpreter.appendCode(code.data);
-          console.log(code.data)
-          interpreter.run()
-        })
-      };
-      interpreter.setProperty(scope, 'enableWatcher',
-        interpreter.createNativeFunction(wrapper));
+  /* GPIO Api */
+  wrapper = function(item,code) {
+    console.log(code)
+    var watcher = new EventEmitter();
+    var self = this;
+    item.toggleInterpreterListener(watcher);
+    watcher.on('watcherUpdate',function(){
+      interpreter.appendCode(code.data);
+      console.log(code.data)
+      if (interpreter.step()) { 
+        setTimeout(function(){
+          self.runner()
+
+        }, 35); 
+      } 
+    })
+  };
+  interpreter.setProperty(scope, 'enableWatcher',
+    interpreter.createNativeFunction(wrapper));
+
+  wrapper = function() {
+    var self = this;
+    try{
+      if (interpreter.step()) { 
+        setTimeout(function(){
+          self.runner()
+
+        }, 35); 
+      } 
+    }
+    catch(e){
+      console.log("error:"+e.stack);
+    }
+  };
+  interpreter.setProperty(scope, 'runner',
+    interpreter.createNativeFunction(wrapper));
 
       //block highlight
       wrapper = function(id) {
@@ -58,48 +81,61 @@ interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper
       /* GPIO Api */
 
       //Set Pin Output
-      wrapper = function(pin,output) {
-        
-        setTimeout(function(){
-          if(store.getters.elem[pin] != 'undefined' && store.getters.elem[pin] != null ) {
-            store.getters.elem[pin].setOutput(output) 
-          }
-          else{
-            alert('pin at ' + pin + ' is not initiated. please create a variable for this pin to use it!')
-            return false
-          }
-        }, 500 * setCalls
-          )
-        setCalls = setCalls+ 1;
-      };
-      interpreter.setProperty(scope, 'setOutput',
-        interpreter.createNativeFunction(wrapper));
+      wrapper = function(gpio,output) {
+        console.log(gpio)
+        console.log(output)
+        var elemArray = store.getters.elem
+        if(gpio != 'undefined' && gpio  != null ) {
+         gpio.setOutput(output.data) 
+       }
+       else{
+        alert('gpio variable is not initiated. please create a variable for this pin to use it!')
+        return false
+      }
+    };
+    interpreter.setProperty(scope, 'setOutput',
+      interpreter.createNativeFunction(wrapper));
 
+      //Set Pin Output
+      wrapper = function(gpio,output) {
+        console.log(gpio)
+        console.log(output)
+        var elemArray = store.getters.elem
+        if(gpio!= 'undefined' && gpio != null ) {
+         gpio.toggleOutput(); 
+       }
+       else{
+        alert('gpio variable is not initiated. please create a variable for this pin to use it!')
+        return false
+      }
+    };
+    interpreter.setProperty(scope, 'toggleOutput',
+      interpreter.createNativeFunction(wrapper));
 
-      wrapper = function(pin,type) {
-       store.dispatch('pushElem',{pin:pin.data,type:type.data})
-       console.log(store.getters.elem[pin.data])
-       return store.getters.elem[pin.data];
-      };
-      interpreter.setProperty(scope, 'newElem',
-        interpreter.createNativeFunction(wrapper));
+    wrapper = function(pin,type) {
+     store.dispatch('pushElem',{pin:pin.data,type:type.data})
+     console.log(store.getters.elem[pin.data])
+     return store.getters.elem[pin.data];
+   };
+   interpreter.setProperty(scope, 'newElem',
+    interpreter.createNativeFunction(wrapper));
 
       //read gpio pin val 
-   var wrapper =  function(pin,sense,callback){
-      return store.getters.elem[pin]
-    };
-     interpreter.setProperty(scope, 'readGpio', interpreter.createAsyncFunction(wrapper));
+      var wrapper =  function(gpio,sense,callback){
+        return gpio.getVal()
+      };
+      interpreter.setProperty(scope, 'readGpio', interpreter.createAsyncFunction(wrapper));
 
 
-    var wrapper = function(d, next) {
+      var wrapper = function(d, next) {
         window.setTimeout(function() {
-            next();
+          next();
         }, d);
-    };
-    interpreter.setProperty(scope, 'wait',
+      };
+      interpreter.setProperty(scope, 'wait',
         interpreter.createAsyncFunction(wrapper));
 
-     
+      
     }
 
 

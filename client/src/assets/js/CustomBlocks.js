@@ -10,9 +10,9 @@ import initApi from './interpreterApi';
 
 Blockly.Blocks['set_gpio'] = {
 	init: function() {
-   this.appendDummyInput()
+   this.appendValueInput('GPIO')
    .appendField('set gpio pin ')
-   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+    this.appendDummyInput()
    .appendField(' to')
    .appendField(new Blockly.FieldDropdown([
      ['high output', '1'],
@@ -28,10 +28,31 @@ Blockly.Blocks['set_gpio'] = {
 
 Blockly.JavaScript['set_gpio'] = function(block) {
 
-  var pin = block.getFieldValue('PIN')
+  var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
   var output = block.getFieldValue('OUTPUT')
-  var code = 'setOutput(' + pin + ',' + output  + ')';
-  return [code, Blockly.JavaScript.ORDER_CALL]; ;
+  console.log(selectedVar)
+  var code = 'setOutput(' + selectedVar + ',' + output  + ');';
+  return code;
+};
+
+Blockly.Blocks['toggle_gpio'] = {
+  init: function() {
+   this.appendValueInput('GPIO')
+   .appendField('toggle output gpio pin number')
+   this.appendDummyInput()
+   this.setColour(140);
+   this.setPreviousStatement(true, 'Action');
+   this.setNextStatement(true, 'Action');
+ }
+};
+
+Blockly.JavaScript['toggle_gpio'] = function(block) {
+
+  var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
+  var output = block.getFieldValue('OUTPUT')
+
+  var code = 'toggleOutput(' + selectedVar + ');';
+  return code;
 };
 
 Blockly.Blocks['read_gpio'] = {
@@ -70,17 +91,18 @@ Blockly.Blocks['new_element'] = {
 Blockly.JavaScript['new_element'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = block.getFieldValue('TYPE');
-  var code = 'newElem(' + pin + ',"' + type  + '")';
-  return [code, Blockly.JavaScript.ORDER_CALL]; 
+  var code = 'newElem(' + pin + ',"' + type  + '");';
+  return [code,Blockly.JavaScript.ORDER_CALL];
 };
 
 
 
 Blockly.Blocks['read_gpio'] = {
   init: function() {
-   this.appendDummyInput()
+   this
+   .appendValueInput('GPIO')
    .appendField('get value of pin')
-   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+   this.appendDummyInput()   
    this.setColour(280);
    this.setOutput(true);
  }
@@ -92,13 +114,13 @@ Blockly.Blocks['read_gpio'] = {
 Blockly.JavaScript['text_print'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block,"TEXT",Blockly.JavaScript.ORDER_NONE);
   console.log('blockly text print : ' + text)
-  var code = 'window.alert('+text+')';
-  return [code, Blockly.JavaScript.ORDER_CALL];
+  var code = 'window.alert('+text+');';
+  return code;
 };
 
 Blockly.JavaScript['read_gpio'] = function(block) {
-  var pin = block.getFieldValue('PIN');
-  var code = 'readGpio(' + pin  + ',' + false + ')';
+  var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
+  var code = 'readGpio(' + selectedVar  + ',' + false + ')';
   return [code, Blockly.JavaScript.ORDER_CALL];
 };
 
@@ -125,9 +147,7 @@ Blockly.defineBlocksWithJsonArray([{
  Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
   var code = 'wait(' + seconds + ')';
-  setTimeout(function(){  
-    return [code, Blockly.JavaScript.ORDER_NONE];
-  },seconds);
+  return code;
 };
 
 
@@ -152,8 +172,9 @@ Blockly.JavaScript['sense_gpio'] = function(block) {
   var sense = true;
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
   console.log(selectedVar);
-  var innerCode = '"' + Blockly.JavaScript.statementToCode(block, 'DO') + '"'
-
+  var innerCode = '"' + Blockly.JavaScript.statementToCode(block, 'DO') + '"';
+  innerCode =   innerCode.replace(/\n/g, " ");
+  console.log(innerCode);
   var code = "enableWatcher("+selectedVar+","+String(innerCode)+")";
   return [code, Blockly.JavaScript.ORDER_NONE];
 };

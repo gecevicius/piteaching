@@ -12,7 +12,6 @@ class Element{
 		this.pin = pin;
 		this.val = 0;
 		this.interpreterListener = false;
-		this.initListener();
 	}
 
 	getVal(){
@@ -48,18 +47,34 @@ class Element{
 
 	toggleInterpreterListener(watcher){
 		this.interpreterListener = watcher;
+		this.initListener();
 	}
-
+	toggleOutput(){
+		var output = this.val;
+		if(output === 1 ) output = 0;
+		else if(output === 0 ) output = 1;
+		this.val = output;
+		apiService.setOutput(this.getPin(),output).then((data) => {
+			console.log(data)
+		})
+	}
 	setOutput(output){
 		console.log(this.getPin())
-		console.log(output.data)
-		apiService.setOutput(this.getPin(),output.data).then((data) => {
+		console.log(output)
+		this.val = output
+		apiService.setOutput(this.getPin(),output).then((data) => {
 			console.log(data)
+
 		})
 	}
 
 	removeInterpreterListener(){
 		this.interpreterListener = false;
+		this.initListener();
+	}
+	close(){
+		this.removeInterpreterListener();
+		apiService.close(this.getPin())
 	}
 
 }
