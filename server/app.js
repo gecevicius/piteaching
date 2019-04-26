@@ -55,6 +55,14 @@ app.use(function(err, req, res, next) {
 // SOCKET
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+
+io.sockets.on('connection', function (socket) {// WebSocket Connection
+  var lightvalue = 0; //static variable for current status
+  socket.on('light', function(data) { //get light switch status from client
+    console.log(data)
+  });
+});
+
 app.set('socketio', io);
 server.listen(3001);
 

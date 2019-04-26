@@ -1,5 +1,5 @@
 
-const Gpio = require('onoff').Gpio;
+const Gpio = require('pigpio').Gpio;
 
 class gpiojs{
 	
@@ -12,13 +12,13 @@ class gpiojs{
 	setOutput(pin,output,io){
 		if (Gpio.accessible) {
 			if(!this.gpioArray[pin]){
-				const gpio = new Gpio(pin, 'out') 
+				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
 				this.gpioArray[pin] = gpio
-				gpio.writeSync(output)
+				gpio.digitalWrite(output)
 			}
 			else {
 				const gpio = this.gpioArray[pin]
-				gpio.writeSync(output);			
+				gpio.digitalWrite(output);			
 			}
 			if(io){
 				io.emit('pinUpdate',{pin:pin,val:output})
@@ -71,9 +71,6 @@ getByPin(pin){
 	}
 
 
-	 map(x, in_min, in_max, out_min, out_max){
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-    }
 
     setRgb(pins,output){
     	var R_val = (output & 0x110000) >> 16;

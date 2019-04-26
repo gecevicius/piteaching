@@ -50,6 +50,7 @@
     props: ['project'],
     mounted(){
       this.createBlockly();
+      
     },
     watch: { 
         computedProject: function(newVal, oldVal) { // watch it
