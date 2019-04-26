@@ -11,8 +11,8 @@ class gpiojs{
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output,type,io){
-		if(type === "RGB"){
-			this.setRgb(pins,output,type)
+		if(type === "RGB" && typeof pin === 'object' && pin.length == 3){
+			this.setRgb(pin,output,type)
 		}
 		else{
 			if(!this.gpioArray[pin]){
