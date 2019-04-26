@@ -79,16 +79,42 @@ getByPin(pin){
 
     setRgb(pins,output){
     	console.log(pins)
+    	var rgb = hexRgb(output,{format:'array'});
     	if(!this.gpioArray[pins.rpin] && !this.gpioArray[pins.bpin] && !this.gpioArray[pins.gpin]){
-	    	var rgb = hexRgb(output,{format:'array'});
+	    	
 	    	var rGpio = new Gpio(pins.rpin, {mode:Gpio.OUTPUT});
 	    	var gGpio = new Gpio(pins.gpin, {mode:Gpio.OUTPUT});
 	    	var bGpio = new Gpio(pins.bpin, {mode:Gpio.OUTPUT});
+
+
+	    	this.gpioArray[pins.rpin] = rGpio;
+			this.gpioArray[pins.rpin].type = 'R';
+			this.gpioArray[pins.gpin] = gGpio;
+			this.gpioArray[pins.gpin].type = 'G';
+			this.gpioArray[pins.bpin] = bGpio;
+			this.gpioArray[pins.gpin].type = 'B';
+
 	    	console.log(rgb)
 	    	rGpio.pwmWrite(rgb[0])
 	    	bGpio.pwmWrite(rgb[1])
 	    	gGpio.pwmWrite(rgb[2])
 
+	    }
+	    else{
+	    	if(this.gpioArray[pins.rpin] && this.gpioArray[pins.bpin] && this.gpioArray[pins.bpin]){
+
+	    		var rGpio = this.gpioArray[pins.rpin]
+	    		var gGpio = this.gpioArray[pins.gpin]
+	    		var bGpio = this.gpioArray[pins.bpin]
+
+	    		rGpio.pwmWrite(rgb[0])
+	    		bGpio.pwmWrite(rgb[1])
+	    		gGpio.pwmWrite(rgb[2])
+
+	    	}
+	    	else{
+	    		return false
+	    	}
 	    }
     }
 

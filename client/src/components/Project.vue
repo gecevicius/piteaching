@@ -189,6 +189,9 @@
       pinUpdate (data) {
         this.updateConsole("Sensor update. *PIN :"+data.pin+" , VAL:"+data.val+"*");
       },
+      error(data){
+        alert(data)
+      }
     },
     computed: {
       pinValArray() {
