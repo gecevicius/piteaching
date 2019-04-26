@@ -45,6 +45,7 @@ router.post('/sensor', function(req, res, next) {
 
 /* DELETE close GPIO connections. */
 router.get('/close', function(req, res, next) {
+	console.log(req.body)
 	if(req.query.pin >= 0){
 		var pin = req.query.pin
 		res.send(gpiojs.close(pin));
