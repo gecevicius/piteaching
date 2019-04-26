@@ -1,5 +1,6 @@
 
-const Gpio = require('onoff').Gpio;
+const Gpio = require('pigpio').Gpio;
+const hexRgb = require('hex-rgb');
 
 class gpiojs{
 	
@@ -9,30 +10,37 @@ class gpiojs{
 
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
-	setOutput(pin,output,io){
-		if (Gpio.accessible) {
+	setOutput(pin,output,type,io){
+		
+		console.log(type)
+		if(type === "RGB"){
+			console.log(type)
+			this.setRgb(pin,output,type)
+		}
+		else{
 			if(!this.gpioArray[pin]){
-				const gpio = new Gpio(pin, 'out') 
+				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
+				this.gpioArray[pin].type = type;
 				this.gpioArray[pin] = gpio
-				gpio.writeSync(output)
+				
+				gpio.digitalWrite(output)
 			}
 			else {
 				const gpio = this.gpioArray[pin]
-				gpio.writeSync(output);			
+				gpio.digitalWrite(output);			
 			}
 			if(io){
 				io.emit('pinUpdate',{pin:pin,val:output})
 			}
 			return true
+			}
 			
-		}
-		
-		return false
+
 	}
 
 	readVal(pin){
 		if ( pin !== undefined && typeof pin !== undefined && pin!== null){
-			var val = this.gpioArray[pin].readSync();
+			var val = this.gpioArray[pin].digitalRead();
 			return val
 		}
 		else return false
@@ -47,47 +55,76 @@ getByPin(pin){
 
 	//
 	senseGpio(pin,type,io){
-		const sensor = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
+		const sensor = new Gpio(pin, 'in', 'rising', {
+ 		 mode: Gpio.INPUT,
+ 		pullUpDown: Gpio.PUD_UP,
+ 		 alert: true
+		});
+
+		sensor.glitchFilter(5000);
 		this.gpioArray[pin] = sensor
-		sensor.watch((err, value) => {
-			if (err) {
-				throw err;
-			}
-			io.emit('pinUpdate', {pin:pin,val:value})
+		sensor.on('alert',(level, tick) => {
+			io.emit('pinUpdate', {pin:pin,val:level})
 		});
 	}
 	close(pin){
-		if(pin != undefined){
-			this.gpioArray[pin].unexport()
+		if(pin != undefined && this.gpioArray[pin] != null){
+			this.gpioArray[pin].digitalWrite(0)
 			this.gpioArray[pin] = null;
 		}
 		else{
 			this.gpioArray.forEach(function(i){
-			i.unexport()
-			i = '';
+				if(i!=null){
+				i.digitalWrite(0)
+				i = null;
+			}
 		})
 		this.gpioArray = []
 		}
+		return true
 	}
 
 
-	 map(x, in_min, in_max, out_min, out_max){
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-    }
 
     setRgb(pins,output){
-    	var R_val = (output & 0x110000) >> 16;
-        var G_val = (output & 0x001100) >> 8;
-        var B_val = (output & 0x000011) >> 0;
+    	console.log(pins)
+    	var rgb = hexRgb(output,{format:'array'});
+    	if(!this.gpioArray[pins.rpin] && !this.gpioArray[pins.bpin] && !this.gpioArray[pins.gpin]){
+	    	
+	    	var rGpio = new Gpio(pins.rpin, {mode:Gpio.OUTPUT});
+	    	var gGpio = new Gpio(pins.gpin, {mode:Gpio.OUTPUT});
+	    	var bGpio = new Gpio(pins.bpin, {mode:Gpio.OUTPUT});
 
-        R_val = this.map(R_val, 0, 255, 0, 100);
-        G_val = this.map(G_val, 0, 255, 0, 100);
-        B_val = this.map(B_val, 0, 255, 0, 100);
 
-        this.setOutput(pins.rpin,100-R_val);     
-        this.setOutput(pins.gpin,100-G_val) ;  
-        this.setOutput(pins.bpin,100-B_val)  ; 
-        
+	    	this.gpioArray[pins.rpin] = rGpio;
+			this.gpioArray[pins.rpin].type = 'RGB';
+			this.gpioArray[pins.gpin] = gGpio;
+			this.gpioArray[pins.gpin].type = 'RGB';
+			this.gpioArray[pins.bpin] = bGpio;
+			this.gpioArray[pins.gpin].type = 'RGB';
+
+	    	console.log(rgb)
+	    	rGpio.pwmWrite(rgb[0])
+	    	bGpio.pwmWrite(rgb[1])
+	    	gGpio.pwmWrite(rgb[2])
+
+	    }
+	    else{
+	    	if(this.gpioArray[pins.rpin] && this.gpioArray[pins.bpin] && this.gpioArray[pins.bpin]){
+
+	    		var rGpio = this.gpioArray[pins.rpin]
+	    		var gGpio = this.gpioArray[pins.gpin]
+	    		var bGpio = this.gpioArray[pins.bpin]
+
+	    		rGpio.pwmWrite(rgb[0])
+	    		bGpio.pwmWrite(rgb[1])
+	    		gGpio.pwmWrite(rgb[2])
+
+	    	}
+	    	else{
+	    		return false
+	    	}
+	    }
     }
 
 

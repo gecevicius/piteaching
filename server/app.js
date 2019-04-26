@@ -55,6 +55,8 @@ app.use(function(err, req, res, next) {
 // SOCKET
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+
+
 app.set('socketio', io);
 server.listen(3001);
 

@@ -1,12 +1,9 @@
-import {APIService} from '../../services/APIService';
-import axios from 'axios';
 
 import {store} from '../../store/store.js'; 
 import Element from './element.js';
 
 var EventEmitter = require('events');
 
-var apiService = new APIService();
 var setCalls = 0;
 
 function initApi(interpreter, scope) {
@@ -113,9 +110,11 @@ interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper
       interpreter.createNativeFunction(wrapper));
 
     wrapper = function(pin,type) {
-     store.dispatch('pushElem',{pin:pin.data,type:type.data})
-     console.log(store.getters.elem[pin.data])
-     return store.getters.elem[pin.data];
+      console.log("interpreter pin:")
+      var pinData = JSON.parse(pin.data)
+     store.dispatch('pushElem',{pin:pinData,type:type.data})
+     console.log(store.getters.elem[pinData.rpin])
+     return store.getters.elem[pinData.rpin];
    };
    interpreter.setProperty(scope, 'newElem',
     interpreter.createNativeFunction(wrapper));

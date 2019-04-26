@@ -8,8 +8,10 @@ const gpiojs = new gpioFunctions()
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
+	var type = req.body.type;
 	const io = req.app.get('socketio');
-	if (gpiojs.setOutput(pin,output,io)) {
+	console.log(req.body)
+	if (gpiojs.setOutput(pin,output,type,io)) {
 		res.send(pin+' LED with value ' + output);
 	}
 	else {
@@ -43,11 +45,12 @@ router.post('/sensor', function(req, res, next) {
 
 /* DELETE close GPIO connections. */
 router.get('/close', function(req, res, next) {
+	console.log(req.body)
 	if(req.query.pin >= 0){
 		var pin = req.query.pin
-		gpiojs.close(pin);
+		res.send(gpiojs.close(pin));
 	}
-	else gpiojs.close();
+	else res.send(gpiojs.close());
 });
 
    module.exports = router;

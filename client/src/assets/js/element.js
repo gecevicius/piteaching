@@ -9,7 +9,11 @@ const socketInstance = io('http://192.168.1.247:3001', {
 class Element{
 	constructor(pin,type){
 		this.type = type;
-		this.pin = pin;
+		if(pin.rpin){
+			this.pin = pin.rpin;
+			this.multiPins = pin;
+		}
+		
 		this.val = 0;
 		this.interpreterListener = false;
 	}
@@ -17,13 +21,18 @@ class Element{
 	getVal(){
 		return this.val;
 	}
-
+	getMultiPins(){
+		return this.multiPins
+	}
 	getPin(){
 		return this.pin;
 	}
 
 	getType(){
 		return this.type;
+	}
+	setPin(pin){
+		this.pin = pin
 	}
 
 	initListener(){
@@ -33,7 +42,7 @@ class Element{
 		var self = this;
 		socketInstance.on('pinUpdate', function(data){
 			if(self.getPin() == data.pin){
-				if(self.getType != 'BUTTON'){
+				if(self.getType() != 'BUTTON'){
 					self.getVal = data.val;
 				}
 				console.log(self.interpreterListener)
@@ -61,18 +70,20 @@ class Element{
 	setOutput(output){
 		if(this.getType() === "RGB"){
 			console.log('RGB is here!')
-			console.log(output)
-			/* apiService.setOutput(this.getPin(),output).then((data) => {
+			console.log(this.getPin())
+			apiService.setOutput(this.getMultiPins(),output,this.getType()).then((data) => {
 			console.log(data) 
-			})*/ 
+			})
 		}
-		console.log(this.getPin())
-		console.log(output)
-		this.val = output
-		apiService.setOutput(this.getPin(),output).then((data) => {
-			console.log(data)
+		else{
+			console.log(this.getPin())
+			console.log(output)
+			this.val = output
+			apiService.setOutput(this.getPin(),output,this.getType()).then((data) => {
+				console.log(data)
 
-		})
+			})
+		}
 	}
 
 	removeInterpreterListener(){
@@ -81,7 +92,12 @@ class Element{
 	}
 	close(){
 		this.removeInterpreterListener();
-		apiService.close(this.getPin())
+		if(this.multiPins){
+			for(var pin in this.getMultiPins()){
+				apiService.close(this.getMultiPins()[pin])
+			}
+		}
+		else apiService.close(this.getPin())
 	}
 
 }

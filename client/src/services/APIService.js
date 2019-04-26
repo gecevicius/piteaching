@@ -3,20 +3,15 @@ import axios from 'axios';
 
 export class APIService{
 	constructor(){
-		this.API_URL = 'http://10.84.117.17:3000';
+		this.API_URL = 'http://192.168.1.247:3001';
 		this.gpioUrl = this.API_URL+`/gpio`;
 	}
 
-	setOutput (pin,output) {
-
-		//Check if params are objects, that's what the JS-Interpreter used by Blockly sends through.
-		if(typeof pin == 'object'){
-			pin = pin.data
-			output = output.data
-		}
+	setOutput (pin,output,type) {
 		console.log(pin)
 		return axios.post(this.gpioUrl,{
 			"pin":pin,
+			"type":type,
 			"output":output
 		}).then(function (response) {
 			console.log(response);
