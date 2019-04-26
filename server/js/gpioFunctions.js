@@ -52,7 +52,7 @@ getByPin(pin){
 
 	//
 	senseGpio(pin,type,io){
-		const sensor = new Gpio(pin, 'in', 'rising', {{
+		const sensor = new Gpio(pin, 'in', 'rising', {
  		 mode: Gpio.INPUT,
  		pullUpDown: Gpio.PUD_UP,
  		 alert: true
