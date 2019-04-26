@@ -52,13 +52,16 @@ getByPin(pin){
 
 	//
 	senseGpio(pin,type,io){
-		const sensor = new Gpio(pin, 'in', 'rising', {debounceTimeout: 10});
+		const sensor = new Gpio(pin, 'in', 'rising', {{
+ 		 mode: Gpio.INPUT,
+ 		pullUpDown: Gpio.PUD_UP,
+ 		 alert: true
+		});
+
+		sensor.glitchFilter(5000);
 		this.gpioArray[pin] = sensor
-		sensor.watch((err, value) => {
-			if (err) {
-				throw err;
-			}
-			io.emit('pinUpdate', {pin:pin,val:value})
+		sensor.on('alert',(level, tick) => {
+			io.emit('pinUpdate', {pin:pin,val:level})
 		});
 	}
 	close(pin){
@@ -68,7 +71,7 @@ getByPin(pin){
 		}
 		else{
 			this.gpioArray.forEach(function(i){
-			i.unexport()
+			i.digitalWrite(0)
 			i = '';
 		})
 		this.gpioArray = []

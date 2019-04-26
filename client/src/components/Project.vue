@@ -132,7 +132,7 @@
   <v-container px-0 pb-3>
     <h3>Active Components</h3>
     <v-layout>
-      <v-flex xs2  v-for="element in this.elemsArray" class="element-block text-xs-center">
+      <v-flex xs2  v-for="element in this.elemsArray" v-if="element!=undefined"   class="element-block text-xs-center">
         <div class="gpio-element">
           <div>{{element.getType()}}</div>
           <div><img width="50px" :src="getComponentImg(element.getType())"></div>

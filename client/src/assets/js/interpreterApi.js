@@ -113,6 +113,7 @@ interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper
       console.log("interpreter pin:")
       var pinData = JSON.parse(pin.data)
      store.dispatch('pushElem',{pin:pinData,type:type.data})
+     console.log(store.getters.elem[pinData.rpin])
      return store.getters.elem[pinData.rpin];
    };
    interpreter.setProperty(scope, 'newElem',

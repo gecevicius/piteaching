@@ -16,17 +16,27 @@ const store = new Vuex.Store({
 	mutations: {
 		pushElem(state,{newElem}){
 			console.log(newElem)
-			if(newElem.getType === 'RGB'){
-				state.elemsArray[newElem.getPin().rpin] = newElem;
+			if(newElem.getType() === 'RGB'){
+				var pinList = newElem.getMultiPins();
+				for (var pin in pinList){
+					console.log(pinList[pin])
+					Vue.set(state.elemsArray,pinList[pin],newElem)
+
+				}
+		
+				console.log(state.elemsArray[pinList.rpin])
+
 			}
 			else{
-				state.elemsArray[newElem.getPin()] = newElem;
+				Vue.set(state.elemsArray,newElem.getPin(),newElem)
 			}
 			
 		},
 		clear(state,{item}){
-			item.close();
-			state.elemsArray[item.getPin()] = null;
+			if(item != null){
+				item.close();
+				state.elemsArray[item.getPin()] = null;
+			}
 		},
 		blocklyWs(state,blocklyWs){
 			state.blocklyWs = blocklyWs;
@@ -78,10 +88,12 @@ const store = new Vuex.Store({
   		if(this.state.noOfElems > 0){
   			var self = this;
   			this.state.elemsArray.forEach(function(item){
-  				console.log(item);
-  				var noOfElems = self.state.noOfElems - 1
-  				context.commit('noOfElems',{noOfElems});
-  				context.commit('clear',{item});
+  				if(item != undefined && item != null){
+	  				console.log(item);
+	  				var noOfElems = self.state.noOfElems - 1
+	  				context.commit('noOfElems',{noOfElems});
+	  				context.commit('clear',{item});
+  				}
   			})
   		}
   	}

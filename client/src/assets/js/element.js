@@ -11,7 +11,7 @@ class Element{
 		this.type = type;
 		if(pin.rpin){
 			this.pin = pin.rpin;
-			this.rgbPins = pin;
+			this.multiPins = pin;
 		}
 		
 		this.val = 0;
@@ -21,13 +21,18 @@ class Element{
 	getVal(){
 		return this.val;
 	}
-
+	getMultiPins(){
+		return this.multiPins
+	}
 	getPin(){
 		return this.pin;
 	}
 
 	getType(){
 		return this.type;
+	}
+	setPin(pin){
+		this.pin = pin
 	}
 
 	initListener(){
@@ -66,7 +71,7 @@ class Element{
 		if(this.getType() === "RGB"){
 			console.log('RGB is here!')
 			console.log(this.getPin())
-			apiService.setOutput(this.rgbPins,output,this.getType()).then((data) => {
+			apiService.setOutput(this.getMultiPins(),output,this.getType()).then((data) => {
 			console.log(data) 
 			})
 		}
@@ -87,7 +92,12 @@ class Element{
 	}
 	close(){
 		this.removeInterpreterListener();
-		apiService.close(this.getPin())
+		if(this.multiPins){
+			for(var pin in this.getMultiPins()){
+				apiService.close(this.getMultiPins()[pin])
+			}
+		}
+		else apiService.close(this.getPin())
 	}
 
 }
