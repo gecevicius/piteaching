@@ -80,7 +80,7 @@ getByPin(pin){
     setRgb(pins,output){
     	console.log(pins)
     	console.log(output)
-    	if(!this.gpioArray[pin.rpin] && !this.gpioArray[pin.bpin] && !this.gpioArray[pin.gpin]){
+    	if(!this.gpioArray[pins.rpin] && !this.gpioArray[pins.bpin] && !this.gpioArray[pins.gpin]){
 	    	var rgb = hexRgb(output,{format:'array'});
 	    	var rGpio = new Gpio(pins.rpin, {mode:Gpio.OUTPUT});
 	    	var gGpio = new Gpio(pins.gpin, {mode:Gpio.OUTPUT});
