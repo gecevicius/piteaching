@@ -11,7 +11,7 @@ class gpiojs{
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output,type,io){
-		this.gpioArray[pin].type = type;
+		
 		console.log(type)
 		if(type === "RGB"){
 			console.log(type)
@@ -20,6 +20,7 @@ class gpiojs{
 		else{
 			if(!this.gpioArray[pin]){
 				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
+				this.gpioArray[pin].type = type;
 				this.gpioArray[pin] = gpio
 				
 				gpio.digitalWrite(output)
@@ -34,6 +35,7 @@ class gpiojs{
 			return true
 			}
 			
+
 	}
 
 	readVal(pin){
@@ -95,11 +97,11 @@ getByPin(pin){
 
 
 	    	this.gpioArray[pins.rpin] = rGpio;
-			this.gpioArray[pins.rpin].type = 'R';
+			this.gpioArray[pins.rpin].type = 'RGB';
 			this.gpioArray[pins.gpin] = gGpio;
-			this.gpioArray[pins.gpin].type = 'G';
+			this.gpioArray[pins.gpin].type = 'RGB';
 			this.gpioArray[pins.bpin] = bGpio;
-			this.gpioArray[pins.gpin].type = 'B';
+			this.gpioArray[pins.gpin].type = 'RGB';
 
 	    	console.log(rgb)
 	    	rGpio.pwmWrite(rgb[0])
