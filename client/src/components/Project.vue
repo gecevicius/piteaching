@@ -4,70 +4,88 @@
       <v-container pa-0>
         <v-layout align-center justify-start>
           <v-flex xs2>
-            <h2>{{this.projects[currentProj].name}}</h2>
-          </v-flex>
-          <v-flex xs3>
-            <v-dialog v-model="showTut" width="500">
-              <template v-slot:activator="{ on }">
-                <v-btn
-                color="red lighten-2"
-                dark
-                v-on="on"
-                >
-                Show instructions
-              </v-btn>
-            </template>
-
-            <v-card>
-              <v-card-title
-              class="headline grey lighten-2"
-              primary-title
-              >
-              {{this.projects[currentProj].steps[currentStep].title}}
-            </v-card-title>
-
-            <v-card-text>
-              {{this.projects[currentProj].steps[currentStep].desc}}
-            </v-card-text>
-
-            <v-divider></v-divider>
-
-            <v-card-actions>
+           <v-select
+           :items="this.projects"
+           item-text="name"
+           item-value="value"
+           label="Project"
+           v-model="currentProj"
+           ></v-select>
+           <h2></h2>
+         </v-flex>
+         <v-flex xs3>
+          <v-dialog v-model="showTut" width="500">
+            <template v-slot:activator="{ on }">
               <v-btn
-              color="secondary"
-              v-if="this.projects[this.currentProj].steps[this.currentStep - 1] !== undefined"
-              flat
-              @click="step(-1)"
+              color="red lighten-2"
+              dark
+              v-on="on"
               >
-              Back
+              Show instructions
             </v-btn>
-            <v-btn
-            color="secondary"
-            v-else
-            flat
-            disabled
-            >
-            Back
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-          v-if="this.projects[this.currentProj].steps[this.currentStep + 1] !== undefined"
-          color="primary"
-          flat
-          @click="step(1)"
-          >
-          Next
-        </v-btn>
+          </template>
+
+          <v-card>
+           <v-card-title
+           class="headline grey lighten-2"
+           primary-title
+           >
+           {{this.projects[currentProj].name}}
+         </v-card-title>
+         <v-card-title
+         class="headline grey lighten-3"
+         secondary-title
+         >
+         {{this.projects[currentProj].steps[currentStep].title}}
+       </v-card-title>
+
+       <v-card-text>
+        <v-container>
+          {{this.projects[currentProj].steps[currentStep].desc}}
+          <img v-if="this.projects[currentProj].steps[currentStep].media" :src="getComponentImg(this.projects[currentProj].steps[currentStep].media)">
+        </v-container>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-actions>
         <v-btn
-        v-else
-        color="primary"
+        color="secondary"
+        v-if="this.projects[this.currentProj].steps[this.currentStep - 1] !== undefined"
         flat
-        disabled
+        @click="step(-1)"
         >
-        Next
+        Back
       </v-btn>
-    </v-card-actions>
-  </v-card>
+      <v-btn
+      color="secondary"
+      v-else
+      flat
+      disabled
+      >
+      Back
+    </v-btn>
+    <v-spacer></v-spacer>
+    <p>{{this.currentStep+1}} / {{this.projects[this.currentProj].steps.length}}</p>
+    <v-spacer></v-spacer>
+    <v-btn
+    v-if="this.projects[this.currentProj].steps[this.currentStep + 1] !== undefined"
+    color="primary"
+    flat
+    @click="step(1)"
+    >
+    Next
+  </v-btn>
+  <v-btn
+  v-else
+  color="primary"
+  flat
+  disabled
+  >
+  Next
+</v-btn>
+</v-card-actions>
+</v-card>
 </v-dialog>
 </v-flex>
 </v-layout>
@@ -86,7 +104,7 @@
   </v-btn>
 </v-toolbar-items>
 </v-toolbar>
-<Workspace v-bind:project="this.projects[currentProj]"></Workspace>
+<Workspace :project="this.projects[currentProj]"></Workspace>
 
 <div id="code">
   <div id="code-generation">
@@ -104,6 +122,30 @@
     label="RaspberryPi Console Output"
     v-model="console">
   </v-textarea>
+  <v-textarea
+  solo
+  label="USERS"
+  v-model="this.localUsers">
+</v-textarea>
+</div>
+<div id="elements" v-if="this.noOfElems>0">
+  <v-container px-0 pb-3>
+    <h3>Active Components</h3>
+    <v-layout>
+      <v-flex xs2  v-for="element in this.elemsArray" class="element-block text-xs-center">
+        <div class="gpio-element">
+          <div>{{element.getType()}}</div>
+          <div><img width="50px" :src="getComponentImg(element.getType())"></div>
+          <v-layout>
+            <v-flex xs6><div text="center" style="font-weight:bold">{{element.getPin()}}</div></v-flex>
+            <v-flex xs6> <div text="center" style="font-weight:bold">{{element.getVal()}}</div></v-flex>
+          </v-layout>
+
+        </div>
+      </v-flex>
+
+    </v-layout>
+  </v-container>
 </div>
 </div>
 
@@ -135,11 +177,13 @@
         currentStep:0,
         projects:'',
         showTut:false,
-        apiService: new APIService()
+        apiService: new APIService(),
+        projectNames:[]
       }
     },
     beforeMount (){
-      this.projects = Projects;
+      this.projects = Projects ;
+
     },
     sockets: {
       pinUpdate (data) {
@@ -153,58 +197,67 @@
       noOfElems(){
         return this.$store.getters.getNoOfElems
       },
-    },
-    asyncComputed: {
-      localUsers(){
-        return this.apiService.getLocals().then(response => response.data)
-
+      elemsArray(){
+        return this.$store.getters.elem
       }
     },
-    methods : {
-      step(direction){
-        console.log(direction)
-        if( this.projects[this.currentProj].steps[this.currentStep + direction] !== undefined ){
-          this.currentStep = this.currentStep + direction
-        }
-      },
-      generate(){
-        this.$store.dispatch('close');
-        Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , this.$store.getters.blocklyWs);
-        var code = Blockly.JavaScript.workspaceToCode(this.$store.getters.blocklyWs);
-        this.code = code;
-        var interpreter = new Interpreter(code, initApi);
-        this.interpreter = interpreter
-        this.runner();
+    asyncComputed: {
+     async localUsers(){
+      const response = await this.apiService.getLocals().then(response => response.data)
+      console.log(response)
+      return response
 
-      },
-      runner() { 
-        try{
-          if (this.interpreter.run()) { 
-            setTimeout(function(){
-              this.runner
+    }
+  },
+  methods : {
+    step(direction){
+      console.log(direction)
+      if( this.projects[this.currentProj].steps[this.currentStep + direction] !== undefined ){
+        this.currentStep = this.currentStep + direction
+      }
+    },
+    generate(){
+      this.$store.dispatch('close');
+      Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , this.$store.getters.blocklyWs);
+      var code = Blockly.JavaScript.workspaceToCode(this.$store.getters.blocklyWs);
+      this.code = code;
+      var interpreter = new Interpreter(code, initApi);
+      this.interpreter = interpreter
+      this.runner();
 
-            }, 25); 
-          } 
-        }
-        catch(e){
-          console.log("error:"+e.stack);
-        }
-      },
+    },
+    runner() { 
+      try{
+        if (this.interpreter.run()) { 
+          setTimeout(function(){
+            this.runner
 
-      stop() {
-       this.setCalls = 0
-       this.apiService.close().then((data) => {
-        console.log(data)
-      });
-       this.$store.dispatch('close')
-     },
-
-     updateConsole(text){
-      this.console = this.console +text+"\n";
+          }, 25); 
+        } 
+      }
+      catch(e){
+        console.log("error:"+e.stack);
+      }
     },
 
+    stop() {
+     this.setCalls = 0
+     this.apiService.close().then((data) => {
+      console.log(data)
+    });
+     this.$store.dispatch('close')
+   },
 
+   updateConsole(text){
+    this.console = this.console +text+"\n";
+  },
+  getComponentImg(type){
+    var img = require("../assets/staticimg/"+type+".png")
+    return img
   }
+
+
+}
 
 
 }

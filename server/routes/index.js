@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-import find from 'local-devices'
+const find = require('local-devices');
 
 /* GET home page. */
 router.get('/users', function(req, res, next) {

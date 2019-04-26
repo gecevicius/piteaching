@@ -6,17 +6,25 @@
 
       </div>
 
-      <xml id="toolbox" style="display: none">
-        <category name="math">
-          <block v-for="block in this.project.blocks.math" :type="block"></block>
+      <xml id="toolbox" >
+        <category colour="210" name="Math">
+          <block  v-for="block in this.computedProject.blocks.math" :type="block"></block>
         </category>
-        <category name="variables and elements">
+        <category  colour="120" name="Loops">
+          <block v-for="block in this.computedProject.blocks.loops" :type="block"></block>
+        </category>
+        <category colour="180" name="Variables and Elements">
           <button text="Add new variable" callbackKey="TEST"></button>
-          <block v-for="block in this.project.blocks.vars" :type="block"></block>
+          <block v-for="block in this.computedProject.blocks.vars" :type="block"></block>
         </category>
-        <category name="gpio controls">
-          <block v-for="block in this.project.blocks.gpio_controls" :type="block"></block>
-
+        <category colour="150" name="Text">
+          <block v-for="block in this.computedProject.blocks.text" :type="block"></block>
+        </category>
+        <category colour="280" name="PI Controls">
+          <block v-for="block in this.computedProject.blocks.gpio_controls" :type="block"></block>
+        </category>
+        <category colour="360" name="Other">
+          <block v-for="block in this.computedProject.blocks.other" :type="block"></block>
         </category>
       </xml>
     </div>
@@ -29,9 +37,6 @@
 
 <script>
   import Blockly from '../assets/js/CustomBlocks'
-  import Interpreter from 'js-interpreter';
-  import initApi from '../assets/js/interpreterApi';
-  import io from 'socket.io-client';
 
   export default {
     name: 'Workspace',
@@ -44,14 +49,39 @@
     },
     props: ['project'],
     mounted(){
-      var blocklyArea = document.getElementById('blocklyArea')
-      var blocklyDiv =  document.getElementById('blocklyDiv')
-      var workspace = Blockly.inject(blocklyDiv,
-        {toolbox: document.getElementById('toolbox')})
-      this.blocklyArea = blocklyArea;
-      this.blocklyDiv = blocklyDiv;
-      this.workspace = workspace;
-      var onresize = function(e) {
+      this.createBlockly();
+    },
+    watch: { 
+        computedProject: function(newVal, oldVal) { // watch it
+
+
+
+         this.workspace.dispose()
+         console.log("clean")
+         console.log(this.workspace)
+         console.log("done updating to" + this.project.value)
+         this.createBlockly()
+         this.workspace.updateToolbox(document.getElementById('toolbox'))
+       }
+     },
+     computed:{
+      computedProject(){
+
+        console.log("computed")
+        return this.project
+      }
+    },
+    methods : {
+      createBlockly(){
+
+        var blocklyArea = document.getElementById('blocklyArea')
+        var blocklyDiv =  document.getElementById('blocklyDiv')
+        var workspace = Blockly.inject(blocklyDiv,
+          {toolbox: document.getElementById('toolbox')})
+        this.blocklyArea = blocklyArea;
+        this.blocklyDiv = blocklyDiv;
+        this.workspace = workspace;
+        var onresize = function(e) {
     // Compute the absolute coordinates and dimensions of blocklyArea.
     var element = blocklyArea;
     var x = 0;
@@ -77,11 +107,7 @@
   workspace.registerButtonCallback('TEST',function(button){Blockly.Variables.createVariable(button.getTargetWorkspace(), null) })
   this.$store.state.blocklyWs = this.workspace;
   console.log(this.$store.state.blocklyWs)
-
-},
-
-methods : {
-
+}
 
 
 }

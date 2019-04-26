@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
 
-  
+
 Vue.use(Vuex)
 
 

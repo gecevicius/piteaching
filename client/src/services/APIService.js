@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export class APIService{
 	constructor(){
-		this.API_URL = 'http://192.168.1.247:3000';
+		this.API_URL = 'http://10.84.117.17:3000';
 		this.gpioUrl = this.API_URL+`/gpio`;
 	}
 
@@ -69,7 +69,7 @@ export class APIService{
 	}
 
 	getLocals(){
-		return axios.get(this.API_URL).then(function(response){
+		return axios.get(this.API_URL+"/users").then(function(response){
 			return response
 		})
 	}

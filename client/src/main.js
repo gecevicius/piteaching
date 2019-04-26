@@ -6,25 +6,25 @@ import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 import './assets/css/general.css'
-import '@mdi/font/css/materialdesignicons.css'
 
+import AsyncComputed from 'vue-async-computed'
 
 import Vuex from 'vuex'
 Vue.use(Vuex)
-
+Vue.use(AsyncComputed)
 import {store} from './store/store.js'
 
 import VueSocketio from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 
 const socketInstance = io('http://192.168.1.247:3001', {
-  transports: ['websocket'],
+	transports: ['websocket'],
 });
 
 
 
 Vue.use(VueSocketio,socketInstance) ;
-
+import '@mdi/font/css/materialdesignicons.css'
 Vue.use(Vuetify,{
   iconfont: 'mdi' // 'md' || 'mdi' || 'fa' || 'fa4'
 })

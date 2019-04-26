@@ -1,17 +1,14 @@
-import {APIService} from '../../services/APIService';
-var apiService = new APIService();
+import Element from "./element"
 
-import io from 'socket.io-client';
-const socketInstance = io('http://192.168.1.247:3001', {
-	transports: ['websocket'],
-});
-
-class Element{
+class RGBALed extends Element{
 	constructor(pin,type){
-		this.type = type;
-		this.pin = pin;
-		this.val = 0;
-		this.interpreterListener = false;
+		if(typeof pin === 'object' || pin[1] )
+			super(pin[0],type);
+		else {
+			super(pin,type);
+		}
+
+		
 	}
 
 	getVal(){
@@ -60,11 +57,9 @@ class Element{
 	}
 	setOutput(output){
 		if(this.getType() === "RGB"){
-			console.log('RGB is here!')
-			console.log(output)
-			/* apiService.setOutput(this.getPin(),output).then((data) => {
-			console.log(data) 
-			})*/ 
+			apiService.setOutput(this.getPin(),output).then((data) => {
+				console.log(data)
+			})
 		}
 		console.log(this.getPin())
 		console.log(output)

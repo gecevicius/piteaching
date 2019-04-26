@@ -11,26 +11,26 @@ import initApi from './interpreterApi';
 Blockly.Blocks['set_gpio'] = {
 	init: function() {
    this.appendValueInput('GPIO')
-   .appendField('set gpio pin ')
+   .appendField('set GPIO ')
     this.appendDummyInput()
-   .appendField(' to')
-   .appendField(new Blockly.FieldDropdown([
-     ['high output', '1'],
-     ['low output', '0'],
-     ]),
-   'OUTPUT');
+   .appendField(' output to')
+   this.appendValueInput('OUTPUT')
+   this.appendDummyInput(),
 
-   this.setColour(160);
+   this.setColour(270);
    this.setPreviousStatement(true, 'Action');
    this.setNextStatement(true, 'Action');
  }
 };
 
+
+
 Blockly.JavaScript['set_gpio'] = function(block) {
 
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
-  var output = block.getFieldValue('OUTPUT')
+  var output = Blockly.JavaScript.valueToCode(block, 'OUTPUT', Blockly.JavaScript.ORDER_ADDITION) || '0';
   console.log(selectedVar)
+   console.log(output)
   var code = 'setOutput(' + selectedVar + ',' + output  + ');';
   return code;
 };
@@ -38,9 +38,9 @@ Blockly.JavaScript['set_gpio'] = function(block) {
 Blockly.Blocks['toggle_gpio'] = {
   init: function() {
    this.appendValueInput('GPIO')
-   .appendField('toggle output gpio pin number')
+   .appendField('toggle GPIO output')
    this.appendDummyInput()
-   this.setColour(140);
+   this.setColour(275);
    this.setPreviousStatement(true, 'Action');
    this.setNextStatement(true, 'Action');
  }
@@ -49,8 +49,7 @@ Blockly.Blocks['toggle_gpio'] = {
 Blockly.JavaScript['toggle_gpio'] = function(block) {
 
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
-  var output = block.getFieldValue('OUTPUT')
-
+ 
   var code = 'toggleOutput(' + selectedVar + ');';
   return code;
 };
@@ -58,39 +57,127 @@ Blockly.JavaScript['toggle_gpio'] = function(block) {
 Blockly.Blocks['read_gpio'] = {
   init: function() {
    this.appendDummyInput()
-   .appendField('get value of pin')
+   .appendField('get value of GPIO')
    .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
-   this.setColour(280);
+   this.setColour(285);
    this.setOutput(true);
  }
 };
 
+Blockly.Blocks['colour_picker'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('colour picker:')
+        .appendField(new Blockly.FieldColour('#ff0000'), 'COLOUR');
+    this.setColour(355)
+    this.setOutput(true)
+  }
+};
 
+/* LEGACY MULTI-ELEMENT BLOCK */
 Blockly.Blocks['new_element'] = {
   init: function() {
    this.appendDummyInput()
-   .appendField('create new')
+   .appendField('create a new ')
    .appendField(new Blockly.FieldDropdown([
      ['Button', 'BUTTON'],
      ['LED', 'LED'],
+     ['RGB', 'LED'],
      ['LCD Screen', 'LCD'],
      ['Ranger', 'RANGER'],
      ]),
    'TYPE')
-   .appendField(' at pin ')
+   .appendField('connected at pin ')
    .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
-
-   this.setColour(120);
+   this.setColour(180);
    this.setPreviousStatement(true, 'Action');
    this.setNextStatement(true, 'Action');
    this.setOutput(true);
  }
 };
 
-
+/* LEGACY MULTI-ELEMENT BLOCK JS*/
 Blockly.JavaScript['new_element'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = block.getFieldValue('TYPE');
+  var code = 'newElem(' + pin + ',"' + type  + '");';
+  return [code,Blockly.JavaScript.ORDER_CALL];
+};
+
+
+Blockly.Blocks['new_led'] = {
+  init: function() {
+   this.appendDummyInput()
+   .appendField('create a new LED')
+   .appendField('connected at pin ')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+   this.setColour(180);
+   this.setPreviousStatement(true, 'Action');
+   this.setNextStatement(true, 'Action');
+   this.setOutput(true);
+ }
+};
+
+Blockly.JavaScript['new_led'] = function(block) {
+  var pin = block.getFieldValue('PIN');
+  var type = 'LED';
+  var code = 'newElem(' + pin + ',"' + type  + '");';
+  return [code,Blockly.JavaScript.ORDER_CALL];
+};
+
+
+
+Blockly.Blocks['new_rgb'] = {
+  init: function() {
+   this.appendDummyInput()
+   .appendField('create a new RGB LED')
+   this.appendDummyInput()   
+   .appendField('R:')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'RED')
+   .appendField('G:')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'GREEN')
+   .appendField('B:')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'BLUE')
+   this.setColour(180);
+   this.setPreviousStatement(true, 'Action');
+   this.setNextStatement(true, 'Action');
+   this.setOutput(true);
+ }
+};
+
+Blockly.JavaScript['new_rgb'] = function(block) {
+  var rpin = block.getFieldValue('RED');
+  var bpin = block.getFieldValue('BLUE');
+  var gpin = block.getFieldValue('GREEN');
+
+  var pins={
+    rpin : rpin,
+    bpin : bpin,
+    gpin : gpin
+  }
+
+  var type = 'RGB';
+  var code = 'newElem(' + JSON.stringify(pins) + ',"' + type  + '");';
+  return [code,Blockly.JavaScript.ORDER_CALL];
+};
+
+
+Blockly.Blocks['new_button'] = {
+  init: function() {
+   this.appendDummyInput()
+   .appendField('create a new Button')
+   .appendField('connected at pin ')
+   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
+   this.setColour(180);
+   this.setPreviousStatement(true, 'Action');
+   this.setNextStatement(true, 'Action');
+   this.setOutput(true);
+ }
+};
+
+Blockly.JavaScript['new_button'] = function(block) {
+  var pin = block.getFieldValue('PIN');
+  var type = 'BUTTON';
   var code = 'newElem(' + pin + ',"' + type  + '");';
   return [code,Blockly.JavaScript.ORDER_CALL];
 };
@@ -101,8 +188,9 @@ Blockly.Blocks['read_gpio'] = {
   init: function() {
    this
    .appendValueInput('GPIO')
-   .appendField('get value of pin')
-   this.appendDummyInput()   
+   .appendField('read GPIO')
+   this.appendDummyInput()  
+   .appendField('value') 
    this.setColour(280);
    this.setOutput(true);
  }
@@ -127,7 +215,7 @@ Blockly.JavaScript['read_gpio'] = function(block) {
 
 Blockly.defineBlocksWithJsonArray([{
   "type": "wait_seconds",
-  "message0": " wait %1 seconds",
+  "message0": " Wait %1 seconds",
   "args0": [{
     "type": "field_number",
     "name": "SECONDS",
@@ -137,7 +225,7 @@ Blockly.defineBlocksWithJsonArray([{
   }],
   "previousStatement": null,
   "nextStatement": null,
-  "colour": "%{BKY_LOOPS_HUE}"
+  "colour":360,
 }]);
 
 /**
@@ -156,10 +244,10 @@ Blockly.Blocks['sense_gpio'] = {
   init: function() {
    this
    .appendValueInput('GPIO')
-   .appendField('watch GPIO')
+   .appendField('Watch GPIO')
   this.appendDummyInput()   
    this.appendStatementInput('DO')
-   .appendField('DO');
+   .appendField('On Change');
 
    this.setColour(280)
   
@@ -199,6 +287,7 @@ console.log(allVars[0])
 Blockly.defineBlocksWithJsonArray([ {
   "type": "variables_get",
   "message0": "%1",
+  "colour": 170,
   "args0": [
   {
     "type": "field_variable",
@@ -217,6 +306,7 @@ Blockly.defineBlocksWithJsonArray([ {
 Blockly.defineBlocksWithJsonArray([{
   "type": "variables_set",
   "message0": "%{BKY_VARIABLES_SET}",
+  "colour": 175,
   "args0": [
   {
     "type": "field_variable",

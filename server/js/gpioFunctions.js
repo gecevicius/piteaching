@@ -20,7 +20,9 @@ class gpiojs{
 				const gpio = this.gpioArray[pin]
 				gpio.writeSync(output);			
 			}
-			io.emit('pinUpdate',{pin:pin,val:output})
+			if(io){
+				io.emit('pinUpdate',{pin:pin,val:output})
+			}
 			return true
 			
 		}
@@ -67,6 +69,26 @@ getByPin(pin){
 		this.gpioArray = []
 		}
 	}
+
+
+	 map(x, in_min, in_max, out_min, out_max){
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+    }
+
+    setRgb(pins,output){
+    	var R_val = (output & 0x110000) >> 16;
+        var G_val = (output & 0x001100) >> 8;
+        var B_val = (output & 0x000011) >> 0;
+
+        R_val = this.map(R_val, 0, 255, 0, 100);
+        G_val = this.map(G_val, 0, 255, 0, 100);
+        B_val = this.map(B_val, 0, 255, 0, 100);
+
+        this.setOutput(pins.rpin,100-R_val);     
+        this.setOutput(pins.gpin,100-G_val) ;  
+        this.setOutput(pins.bpin,100-B_val)  ; 
+        
+    }
 
 
 }
