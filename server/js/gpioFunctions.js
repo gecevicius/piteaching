@@ -11,7 +11,9 @@ class gpiojs{
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output,type,io){
+		console.log(type)
 		if(type === "RGB"){
+			console.log(type)
 			this.setRgb(pin,output,type)
 		}
 		else{
@@ -76,12 +78,14 @@ getByPin(pin){
 
 
     setRgb(pins,output){
+    	console.log(pins)
+    	console.log(output)
     	if(!this.gpioArray[pin.rpin] && !this.gpioArray[pin.bpin] && !this.gpioArray[pin.gpin]){
 	    	var rgb = hexRgb(output,{format:'array'});
 	    	var rGpio = new Gpio(pins.rpin, {mode:Gpio.OUTPUT});
 	    	var gGpio = new Gpio(pins.gpin, {mode:Gpio.OUTPUT});
 	    	var bGpio = new Gpio(pins.bpin, {mode:Gpio.OUTPUT});
-
+	    	console.log(rgb)
 	    	rGpio.pwmWrite(rgb[0])
 	    	bGpio.pwmWrite(rgb[1])
 	    	gGpio.pwmWrite(rgb[2])
