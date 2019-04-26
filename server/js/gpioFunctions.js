@@ -10,7 +10,11 @@ class gpiojs{
 
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
-	setOutput(pin,output,io,type){
+	setOutput(pin,output,type,io){
+		if(type === "RGB"){
+			this.setRgb(pins,output,type)
+		}
+		else{
 			if(!this.gpioArray[pin]){
 				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
 				this.gpioArray[pin] = gpio
@@ -25,8 +29,8 @@ class gpiojs{
 				io.emit('pinUpdate',{pin:pin,val:output})
 			}
 			return true
+			}
 			
-		
 	}
 
 	readVal(pin){

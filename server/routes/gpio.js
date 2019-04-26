@@ -8,8 +8,9 @@ const gpiojs = new gpioFunctions()
 router.post('/', function(req, res, next) {
 	var pin = req.body.pin
 	var output = req.body.output;
+	var type = req.body.type;
 	const io = req.app.get('socketio');
-	if (gpiojs.setOutput(pin,output,io)) {
+	if (gpiojs.setOutput(pin,output,type,io)) {
 		res.send(pin+' LED with value ' + output);
 	}
 	else {
