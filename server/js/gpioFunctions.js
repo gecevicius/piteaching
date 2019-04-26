@@ -66,16 +66,17 @@ getByPin(pin){
 	}
 	close(pin){
 		if(pin != undefined){
-			this.gpioArray[pin].unexport()
+			this.gpioArray[pin].digitalWrite(0)
 			this.gpioArray[pin] = null;
 		}
 		else{
 			this.gpioArray.forEach(function(i){
 			i.digitalWrite(0)
-			i = '';
+			i = null;
 		})
 		this.gpioArray = []
 		}
+		return true
 	}
 
 
