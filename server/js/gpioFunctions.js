@@ -1,5 +1,6 @@
 
 const Gpio = require('pigpio').Gpio;
+const hexRgb = require('hex-rgb');
 
 class gpiojs{
 	
@@ -9,10 +10,11 @@ class gpiojs{
 
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
-	setOutput(pin,output,io){
+	setOutput(pin,output,io,type){
 			if(!this.gpioArray[pin]){
 				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
 				this.gpioArray[pin] = gpio
+				this.gpioArray[pin].type = type
 				gpio.digitalWrite(output)
 			}
 			else {
@@ -70,18 +72,17 @@ getByPin(pin){
 
 
     setRgb(pins,output){
-    	var R_val = (output & 0x110000) >> 16;
-        var G_val = (output & 0x001100) >> 8;
-        var B_val = (output & 0x000011) >> 0;
+    	if(!this.gpioArray[pin.rpin] && !this.gpioArray[pin.bpin] && !this.gpioArray[pin.gpin]){
+	    	var rgb = hexRgb(output,{format:'array'});
+	    	var rGpio = new Gpio(pins.rpin, {mode:Gpio.OUTPUT});
+	    	var gGpio = new Gpio(pins.gpin, {mode:Gpio.OUTPUT});
+	    	var bGpio = new Gpio(pins.bpin, {mode:Gpio.OUTPUT});
 
-        R_val = this.map(R_val, 0, 255, 0, 100);
-        G_val = this.map(G_val, 0, 255, 0, 100);
-        B_val = this.map(B_val, 0, 255, 0, 100);
+	    	rGpio.pwmWrite(rgb[0])
+	    	bGpio.pwmWrite(rgb[1])
+	    	gGpio.pwmWrite(rgb[2])
 
-        this.setOutput(pins.rpin,100-R_val);     
-        this.setOutput(pins.gpin,100-G_val) ;  
-        this.setOutput(pins.bpin,100-B_val)  ; 
-        
+	    }
     }
 
 
