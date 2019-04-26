@@ -47,9 +47,9 @@ router.post('/sensor', function(req, res, next) {
 router.get('/close', function(req, res, next) {
 	if(req.query.pin >= 0){
 		var pin = req.query.pin
-		gpiojs.close(pin);
+		res.send(gpiojs.close(pin));
 	}
-	else gpiojs.close();
+	else res.send(gpiojs.close());
 });
 
    module.exports = router;
