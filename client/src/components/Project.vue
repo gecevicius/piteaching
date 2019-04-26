@@ -194,9 +194,6 @@
       }
     },
     computed: {
-      pinValArray() {
-        return this.$store.getters.pinValArray[4]
-      },
       noOfElems(){
         return this.$store.getters.getNoOfElems
       },
@@ -220,13 +217,16 @@
       }
     },
     generate(){
-      this.$store.dispatch('close');
+      if(this.noOfElems > 0){
+        this.stop()
+      }
       Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , this.$store.getters.blocklyWs);
       var code = Blockly.JavaScript.workspaceToCode(this.$store.getters.blocklyWs);
       this.code = code;
       var interpreter = new Interpreter(code, initApi);
       this.interpreter = interpreter
       this.runner();
+
 
     },
     runner() { 
@@ -244,23 +244,22 @@
     },
 
     stop() {
-     this.setCalls = 0
-     this.apiService.close().then((data) => {
-      console.log(data)
-    });
-     this.$store.dispatch('close')
-   },
+      this.$store.dispatch('close',{pin:""})
+      this.apiService.close().then((data) => {
+            console.log(data)
+          });
+    },
 
-   updateConsole(text){
-    this.console = this.console +text+"\n";
-  },
-  getComponentImg(type){
-    var img = require("../assets/staticimg/"+type+".png")
-    return img
+    updateConsole(text){
+      this.console = this.console +text+"\n";
+    },
+    getComponentImg(type){
+      var img = require("../assets/staticimg/"+type+".png")
+      return img
+    }
+
+
   }
-
-
-}
 
 
 }

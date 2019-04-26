@@ -23,7 +23,7 @@ const store = new Vuex.Store({
 					Vue.set(state.elemsArray,pinList[pin],newElem)
 
 				}
-		
+
 				console.log(state.elemsArray[pinList.rpin])
 
 			}
@@ -32,11 +32,17 @@ const store = new Vuex.Store({
 			}
 			
 		},
-		clear(state,{item}){
-			if(item != null){
+		remove(state,{pin}){
+			if(pin != null){
+				var item = this.state.elemsArray[pin];
 				item.close();
-				state.elemsArray[item.getPin()] = null;
+				Vue.set(state.elemsArray,pin,null)
+				state.noOfElems = state.noOfElems - 1;
 			}
+		},
+		close(state){
+			state.elemsArray = [];
+			state.noOfElems = 0;
 		},
 		blocklyWs(state,blocklyWs){
 			state.blocklyWs = blocklyWs;
@@ -65,7 +71,7 @@ const store = new Vuex.Store({
 	actions:{
 		pushElem(context,{pin,type}){
   		//
-  		if(pin !='undefined' && type != null){
+  		if(pin !=undefined && type != null){
   			if(this.state.elemsArray[pin] == undefined || this.state.elemsArray[pin] == null ){
   				var newElem = new Element(pin,type);
   				var noOfElems = this.state.noOfElems + 1;
@@ -84,17 +90,21 @@ const store = new Vuex.Store({
   	blocklyWs(context,{blocklyWs}){
   		context.commit('blocklyWs',{blocklyWs});
   	},
-  	close(context){
+  	close(context,{pin}){
   		if(this.state.noOfElems > 0){
-  			var self = this;
-  			this.state.elemsArray.forEach(function(item){
-  				if(item != undefined && item != null){
-	  				console.log(item);
-	  				var noOfElems = self.state.noOfElems - 1
-	  				context.commit('noOfElems',{noOfElems});
-	  				context.commit('clear',{item});
-  				}
-  			})
+  			console.log(pin)
+  			if(pin != undefined && pin !== "")
+  			{
+
+  				context.commit('remove',{pin});
+
+  			}
+  			else {
+  				
+  				context.commit('close');
+
+  			}
+  			
   		}
   	}
   },
