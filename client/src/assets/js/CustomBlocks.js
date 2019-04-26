@@ -161,7 +161,7 @@ Blockly.JavaScript['new_rgb'] = function(block) {
   }
 
   var type = 'RGB';
-  var code = 'newElem(' + JSON.stringify(pins) + ',"' + type  + '");';
+  var code = "newElem('" + JSON.stringify(pins) + "','" + type  + "');";
   return [code,Blockly.JavaScript.ORDER_CALL];
 };
 

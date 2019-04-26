@@ -16,7 +16,13 @@ const store = new Vuex.Store({
 	mutations: {
 		pushElem(state,{newElem}){
 			console.log(newElem)
-			state.elemsArray[newElem.getPin()] = newElem;
+			if(newElem.getType === 'RGB'){
+				state.elemsArray[newElem.getPin().rpin] = newElem;
+			}
+			else{
+				state.elemsArray[newElem.getPin()] = newElem;
+			}
+			
 		},
 		clear(state,{item}){
 			item.close();
