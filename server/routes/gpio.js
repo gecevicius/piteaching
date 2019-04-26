@@ -10,6 +10,7 @@ router.post('/', function(req, res, next) {
 	var output = req.body.output;
 	var type = req.body.type;
 	const io = req.app.get('socketio');
+	console.log(req.body)
 	if (gpiojs.setOutput(pin,output,type,io)) {
 		res.send(pin+' LED with value ' + output);
 	}
