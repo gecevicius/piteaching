@@ -10,7 +10,6 @@ class gpiojs{
 
 	//returns true if gpio is accessible and written successfuly, otherwise return false.
 	setOutput(pin,output,io){
-		if (Gpio.accessible) {
 			if(!this.gpioArray[pin]){
 				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
 				this.gpioArray[pin] = gpio
@@ -25,14 +24,12 @@ class gpiojs{
 			}
 			return true
 			
-		}
 		
-		return false
 	}
 
 	readVal(pin){
 		if ( pin !== undefined && typeof pin !== undefined && pin!== null){
-			var val = this.gpioArray[pin].readSync();
+			var val = this.gpioArray[pin].digitalRead();
 			return val
 		}
 		else return false
