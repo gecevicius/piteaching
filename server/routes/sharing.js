@@ -12,6 +12,7 @@ const io = req.app.get('socketio');
 		if(req.body.enabled){
 			await storage.setItem('enabled',req.body.enabled);
 			await storage.setItem('workspace',req.body.workspace);
+			console.log(req.body.workspace)
 			enabled = req.body.enabled;
 			var url = ip.address();
 			io.emit("wsSharing",{enabled:req.body.enabled,url:url,msg:"Sharing enabled!"});
@@ -37,8 +38,8 @@ const io = req.app.get('socketio');
 			enabled = await storage.getItem('enabled');
 			if(enabled == true){
 				io.emit("wsUpdated",{msg:"Workspace updated."});
-				const workspace = await storage.getItem('workspace',req.body.workspace);
-				
+				const workspace = await storage.getItem('workspace');
+					console.log(workspace)
 				res.send(workspace)
 			}else{
 				res.sendStatus(403)
