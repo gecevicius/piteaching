@@ -52,6 +52,7 @@ const store = new Vuex.Store({
 			state.noOfElems = 0;
 		},
 		blocklyWs(state,blocklyWs){
+
 			state.blocklyWs = blocklyWs;
 		},
 		
@@ -70,8 +71,9 @@ const store = new Vuex.Store({
 			}
 			return state.elemsArray;
 		},
-		blocklyWs(state,{pin})
+		blocklyWs(state)
 		{ 
+
 			return state.blocklyWs;
 		},
 		getNoOfElems(state){
@@ -81,8 +83,9 @@ const store = new Vuex.Store({
 	actions:{
 		toggleEnableSharing(context,{enableSharing,username}){
 			if(enableSharing != undefined ){
+				var blockDB = this.state.blocklyWs.blockDB
 				context.commit('toggleEnableSharing',{enableSharing,username});
-				apiService.shareWorkspace(this.state.blocklyWs,username,enableSharing)
+				apiService.shareWorkspace(blockDB,username,enableSharing)
 			}
 
 		},
@@ -105,6 +108,7 @@ const store = new Vuex.Store({
   		}
   	},
   	blocklyWs(context,{blocklyWs}){
+
   		context.commit('blocklyWs',{blocklyWs});
   	},
   	close(context,{pin}){

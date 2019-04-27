@@ -69,13 +69,10 @@ export class APIService{
 		})
 	}
 
-	shareWorkspace(workspace,enabled){
-		console.log(workspace)
-		console.log(enabled)
-
-		var stringifiedWs = stringify(workspace);
+	shareWorkspace(blockDB,enabled){
+		var stringifiedWs = stringify(blockDB);
 		console.log(stringifiedWs)
-		 axios.post(this.API_URL+"/workspace",{
+		 axios.post(this.API_URL+"/sharing",{
 			"workspace":stringifiedWs,
 			"enabled":true
 		}).then(function(response){
