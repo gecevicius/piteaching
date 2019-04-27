@@ -10,11 +10,21 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', async function(req, res, next) {
-  
-			await storage.setItem('username',req.body.username);
+  	
+	await storage.setItem('username',req.body.username);
   	await storage.setItem('workspace',req.body.workspace);
-  	const username = await storage.getItem('username')
-  	console.log(username)
+  	const username = await storage.getItem('username');
+  	const io = req.app.get('socketio');
+
+  	io.emit("wsenable",{enabled:true,username:username});
+	res.sendStatus(200)
+});
+
+router.get('/', async function(req, res, next) {
+  
+	await storage.setItem('username',req.body.username);
+  	await storage.setItem('workspace',req.body.workspace);
+  	const username = await storage.getItem('username');
 
 	res.sendStatus(200)
 });

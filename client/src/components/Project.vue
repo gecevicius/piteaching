@@ -191,6 +191,9 @@
       },
       error(data){
         alert(data)
+      },
+      wsenable(data){
+        alert(data)
       }
     },
     computed: {
@@ -246,8 +249,8 @@
     stop() {
       this.$store.dispatch('close',{pin:""})
       this.apiService.close().then((data) => {
-            console.log(data)
-          });
+        console.log(data)
+      });
     },
 
     updateConsole(text){
