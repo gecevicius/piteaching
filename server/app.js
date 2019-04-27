@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 const slowDown = require("express-slow-down");
+const bodyParser = require('body-parser');
+
 
 
 var indexRouter = require('./routes/index');
@@ -22,6 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Tell the bodyparser middleware to accept more data
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

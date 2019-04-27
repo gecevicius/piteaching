@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+const CircularJSON = require('circular-json');
 
 export class APIService{
 	constructor(){
@@ -70,12 +70,15 @@ export class APIService{
 	}
 
 	shareWorkspace(workspace,username,enabled){
-		return axios.post(this.API_URL+"/users/workspace",{
-			"workspace":workspace,
+		console.log(workspace)
+		console.log(username)
+		console.log(enabled)
+		 axios.post(this.API_URL+"/users/workspace",{
+			"workspace":CircularJSON.stringify(workspace),
 			"username":username,
 			"enabled":true
 		}).then(function(response){
-			return response
+			
 		})
 	}
 

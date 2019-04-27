@@ -2,9 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
-import APIService from '../services/APIService'
-
-var apiService = new APIService()
+import {APIService} from '../services/APIService';
+var apiService = new APIService();
 
 Vue.use(Vuex)
 
@@ -83,6 +82,7 @@ const store = new Vuex.Store({
 		toggleEnableSharing(context,{enableSharing,username}){
 			if(username !=undefined && enableSharing != undefined && this.state.blocklyWs != ''){
 				context.commit('toggleEnableSharing',{enableSharing,username});
+				console.log(this.state.blocklyWs)
 				apiService.shareWorkspace(this.state.blocklyWs,username,enableSharing)
 			}
 
