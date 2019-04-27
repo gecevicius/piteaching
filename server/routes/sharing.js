@@ -8,20 +8,15 @@ const bodyParser = require('body-parser');
 
 router.post('/',async function(req, res, next) {
 	const io = req.app.get('socketio');
-	const workspace = await storage.getItem('workspace');
-	if(workspace == undefined){
-		await storage.setItem('workspace',req.body.workspace);
-		console.log(req.body.workspace)
-		var url = ip.address();
-		res.sendStatus(200)
-		io.emit("wsSharing",{url:url,msg:"Workspace shared!"});
-	}
-	else{
-			io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace});
-			await storage.setItem('workspace',req.body.workspace);
-		
-		res.sendStatus(200)
-	}
+	console.log(req.body.workspace)
+	var url = ip.address();
+
+	await storage.setItem('workspace',req.body.workspace).then(response =>{
+		io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace,url:url});
+	});
+	
+	res.sendStatus(200)
+	
 
 });
 
@@ -44,7 +39,7 @@ router.delete('/',async function(req, res, next) {
 	const io = req.app.get('socketio');
 	const workspace = await storage.setItem('workspace',undefined);
 
-		io.emit("wsUpdated",{msg:"A person just connected to your workspace."});
+		io.emit("wsUpdated",{msg:"Workspace cleared",workspace:""});
 
 		console.log(workspace)
 		res.send(workspace)

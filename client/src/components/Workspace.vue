@@ -66,8 +66,10 @@
      },
      sockets:{
       wsUpdated(data){
+
         console.log(data)
         this.xmlToWs(data.workspace);
+        
       }
     },
     computed:{
@@ -83,6 +85,7 @@
         var blocklyDiv =  document.getElementById('blocklyDiv')
         var workspace = Blockly.inject(blocklyDiv,
           {toolbox: document.getElementById('toolbox')})
+
         this.blocklyArea = blocklyArea;
         this.blocklyDiv = blocklyDiv;
         this.workspace = workspace;
@@ -110,12 +113,11 @@
   window.addEventListener('resize', onresize, false);
   onresize();
   Blockly.svgResize(workspace);
-
   this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
-  
-  this.shareWorkspace();
+  var self = this;
+  workspace.addChangeListener( function(event){self.shareWorkspace(event)})
 
-  workspace.addChangeListener( this.shareWorkspace() )
+  
 },
 
 async checkIfWorkspaceIsShared(){
@@ -123,8 +125,6 @@ async checkIfWorkspaceIsShared(){
     return response
   })
   if(ws != undefined && ws != false){
-   console.log(ws)
-   console.log(typeof ws)
    this.createBlockly(ws);
  }
  else  this.createBlockly();
@@ -132,18 +132,25 @@ async checkIfWorkspaceIsShared(){
 
 
 
+
 xmlToWs(xmlWs){
-  this.xmlWs = xmlWs;
-  Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace)
+ Blockly.Events.disable();
+ this.workspace.clear()
+ Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace);
+ Blockly.Events.enable();
 },
 
-shareWorkspace(){
-  var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  var xmlString = xmlSerializer.serializeToString(xmlDom)
-  console.log(xmlString === this.xmlWs)
-  if(xmlString !== this.xmlWs){
-    console.log(xmlString)
-    APIService.shareWorkspace(xmlString);
+shareWorkspace(event){
+  console.log(event)
+  if(event.type === Blockly.Events.MOVE){
+    console.log("sharing")
+
+    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlString = xmlSerializer.serializeToString(xmlDom)
+
+    if(xmlString !== this.xmlWs){
+      APIService.shareWorkspace(xmlString);
+    }
   }
 }
 
