@@ -10,8 +10,8 @@ router.post('/',async function(req, res, next) {
 	const io = req.app.get('socketio');
 	console.log(req.body.workspace)
 	var url = ip.address();
-
-	await storage.setItem('workspace',req.body.workspace).then(response =>{
+	var workspace = req.body.workspace
+	await storage.setItem('workspace',workspace).then(response =>{
 		io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace,url:url});
 	}).catch(error =>{
 		console.log(error)
