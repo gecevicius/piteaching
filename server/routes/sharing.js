@@ -33,8 +33,7 @@ const io = req.app.get('socketio');
 
 router.get('/',async function(req, res, next) {
 			const io = req.app.get('socketio');
-			const enabled;
-			enabled = await storage.getItem('enabled');
+			const enabled = await storage.getItem('enabled');
 			if(enabled == true){
 				io.emit("wsConnection",{msg:"A person just connected to your workspace."});
 				const workspace = await storage.getItem('workspace');
