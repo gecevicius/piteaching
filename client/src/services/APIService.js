@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {parse, stringify} from 'flatted/esm';
 
 
-export class APIService{
+class APIService{
 	constructor(){
 		this.API_URL = 'http://192.168.1.247:3001';
 		this.gpioUrl = this.API_URL+`/gpio`;
@@ -35,10 +36,10 @@ export class APIService{
     // handle error
     
 })
-}
+	}
 
 	sense(pin,type){
-			return axios.post(this.gpioUrl+"/sensor",{
+		return axios.post(this.gpioUrl+"/sensor",{
 			pin:pin,
 			type:type
 		}).then(function (response) {
@@ -49,26 +50,41 @@ export class APIService{
 
 	close(pin){
 		if (pin !== undefined || pin >= 0 ){
-		return axios.get(this.gpioUrl+'/close',{params : {
-			pin:pin
-		}
+			return axios.get(this.gpioUrl+'/close',{params : {
+				pin:pin
+			}
 		}).then(function (response) {
 			return console.log(response);
 		})
-		}
-		else{
-			return axios.get(this.gpioUrl+'/close').then(function (response) {
+	}
+	else{
+		return axios.get(this.gpioUrl+'/close').then(function (response) {
 			return console.log(response);
 		})
-		}
 	}
+}
 
-	getLocals(){
-		return axios.get(this.API_URL+"/users").then(function(response){
-			return response
-		})
-	}
+getLocals(){
+	return axios.get(this.API_URL+"/users").then(function(response){
+		return response
+	})
+}
 
-	
+shareWorkspace(xmlWs){
+	console.log(xmlWs)
+	axios.post(this.API_URL+"/sharing",{
+		"workspace":xmlWs,
+	}).then(response =>{
+
+	})
+}
+
+async getWorkspace(){
+	return await axios.get(this.API_URL+"/sharing").then(response => {
+		return response.data;
+	})
+}
 
 }
+
+export default new APIService()

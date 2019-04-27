@@ -2,16 +2,19 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
+import APIService from '../services/APIService';
+import Blockly from '../assets/js/CustomBlocks';
+
 
 
 Vue.use(Vuex)
-
 
 const store = new Vuex.Store({
 	state: {
 		elemsArray:[],
 		blocklyWs:'',
-		noOfElems:0
+		noOfElems:0,
+		username:''
 	},
 	mutations: {
 		pushElem(state,{newElem}){
@@ -20,15 +23,12 @@ const store = new Vuex.Store({
 				var pinList = newElem.getMultiPins();
 				for (var pin in pinList){
 					console.log(pinList[pin])
-					Vue.set(state.elemsArray,pinList[pin],newElem)
-
+					Vue.set(state.elemsArray,pinList[pin],newElem);
 				}
-
-				console.log(state.elemsArray[pinList.rpin])
-
+				console.log(state.elemsArray[pinList.rpin]);
 			}
 			else{
-				Vue.set(state.elemsArray,newElem.getPin(),newElem)
+				Vue.set(state.elemsArray,newElem.getPin(),newElem);
 			}
 			
 		},
@@ -45,6 +45,7 @@ const store = new Vuex.Store({
 			state.noOfElems = 0;
 		},
 		blocklyWs(state,blocklyWs){
+
 			state.blocklyWs = blocklyWs;
 		},
 		
@@ -60,8 +61,9 @@ const store = new Vuex.Store({
 			}
 			return state.elemsArray;
 		},
-		blocklyWs(state,{pin})
+		blocklyWs(state)
 		{ 
+
 			return state.blocklyWs;
 		},
 		getNoOfElems(state){
@@ -88,7 +90,10 @@ const store = new Vuex.Store({
   		}
   	},
   	blocklyWs(context,{blocklyWs}){
-  		context.commit('blocklyWs',{blocklyWs});
+  		if(blocklyWs !== this.state.blocklyWs){
+  			console.log(blocklyWs)
+  			context.commit('blocklyWs',{blocklyWs});
+  		}
   	},
   	close(context,{pin}){
   		if(this.state.noOfElems > 0){
@@ -102,9 +107,7 @@ const store = new Vuex.Store({
   			else {
   				
   				context.commit('close');
-
   			}
-  			
   		}
   	}
   },

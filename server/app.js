@@ -6,9 +6,18 @@ var logger = require('morgan');
 var cors = require('cors')
 const slowDown = require("express-slow-down");
 
+var history = require('connect-history-api-fallback');
+const hostname = 'localhost';
+const port = 3000;
+const storage = require('node-persist');
+const bodyParser = require('body-parser');
+
+const staticFileMiddleware = express.static(path.join(__dirname, '/dist/'));
+
+
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var gpioRouter  = require('./routes/gpio');
+var sharingRouter  = require('./routes/sharing');
 
 var app = express();
 
@@ -22,15 +31,35 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.json({ limit: '50mb' ,type:'application/json'}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:5000000,type:'application/json'}));
+
+
+//routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/gpio', gpioRouter);
+app.use('/sharing', sharingRouter);
 
 const speedLimiter = slowDown({
   windowMs: 2000, // 15 minutes
   delayAfter: 1, // allow 100 requests per 15 minutes, then...
   delayMs: 2000 // begin adding 500ms of delay per request above 100:
 });
+
+
+app.use(staticFileMiddleware);
+
+app.use(history({
+  index:'dist/index.html',
+}));
+
+
+app.get('*',async (req, res) => {
+
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+  
+});
+
 
 app.use(speedLimiter);
 

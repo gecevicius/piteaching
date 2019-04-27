@@ -29,14 +29,14 @@
       </xml>
     </div>
 
-    <div id="pi-emu">
-
-    </div>
   </div>
 </template>
 
 <script>
-  import Blockly from '../assets/js/CustomBlocks'
+  import Blockly from '../assets/js/CustomBlocks';
+  import APIService from '../services/APIService';
+  var parseString = require('xml2js').parseString;
+  var xmlSerializer = new XMLSerializer();
 
   export default {
     name: 'Workspace',
@@ -45,18 +45,17 @@
         blocklyArea : '',
         blocklyDiv :'',
         workspace :'',
+        xmlWs:''
       }
     },
     props: ['project'],
     mounted(){
-      this.createBlockly();
-      
+      this.checkIfWorkspaceIsShared();
+
     },
+
     watch: { 
         computedProject: function(newVal, oldVal) { // watch it
-
-
-
          this.workspace.dispose()
          console.log("clean")
          console.log(this.workspace)
@@ -65,33 +64,41 @@
          this.workspace.updateToolbox(document.getElementById('toolbox'))
        }
      },
-     computed:{
-      computedProject(){
+     sockets:{
+      wsUpdated(data){
 
+        console.log(data)
+        this.xmlToWs(data.workspace);
+        
+      }
+    },
+    computed:{
+      computedProject(){
         console.log("computed")
         return this.project
       }
     },
     methods : {
-      createBlockly(){
+      createBlockly(xmlWs){
 
         var blocklyArea = document.getElementById('blocklyArea')
         var blocklyDiv =  document.getElementById('blocklyDiv')
         var workspace = Blockly.inject(blocklyDiv,
           {toolbox: document.getElementById('toolbox')})
+
         this.blocklyArea = blocklyArea;
         this.blocklyDiv = blocklyDiv;
         this.workspace = workspace;
         var onresize = function(e) {
-    // Compute the absolute coordinates and dimensions of blocklyArea.
-    var element = blocklyArea;
-    var x = 0;
-    var y = 0;
-    do {
-      x += element.offsetLeft;
-      y += element.offsetTop;
-      element = element.offsetParent;
-    } while (element);
+        // Compute the absolute coordinates and dimensions of blocklyArea.
+        var element = blocklyArea;
+        var x = 0;
+        var y = 0;
+        do {
+          x += element.offsetLeft;
+          y += element.offsetTop;
+          element = element.offsetParent;
+        } while (element);
     // Position blocklyDiv over blocklyArea.
     blocklyDiv.style.left = x + 'px';
     blocklyDiv.style.top = y + 'px';
@@ -99,20 +106,55 @@
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(workspace);
 
-
   };
+  if(xmlWs){
+    this.xmlToWs(xmlWs);
+  }
   window.addEventListener('resize', onresize, false);
   onresize();
   Blockly.svgResize(workspace);
+  this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
+  var self = this;
+  workspace.addChangeListener( function(event){self.shareWorkspace(event)})
 
-  workspace.registerButtonCallback('TEST',function(button){Blockly.Variables.createVariable(button.getTargetWorkspace(), null) })
-  this.$store.state.blocklyWs = this.workspace;
-  console.log(this.$store.state.blocklyWs)
+  
+},
+
+async checkIfWorkspaceIsShared(){
+  const ws =  await APIService.getWorkspace().then(response =>{
+    return response
+  })
+  if(ws != undefined && ws != false){
+   this.createBlockly(ws);
+ }
+ else  this.createBlockly();
+},
+
+
+
+
+xmlToWs(xmlWs){
+ Blockly.Events.disable();
+ this.workspace.clear()
+ Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace);
+ Blockly.Events.enable();
+},
+
+shareWorkspace(event){
+  console.log(event)
+  if(event.type === Blockly.Events.MOVE){
+    console.log("sharing")
+
+    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlString = xmlSerializer.serializeToString(xmlDom)
+
+    if(xmlString !== this.xmlWs){
+      APIService.shareWorkspace(xmlString);
+    }
+  }
 }
 
-
 }
-
 
 }
 
