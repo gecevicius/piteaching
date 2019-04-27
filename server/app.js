@@ -51,9 +51,9 @@ app.use(history({
 }));
 
 
-app.get('*', (req, res) => {
+app.get('*',async (req, res) => {
   if(req.connection.remoteAddress !== "127.0.0.1"){
-    const username = await storage.getItem('enabled');
+    const enabled = await storage.getItem('enabled');
     if(enabled){
       res.sendFile(path.join(__dirname, 'dist/index.html'));
       io.emit("wsConnection");
