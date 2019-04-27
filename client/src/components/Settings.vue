@@ -94,7 +94,7 @@ Save
 	methods:{
 		save(){
 			if(this.enableSharing!=false && this.username !== ''){
-				this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing,username:this.username})
+				this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing})
 
 			}
 

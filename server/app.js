@@ -49,20 +49,13 @@ app.use(history({
   index:'dist/index.html',
 }));
 
+app.use(bodyParser.json({ limit: '20mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
 
 app.get('*',async (req, res) => {
-  if(req.connection.remoteAddress !== "127.0.0.1"){
-    console.log(req.connection.remoteAddress)
-    const enabled = await storage.getItem('enabled');
-    if(enabled == true){
-      res.sendFile(path.join(__dirname, 'dist/index.html'));
-      io.emit("wsConnection");
-    }
-    else res.send("User does not exist or sharing is disabled.")
-  }
-  else {
+
     res.sendFile(path.join(__dirname, 'dist/index.html'));
-  }
+  
 });
 
 
