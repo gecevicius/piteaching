@@ -74,6 +74,7 @@ Save
 		},
 		sockets:{
 			wsSharing(data){
+				console.log(data)
 				this.url = data.url;
 			},
 		},
@@ -81,24 +82,19 @@ Save
 			enableSharing :{
 				get(){
 					var enabled = this.$store.getters.enableSharing
-					if(enabled == false){
-						return this.dialog
-					}
-					else return enabled
-				},
-			set(val){
-				this.done = val
-			}
-		}
-	},
-	methods:{
-		save(){
-			if(this.enableSharing!=false && this.username !== ''){
-				this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing})
+					return enabled
+				}
 
 			}
+		},
+		methods:{
+			save(){
+				if(this.enableSharing!=false){
+					this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing})
 
+				}
+
+			}
 		}
 	}
-}
 </script>

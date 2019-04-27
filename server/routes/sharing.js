@@ -12,6 +12,7 @@ const io = req.app.get('socketio');
 		if(req.body.enabled){
 			await storage.setItem('enabled',req.body.enabled);
 			enabled = req.body.enabled;
+			var url = ip.address();
 			io.emit("wsSharing",{enabled:req.body.enabled,url:url,msg:"Sharing enabled!"});
 		}
 		else{
@@ -20,7 +21,7 @@ const io = req.app.get('socketio');
 		}
 		await storage.setItem('workspace',req.body.workspace);
 		
-		var url = ip.address();
+		
 		
 		res.sendStatus(200)
 });
