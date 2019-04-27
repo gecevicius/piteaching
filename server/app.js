@@ -5,11 +5,11 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
 const slowDown = require("express-slow-down");
-const bodyParser = require('body-parser');
 
 var history = require('connect-history-api-fallback');
 const hostname = 'localhost';
 const port = 3000;
+const storage = require('node-persist');
 
 
 const staticFileMiddleware = express.static(path.join(__dirname, '/dist/'));
@@ -18,7 +18,7 @@ const staticFileMiddleware = express.static(path.join(__dirname, '/dist/'));
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gpioRouter  = require('./routes/gpio');
-var workspaceRouter  = require('./routes/workspace');
+var sharingRouter  = require('./routes/sharing');
 
 var app = express();
 
@@ -32,14 +32,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Tell the bodyparser middleware to accept more data
-app.use(bodyParser.json({ limit: '50mb' }));
-
 //routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/gpio', gpioRouter);
-app.use('/workspace', workspaceRouter);
+app.use('/sharing', workspaceRouter);
 
 const speedLimiter = slowDown({
   windowMs: 2000, // 15 minutes
@@ -56,7 +52,17 @@ app.use(history({
 
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
+  if(req.connection.remoteAddress !== "127.0.0.1"){
+    const username = await storage.getItem('enabled');
+    if(enabled){
+      res.sendFile(path.join(__dirname, 'dist/index.html'));
+      io.emit("wsConnection");
+    }
+    else res.send("User does not exist or sharing is disabled.")
+  }
+  else {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  }
 });
 
 

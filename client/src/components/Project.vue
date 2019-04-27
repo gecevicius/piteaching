@@ -192,9 +192,8 @@
       error(data){
         alert(data)
       },
-      
-      wsConnections(data){
-        alert(data.username + " has connected to your workspace!");
+      wsConnection(data){
+        alert("Somebody has connected to your workspace!");
       }
     },
     computed: {

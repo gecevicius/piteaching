@@ -69,20 +69,36 @@ Save
 				username:'',
 				enableSharing:false,
 				dialog:false,
-				url:"Please enable sharing to get your key!"
+				url:""
 			}
 		},
-		wsenable(data){
-			this.url = data.url
+		sockets:{
+			wsSharing(data){
+				this.url = data.url;
+			},
 		},
-		methods:{
-			save(){
-				if(this.enableSharing!=false && this.username !== ''){
-					this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing,username:this.username})
-
-				}
-
+		computed:{
+			enableSharing :{
+				get(){
+					var enabled = this.$store.getters.enableSharing
+					if(enabled == false){
+						return this.dialog
+					}
+					else return enabled
+				},
+			set(val){
+				this.done = val
 			}
 		}
+	},
+	methods:{
+		save(){
+			if(this.enableSharing!=false && this.username !== ''){
+				this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing,username:this.username})
+
+			}
+
+		}
 	}
+}
 </script>
