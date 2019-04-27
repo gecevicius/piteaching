@@ -13,6 +13,8 @@ router.post('/',async function(req, res, next) {
 
 	await storage.setItem('workspace',req.body.workspace).then(response =>{
 		io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace,url:url});
+	}).catch(error =>{
+		console.log(error)
 	});
 	
 	res.sendStatus(200)
