@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //routes
 app.use('/', indexRouter);
 app.use('/gpio', gpioRouter);
-app.use('/sharing', workspaceRouter);
+app.use('/sharing', sharingRouter);
 
 const speedLimiter = slowDown({
   windowMs: 2000, // 15 minutes
