@@ -73,12 +73,12 @@ export class APIService{
 		console.log(workspace)
 		console.log(username)
 		console.log(enabled)
-		 axios.post(this.API_URL+"/users/workspace",{
+		 axios.post(this.API_URL+"/workspace",{
 			"workspace":CircularJSON.stringify(workspace),
 			"username":username,
 			"enabled":true
 		}).then(function(response){
-			
+
 		})
 	}
 
