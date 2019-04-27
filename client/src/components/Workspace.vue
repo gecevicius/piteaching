@@ -65,6 +65,7 @@
      sockets:{
       wsUpdated(data){
         console.log(data)
+        this.xmlToWs(data.workspace);
       }
     },
     computed:{
@@ -102,9 +103,7 @@
 
   };
   if(xmlWs){
-    console.log(Blockly.mainWorkspace)
-    console.log(xmlWs)
-    console.log(Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace))
+    this.xmlToWs(xmlWs);
   }
   window.addEventListener('resize', onresize, false);
   onresize();
@@ -122,7 +121,6 @@ async checkIfWorkspaceIsShared(){
   if(ws != undefined && ws != false){
    console.log(ws)
    console.log(typeof ws)
-   this.xmlWs = ws;
    this.createBlockly(ws);
  }
  else  this.createBlockly();
@@ -130,6 +128,10 @@ async checkIfWorkspaceIsShared(){
 
 async updateWorkspace(e){
   this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
+},
+
+xmlToWs(xmlWs){
+  console.log(Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace))
 }
 
 }

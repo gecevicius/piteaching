@@ -17,8 +17,10 @@ router.post('/',async function(req, res, next) {
 		io.emit("wsSharing",{url:url,msg:"Workspace shared!"});
 	}
 	else{
-		io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace});
-		await storage.setItem('workspace',req.body.workspace);
+		if(req.body.workspace != workspace){
+			io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace});
+			await storage.setItem('workspace',req.body.workspace);
+		}
 		res.sendStatus(200)
 	}
 
