@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import Blockly from '../assets/js/CustomBlocks'
+  import Blockly from '../assets/js/CustomBlocks';
   
   export default {
     name: 'Workspace',
@@ -106,7 +106,7 @@
   Blockly.svgResize(workspace);
 
   workspace.registerButtonCallback('TEST',function(button){Blockly.Variables.createVariable(button.getTargetWorkspace(), null) })
-  this.$store.state.blocklyWs = this.workspace;
+  this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
   console.log(this.$store.state.blocklyWs)
 }
 

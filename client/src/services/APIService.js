@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {parse, stringify} from 'flatted/esm';
 
+
 export class APIService{
 	constructor(){
 		this.API_URL = 'http://192.168.1.247:3001';
@@ -69,11 +70,10 @@ export class APIService{
 		})
 	}
 
-	shareWorkspace(blockDB,enabled){
-		var stringifiedWs = stringify(blockDB);
-		console.log(stringifiedWs)
+	shareWorkspace(xmlWs,enabled){
+		console.log(xmlWs)
 		 axios.post(this.API_URL+"/sharing",{
-			"workspace":stringifiedWs,
+			"workspace":xmlWs,
 			"enabled":true
 		}).then(function(response){
 

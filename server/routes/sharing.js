@@ -39,7 +39,7 @@ const io = req.app.get('socketio');
 				io.emit("wsUpdated",{msg:"Workspace updated."});
 				const workspace = await storage.getItem('workspace',req.body.workspace);
 				
-				res.json(workspace)
+				res.send(workspace)
 			}else{
 				res.sendStatus(403)
 			}

@@ -122,11 +122,7 @@
     label="RaspberryPi Console Output"
     v-model="console">
   </v-textarea>
-  <v-textarea
-  solo
-  label="USERS"
-  v-model="this.localUsers">
-</v-textarea>
+
 </div>
 <div id="elements" v-if="this.noOfElems>0">
   <v-container px-0 pb-3>
@@ -204,67 +200,59 @@
         return this.$store.getters.elem
       }
     },
-    asyncComputed: {
-     async localUsers(){
-      const response = await this.apiService.getLocals().then(response => response.data)
-      console.log(response)
-      return response
+    methods : {
+      step(direction){
+        console.log(direction)
+        if( this.projects[this.currentProj].steps[this.currentStep + direction] !== undefined ){
+          this.currentStep = this.currentStep + direction
+        }
+      },
+      generate(){
+        if(this.noOfElems > 0){
+          this.stop()
+        }
+        Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , this.$store.getters.blocklyWs);
+        var code = Blockly.JavaScript.workspaceToCode(this.$store.getters.blocklyWs);
+        this.code = code;
+        var interpreter = new Interpreter(code, initApi);
+        this.interpreter = interpreter
+        this.runner();
 
-    }
-  },
-  methods : {
-    step(direction){
-      console.log(direction)
-      if( this.projects[this.currentProj].steps[this.currentStep + direction] !== undefined ){
-        this.currentStep = this.currentStep + direction
+
+      },
+      runner() { 
+        try{
+          if (this.interpreter.run()) { 
+            setTimeout(function(){
+              this.runner
+
+            }, 25); 
+          } 
+        }
+        catch(e){
+          console.log("error:"+e.stack);
+        }
+      },
+
+      stop() {
+        this.$store.dispatch('close',{pin:""})
+        this.apiService.close().then((data) => {
+          console.log(data)
+        });
+      },
+
+      updateConsole(text){
+        this.console = this.console +text+"\n";
+      },
+      getComponentImg(type){
+        var img = require("../assets/staticimg/"+type+".png")
+        return img
       }
-    },
-    generate(){
-      if(this.noOfElems > 0){
-        this.stop()
-      }
-      Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , this.$store.getters.blocklyWs);
-      var code = Blockly.JavaScript.workspaceToCode(this.$store.getters.blocklyWs);
-      this.code = code;
-      var interpreter = new Interpreter(code, initApi);
-      this.interpreter = interpreter
-      this.runner();
 
 
-    },
-    runner() { 
-      try{
-        if (this.interpreter.run()) { 
-          setTimeout(function(){
-            this.runner
-
-          }, 25); 
-        } 
-      }
-      catch(e){
-        console.log("error:"+e.stack);
-      }
-    },
-
-    stop() {
-      this.$store.dispatch('close',{pin:""})
-      this.apiService.close().then((data) => {
-        console.log(data)
-      });
-    },
-
-    updateConsole(text){
-      this.console = this.console +text+"\n";
-    },
-    getComponentImg(type){
-      var img = require("../assets/staticimg/"+type+".png")
-      return img
     }
 
 
   }
-
-
-}
 
 </script>

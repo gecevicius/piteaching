@@ -3,10 +3,10 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
 import {APIService} from '../services/APIService';
+import Blockly from '../assets/js/CustomBlocks'
 var apiService = new APIService();
 
 Vue.use(Vuex)
-
 
 const store = new Vuex.Store({
 	state: {
@@ -27,15 +27,13 @@ const store = new Vuex.Store({
 				var pinList = newElem.getMultiPins();
 				for (var pin in pinList){
 					console.log(pinList[pin])
-					Vue.set(state.elemsArray,pinList[pin],newElem)
-
+					Vue.set(state.elemsArray,pinList[pin],newElem);
 				}
-
-				console.log(state.elemsArray[pinList.rpin])
+				console.log(state.elemsArray[pinList.rpin]);
 
 			}
 			else{
-				Vue.set(state.elemsArray,newElem.getPin(),newElem)
+				Vue.set(state.elemsArray,newElem.getPin(),newElem);
 			}
 			
 		},
@@ -83,9 +81,9 @@ const store = new Vuex.Store({
 	actions:{
 		toggleEnableSharing(context,{enableSharing,username}){
 			if(enableSharing != undefined ){
-				var blockDB = this.state.blocklyWs.blockDB
+				var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
 				context.commit('toggleEnableSharing',{enableSharing,username});
-				apiService.shareWorkspace(blockDB,username,enableSharing)
+				apiService.shareWorkspace(xmlDom,username,enableSharing)
 			}
 
 		},
@@ -108,7 +106,7 @@ const store = new Vuex.Store({
   		}
   	},
   	blocklyWs(context,{blocklyWs}){
-
+  		console.log(blocklyWs)
   		context.commit('blocklyWs',{blocklyWs});
   	},
   	close(context,{pin}){
