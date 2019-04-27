@@ -14,9 +14,13 @@ const store = new Vuex.Store({
 		elemsArray:[],
 		blocklyWs:'',
 		noOfElems:0,
-		username:''
+		username:'',
+		url:'',
 	},
 	mutations: {
+		url(state,{url}){
+			state.url = url;
+		},
 		pushElem(state,{newElem}){
 			console.log(newElem)
 			if(newElem.getType() === 'RGB'){
@@ -31,6 +35,9 @@ const store = new Vuex.Store({
 				Vue.set(state.elemsArray,newElem.getPin(),newElem);
 			}
 			
+		},
+		username(state,{username}){
+			state.username = username;
 		},
 		remove(state,{pin}){
 			if(pin != null){
@@ -54,6 +61,9 @@ const store = new Vuex.Store({
 		}
 	},
 	getters: {
+		url(state){
+			return state.url;
+		},
 		elem(state,{pin})
 		{ 
 			if(pin >= 0){
@@ -95,6 +105,7 @@ const store = new Vuex.Store({
   			context.commit('blocklyWs',{blocklyWs});
   		}
   	},
+
   	close(context,{pin}){
   		if(this.state.noOfElems > 0){
   			console.log(pin)

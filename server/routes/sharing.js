@@ -25,8 +25,9 @@ router.post('/',async function(req, res, next) {
 router.get('/',async function(req, res, next) {
 	const io = req.app.get('socketio');
 	const workspace = await storage.getItem('workspace');
+	var url = "http://" + ip.address();
 	if(workspace != undefined){
-		io.emit("wsConnection",{msg:"A person just connected to your workspace."});
+		io.emit("wsConnection",{msg:"A person just connected to your workspace.",url:url});
 
 		console.log(workspace)
 		res.send(workspace)
@@ -41,10 +42,10 @@ router.delete('/',async function(req, res, next) {
 	const io = req.app.get('socketio');
 	const workspace = await storage.setItem('workspace',undefined);
 
-		io.emit("wsUpdated",{msg:"Workspace cleared",workspace:""});
+	io.emit("wsUpdated",{msg:"Workspace cleared",workspace:""});
 
-		console.log(workspace)
-		res.send(workspace)
+	console.log(workspace)
+	res.send(workspace)
 
 
 

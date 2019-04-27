@@ -124,6 +124,19 @@
   </v-textarea>
 
 </div>
+<div id="chat">
+  <v-layout row wrap>
+    <v-flex xs12>
+      <v-text-field readonly flat label="Please set your Username in settings to use the chat!" v-model="username" ></v-text-field>
+    </v-flex>
+
+  </v-layout>
+
+  <div class="chat-area">
+
+  </div>
+
+</div>
 <div id="elements" v-if="this.noOfElems>0">
   <v-container px-0 pb-3>
     <h3>Active Components</h3>
@@ -188,9 +201,11 @@
         alert(data)
       },
       wsConnection(data){
-        
+        console.log(data)
+        this.$store.commit('url',{url:data.url})
       }
     },
+
     computed: {
       noOfElems(){
         return this.$store.getters.getNoOfElems
@@ -198,7 +213,11 @@
       elemsArray(){
         return this.$store.getters.elem
       },
-      username(){
+      username:{
+
+        get(){
+          return this.$store.state.username;
+        }
 
       }
     },
