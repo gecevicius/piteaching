@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gpioRouter  = require('./routes/gpio');
+var workspaceRouter  = require('./routes/workspace');
 
 var app = express();
 
@@ -29,9 +30,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 
+//routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/gpio', gpioRouter);
+app.use('/workspace', wworkspaceRouter);
 
 const speedLimiter = slowDown({
   windowMs: 2000, // 15 minutes
