@@ -5,7 +5,7 @@ import Element from '../assets/js/element.js'
 import APIService from '../services/APIService';
 import Blockly from '../assets/js/CustomBlocks';
 
-var xmlSerializer = new XMLSerializer();
+
 
 Vue.use(Vuex)
 
@@ -90,13 +90,10 @@ const store = new Vuex.Store({
   		}
   	},
   	blocklyWs(context,{blocklyWs}){
-  		console.log(blocklyWs)
-  		context.commit('blocklyWs',{blocklyWs});
-  		var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  		
-  		var xmlString = xmlSerializer.serializeToString(xmlDom)
-  		console.log(xmlString)
-  		APIService.shareWorkspace(xmlString);
+  		if(blocklyWs !== this.state.blocklyWs){
+  			console.log(blocklyWs)
+  			context.commit('blocklyWs',{blocklyWs});
+  		}
   	},
   	close(context,{pin}){
   		if(this.state.noOfElems > 0){

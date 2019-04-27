@@ -17,10 +17,9 @@ router.post('/',async function(req, res, next) {
 		io.emit("wsSharing",{url:url,msg:"Workspace shared!"});
 	}
 	else{
-		if(req.body.workspace != workspace){
 			io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace});
 			await storage.setItem('workspace',req.body.workspace);
-		}
+		
 		res.sendStatus(200)
 	}
 
@@ -37,6 +36,19 @@ router.get('/',async function(req, res, next) {
 	}else{
 		res.send(false)
 	}
+
+
+});
+
+router.delete('/',async function(req, res, next) {
+	const io = req.app.get('socketio');
+	const workspace = await storage.setItem('workspace',undefined);
+
+		io.emit("wsUpdated",{msg:"A person just connected to your workspace."});
+
+		console.log(workspace)
+		res.send(workspace)
+
 
 
 });

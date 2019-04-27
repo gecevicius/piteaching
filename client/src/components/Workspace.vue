@@ -36,6 +36,8 @@
   import Blockly from '../assets/js/CustomBlocks';
   import APIService from '../services/APIService';
   var parseString = require('xml2js').parseString;
+  var xmlSerializer = new XMLSerializer();
+
   export default {
     name: 'Workspace',
     data () {
@@ -110,8 +112,10 @@
   Blockly.svgResize(workspace);
 
   this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
-  console.log(this.$store.state.blocklyWs)
-  workspace.addChangeListener(this.updateWorkspace)
+  
+  this.shareWorkspace();
+
+  workspace.addChangeListener( this.shareWorkspace() )
 },
 
 async checkIfWorkspaceIsShared(){
@@ -126,16 +130,24 @@ async checkIfWorkspaceIsShared(){
  else  this.createBlockly();
 },
 
-async updateWorkspace(e){
-  this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
-},
+
 
 xmlToWs(xmlWs){
-  console.log(Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace))
+  this.xmlWs = xmlWs;
+  Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace)
+},
+
+shareWorkspace(){
+  var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  var xmlString = xmlSerializer.serializeToString(xmlDom)
+  console.log(xmlString === this.xmlWs)
+  if(xmlString !== this.xmlWs){
+    console.log(xmlString)
+    APIService.shareWorkspace(xmlString);
+  }
 }
 
 }
-
 
 }
 

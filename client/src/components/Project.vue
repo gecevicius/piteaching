@@ -188,7 +188,7 @@
         alert(data)
       },
       wsConnection(data){
-        alert("Somebody has connected to your workspace!");
+        
       }
     },
     computed: {
