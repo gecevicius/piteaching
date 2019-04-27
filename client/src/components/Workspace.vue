@@ -109,7 +109,10 @@
   this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
   console.log(this.$store.state.blocklyWs)
 }
-
+  
+  checkIfWorkspaceIsShared(){
+    
+  }
 
 }
 

@@ -36,10 +36,10 @@ export class APIService{
     // handle error
     
 })
-}
+	}
 
 	sense(pin,type){
-			return axios.post(this.gpioUrl+"/sensor",{
+		return axios.post(this.gpioUrl+"/sensor",{
 			pin:pin,
 			type:type
 		}).then(function (response) {
@@ -50,36 +50,41 @@ export class APIService{
 
 	close(pin){
 		if (pin !== undefined || pin >= 0 ){
-		return axios.get(this.gpioUrl+'/close',{params : {
-			pin:pin
-		}
+			return axios.get(this.gpioUrl+'/close',{params : {
+				pin:pin
+			}
 		}).then(function (response) {
 			return console.log(response);
 		})
-		}
-		else{
-			return axios.get(this.gpioUrl+'/close').then(function (response) {
+	}
+	else{
+		return axios.get(this.gpioUrl+'/close').then(function (response) {
 			return console.log(response);
 		})
-		}
 	}
+}
 
-	getLocals(){
-		return axios.get(this.API_URL+"/users").then(function(response){
-			return response
-		})
-	}
+getLocals(){
+	return axios.get(this.API_URL+"/users").then(function(response){
+		return response
+	})
+}
 
-	shareWorkspace(xmlWs,enabled){
-		console.log(xmlWs)
-		 axios.post(this.API_URL+"/sharing",{
-			"workspace":xmlWs,
-			"enabled":true
-		}).then(function(response){
+shareWorkspace(xmlWs,enabled){
+	console.log(xmlWs)
+	axios.post(this.API_URL+"/sharing",{
+		"workspace":xmlWs,
+		"enabled":true
+	}).then(response =>{
 
-		})
-	}
+	})
+}
 
-	
+async getWorkspace(){
+	const response = await axios.get(this.API_URL+"/sharing").then(response => {
+		return response;
+	})
+	console.log(getWorkspace)
+}
 
 }

@@ -32,17 +32,16 @@ const io = req.app.get('socketio');
 });
 
 router.get('/',async function(req, res, next) {
-const io = req.app.get('socketio');
-	var enabled;
-
+			const io = req.app.get('socketio');
+			const enabled;
 			enabled = await storage.getItem('enabled');
 			if(enabled == true){
-				io.emit("wsUpdated",{msg:"Workspace updated."});
+				io.emit("wsConnection",{msg:"A person just connected to your workspace."});
 				const workspace = await storage.getItem('workspace');
-					console.log(workspace)
+				console.log(workspace)
 				res.send(workspace)
 			}else{
-				res.sendStatus(403)
+				res.send(false)
 			}
 
 		

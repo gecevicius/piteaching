@@ -3,7 +3,9 @@ import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
 import {APIService} from '../services/APIService';
-import Blockly from '../assets/js/CustomBlocks'
+import Blockly from '../assets/js/CustomBlocks';
+
+var xmlSerializer = new XMLSerializer();
 var apiService = new APIService();
 
 Vue.use(Vuex)
@@ -82,8 +84,11 @@ const store = new Vuex.Store({
 		toggleEnableSharing(context,{enableSharing,username}){
 			if(enableSharing != undefined ){
 				var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+			
+				var xmlString = xmlSerializer.serializeToString(xmlDom)
+				console.log(xmlString)
 				context.commit('toggleEnableSharing',{enableSharing,username});
-				apiService.shareWorkspace(xmlDom,username,enableSharing)
+				apiService.shareWorkspace(xmlString,username,enableSharing)
 			}
 
 		},
