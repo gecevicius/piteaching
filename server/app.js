@@ -27,8 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Tell the bodyparser middleware to accept more data
-app.use(bodyParser.json({limit: '5mb'}));
-app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
+app.use(bodyParser.json({ limit: '50mb' }));
 
 //routes
 app.use('/', indexRouter);

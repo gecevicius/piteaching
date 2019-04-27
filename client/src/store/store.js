@@ -83,7 +83,7 @@ const store = new Vuex.Store({
 			if(username !=undefined && enableSharing != undefined && this.state.blocklyWs != ''){
 				context.commit('toggleEnableSharing',{enableSharing,username});
 				console.log(this.state.blocklyWs)
-				apiService.shareWorkspace(this.state.blocklyWs.workspace,username,enableSharing)
+				apiService.shareWorkspace(this.state.blocklyWs,username,enableSharing)
 			}
 
 		},

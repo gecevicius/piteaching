@@ -43,7 +43,7 @@
 	flat
 	@click="dialog = false"
 	>
-	Cancel
+	Close
 </v-btn>
 <v-spacer></v-spacer>
 <v-btn
@@ -73,8 +73,8 @@ Save
 			}
 		},
 		wsenable(data){
-        this.url = data.url
-      },
+			this.url = data.url
+		},
 		methods:{
 			save(){
 				if(this.enableSharing!=false && this.username !== ''){
@@ -82,7 +82,6 @@ Save
 
 				}
 
-				this.dialog = false
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const CircularJSON = require('circular-json');
+import {parse, stringify} from 'flatted/esm';
 
 export class APIService{
 	constructor(){
@@ -73,8 +73,11 @@ export class APIService{
 		console.log(workspace)
 		console.log(username)
 		console.log(enabled)
+
+		var stringifiedWs = stringify(workspace);
+
 		 axios.post(this.API_URL+"/workspace",{
-			"workspace":CircularJSON.stringify(workspace),
+			"workspace":stringifiedWs,
 			"username":username,
 			"enabled":true
 		}).then(function(response){
