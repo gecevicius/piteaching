@@ -37,7 +37,7 @@
 
 <script>
   import Blockly from '../assets/js/CustomBlocks'
-
+  
   export default {
     name: 'Workspace',
     data () {

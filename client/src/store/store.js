@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
+import APIService from '../services/APIService'
 
+var apiService = new APIService()
 
 Vue.use(Vuex)
 
@@ -11,9 +13,15 @@ const store = new Vuex.Store({
 	state: {
 		elemsArray:[],
 		blocklyWs:'',
-		noOfElems:0
+		noOfElems:0,
+		enableSharing:false,
+		username:''
 	},
 	mutations: {
+		toggleEnableSharing(state,{enableSharing,username}){
+			state.enableSharing = enableSharing;
+			state.username = username;
+		},
 		pushElem(state,{newElem}){
 			console.log(newElem)
 			if(newElem.getType() === 'RGB'){
@@ -53,6 +61,9 @@ const store = new Vuex.Store({
 		}
 	},
 	getters: {
+		enableSharing(state){
+			return state.enableSharing;
+		},
 		elem(state,{pin})
 		{ 
 			if(pin >= 0){
@@ -69,6 +80,13 @@ const store = new Vuex.Store({
 		}
 	},
 	actions:{
+		toggleEnableSharing(context,{enableSharing,username}){
+			if(username !=undefined && enableSharing != undefined && this.state.blocklyWs != ''){
+				context.commit('toggleEnableSharing',{enableSharing,username});
+				apiService.shareWorkspace(this.state.blocklyWs,username,enableSharing)
+			}
+
+		},
 		pushElem(context,{pin,type}){
   		//
   		if(pin !=undefined && type != null){

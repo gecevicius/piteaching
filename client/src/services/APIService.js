@@ -69,6 +69,16 @@ export class APIService{
 		})
 	}
 
+	shareWorkspace(workspace,username,enabled){
+		return axios.post(this.API_URL+"/users/workspace",{
+			"workspace":workspace,
+			"username":username,
+			"enabled":true
+		}).then(function(response){
+			return response
+		})
+	}
+
 	
 
 }

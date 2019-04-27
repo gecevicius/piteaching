@@ -61,10 +61,5 @@ const io = require('socket.io')(server);
 app.set('socketio', io);
 server.listen(3001);
 
-//IP FILTERING
-const ipfilter = require('express-ipfilter').IpFilter
-const ips = ['127.0.0.1','192.168.1.136','238.152.195.50']
-app.use(ipfilter(ips, { mode: 'allow' }))
-
 
 module.exports = app;
