@@ -29,15 +29,13 @@
       </xml>
     </div>
 
-    <div id="pi-emu">
-
-    </div>
   </div>
 </template>
 
 <script>
   import Blockly from '../assets/js/CustomBlocks';
-  
+  import APIService from '../services/APIService';
+  var parseString = require('xml2js').parseString;
   export default {
     name: 'Workspace',
     data () {
@@ -45,18 +43,17 @@
         blocklyArea : '',
         blocklyDiv :'',
         workspace :'',
+        xmlWs:''
       }
     },
     props: ['project'],
     mounted(){
-      this.createBlockly();
-      
+      this.checkIfWorkspaceIsShared();
+
     },
+
     watch: { 
         computedProject: function(newVal, oldVal) { // watch it
-
-
-
          this.workspace.dispose()
          console.log("clean")
          console.log(this.workspace)
@@ -65,15 +62,19 @@
          this.workspace.updateToolbox(document.getElementById('toolbox'))
        }
      },
-     computed:{
+     sockets:{
+      wsUpdated(data){
+        console.log(data)
+      }
+    },
+    computed:{
       computedProject(){
-
         console.log("computed")
         return this.project
       }
     },
     methods : {
-      createBlockly(){
+      createBlockly(xmlWs){
 
         var blocklyArea = document.getElementById('blocklyArea')
         var blocklyDiv =  document.getElementById('blocklyDiv')
@@ -83,15 +84,15 @@
         this.blocklyDiv = blocklyDiv;
         this.workspace = workspace;
         var onresize = function(e) {
-    // Compute the absolute coordinates and dimensions of blocklyArea.
-    var element = blocklyArea;
-    var x = 0;
-    var y = 0;
-    do {
-      x += element.offsetLeft;
-      y += element.offsetTop;
-      element = element.offsetParent;
-    } while (element);
+        // Compute the absolute coordinates and dimensions of blocklyArea.
+        var element = blocklyArea;
+        var x = 0;
+        var y = 0;
+        do {
+          x += element.offsetLeft;
+          y += element.offsetTop;
+          element = element.offsetParent;
+        } while (element);
     // Position blocklyDiv over blocklyArea.
     blocklyDiv.style.left = x + 'px';
     blocklyDiv.style.top = y + 'px';
@@ -99,20 +100,37 @@
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(workspace);
 
-
   };
+  if(xmlWs){
+    console.log(Blockly.mainWorkspace)
+    console.log(xmlWs)
+    console.log(Blockly.Xml.domToWorkspace( Blockly.Xml.textToDom(xmlWs),Blockly.mainWorkspace))
+  }
   window.addEventListener('resize', onresize, false);
   onresize();
   Blockly.svgResize(workspace);
 
-  workspace.registerButtonCallback('TEST',function(button){Blockly.Variables.createVariable(button.getTargetWorkspace(), null) })
   this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
   console.log(this.$store.state.blocklyWs)
+  workspace.addChangeListener(this.updateWorkspace)
+},
+
+async checkIfWorkspaceIsShared(){
+  const ws =  await APIService.getWorkspace().then(response =>{
+    return response
+  })
+  if(ws != undefined && ws != false){
+   console.log(ws)
+   console.log(typeof ws)
+   this.xmlWs = ws;
+   this.createBlockly(ws);
+ }
+ else  this.createBlockly();
+},
+
+async updateWorkspace(e){
+  this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace})
 }
-  
-  checkIfWorkspaceIsShared(){
-    
-  }
 
 }
 

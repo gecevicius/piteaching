@@ -7,44 +7,39 @@ const bodyParser = require('body-parser');
 
 
 router.post('/',async function(req, res, next) {
-const io = req.app.get('socketio');
-	var enabled;
-		if(req.body.enabled){
-			await storage.setItem('enabled',req.body.enabled);
-			await storage.setItem('workspace',req.body.workspace);
-			console.log(req.body.workspace)
-			enabled = req.body.enabled;
-			var url = ip.address();
-			io.emit("wsSharing",{enabled:req.body.enabled,url:url,msg:"Sharing enabled!"});
-			res.sendStatus(200)
-		}
-		else{
-			enabled = await storage.getItem('enabled');
-			if(enabled == true){
-				io.emit("wsUpdated",{msg:"Workspace updated."});
-				await storage.setItem('workspace',req.body.workspace);
-				res.sendStatus(200)
-			}else{
-				res.sendStatus(403)
-			}
-		}
-		
+	const io = req.app.get('socketio');
+	const workspace = await storage.getItem('workspace');
+	if(workspace == undefined){
+		await storage.setItem('workspace',req.body.workspace);
+		console.log(req.body.workspace)
+		var url = ip.address();
+		res.sendStatus(200)
+		io.emit("wsSharing",{url:url,msg:"Workspace shared!"});
+	}
+	else{
+		io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace});
+		await storage.setItem('workspace',req.body.workspace);
+		res.sendStatus(200)
+	}
+
 });
 
 router.get('/',async function(req, res, next) {
-			const io = req.app.get('socketio');
-			const enabled = await storage.getItem('enabled');
-			if(enabled == true){
-				io.emit("wsConnection",{msg:"A person just connected to your workspace."});
-				const workspace = await storage.getItem('workspace');
-				console.log(workspace)
-				res.send(workspace)
-			}else{
-				res.send(false)
-			}
+	const io = req.app.get('socketio');
+	const workspace = await storage.getItem('workspace');
+	if(workspace != undefined){
+		io.emit("wsConnection",{msg:"A person just connected to your workspace."});
 
-		
+		console.log(workspace)
+		res.send(workspace)
+	}else{
+		res.send(false)
+	}
+
+
 });
+
+
 
 
 

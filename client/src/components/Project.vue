@@ -156,7 +156,7 @@
   import initApi from '../assets/js/interpreterApi';
   import io from 'socket.io-client';
   import Projects from '../assets/Projects';
-  import {APIService} from '../services/APIService';
+  import APIService from '../services/APIService';
 
   export default {
     name: 'Project',
@@ -173,8 +173,7 @@
         currentStep:0,
         projects:'',
         showTut:false,
-        apiService: new APIService(),
-        projectNames:[]
+        projectNames:[],
       }
     },
     beforeMount (){
@@ -198,6 +197,9 @@
       },
       elemsArray(){
         return this.$store.getters.elem
+      },
+      username(){
+
       }
     },
     methods : {
@@ -217,7 +219,7 @@
         var interpreter = new Interpreter(code, initApi);
         this.interpreter = interpreter
         this.runner();
-
+        this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace});
 
       },
       runner() { 
@@ -236,7 +238,7 @@
 
       stop() {
         this.$store.dispatch('close',{pin:""})
-        this.apiService.close().then((data) => {
+        APIService.close().then((data) => {
           console.log(data)
         });
       },

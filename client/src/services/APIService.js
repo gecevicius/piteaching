@@ -2,7 +2,7 @@ import axios from 'axios';
 import {parse, stringify} from 'flatted/esm';
 
 
-export class APIService{
+class APIService{
 	constructor(){
 		this.API_URL = 'http://192.168.1.247:3001';
 		this.gpioUrl = this.API_URL+`/gpio`;
@@ -70,21 +70,21 @@ getLocals(){
 	})
 }
 
-shareWorkspace(xmlWs,enabled){
+shareWorkspace(xmlWs){
 	console.log(xmlWs)
 	axios.post(this.API_URL+"/sharing",{
 		"workspace":xmlWs,
-		"enabled":true
 	}).then(response =>{
 
 	})
 }
 
 async getWorkspace(){
-	const response = await axios.get(this.API_URL+"/sharing").then(response => {
-		return response;
+	return await axios.get(this.API_URL+"/sharing").then(response => {
+		return response.data;
 	})
-	console.log(getWorkspace)
 }
 
 }
+
+export default new APIService()

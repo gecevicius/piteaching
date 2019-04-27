@@ -7,7 +7,6 @@ var Blockly = require('node-blockly/browser');
 import {store} from '../../store/store.js';
 
 
-
 import Interpreter from 'js-interpreter';
 import initApi from './interpreterApi';
 

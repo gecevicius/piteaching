@@ -2,11 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Element from '../assets/js/element.js'
-import {APIService} from '../services/APIService';
+import APIService from '../services/APIService';
 import Blockly from '../assets/js/CustomBlocks';
 
 var xmlSerializer = new XMLSerializer();
-var apiService = new APIService();
 
 Vue.use(Vuex)
 
@@ -15,14 +14,9 @@ const store = new Vuex.Store({
 		elemsArray:[],
 		blocklyWs:'',
 		noOfElems:0,
-		enableSharing:false,
 		username:''
 	},
 	mutations: {
-		toggleEnableSharing(state,{enableSharing,username}){
-			state.enableSharing = enableSharing;
-			state.username = username;
-		},
 		pushElem(state,{newElem}){
 			console.log(newElem)
 			if(newElem.getType() === 'RGB'){
@@ -32,7 +26,6 @@ const store = new Vuex.Store({
 					Vue.set(state.elemsArray,pinList[pin],newElem);
 				}
 				console.log(state.elemsArray[pinList.rpin]);
-
 			}
 			else{
 				Vue.set(state.elemsArray,newElem.getPin(),newElem);
@@ -61,9 +54,6 @@ const store = new Vuex.Store({
 		}
 	},
 	getters: {
-		enableSharing(state){
-			return state.enableSharing;
-		},
 		elem(state,{pin})
 		{ 
 			if(pin >= 0){
@@ -81,17 +71,6 @@ const store = new Vuex.Store({
 		}
 	},
 	actions:{
-		toggleEnableSharing(context,{enableSharing,username}){
-			if(enableSharing != undefined ){
-				var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-			
-				var xmlString = xmlSerializer.serializeToString(xmlDom)
-				console.log(xmlString)
-				context.commit('toggleEnableSharing',{enableSharing,username});
-				apiService.shareWorkspace(xmlString,username,enableSharing)
-			}
-
-		},
 		pushElem(context,{pin,type}){
   		//
   		if(pin !=undefined && type != null){
@@ -113,6 +92,11 @@ const store = new Vuex.Store({
   	blocklyWs(context,{blocklyWs}){
   		console.log(blocklyWs)
   		context.commit('blocklyWs',{blocklyWs});
+  		var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+  		
+  		var xmlString = xmlSerializer.serializeToString(xmlDom)
+  		console.log(xmlString)
+  		APIService.shareWorkspace(xmlString);
   	},
   	close(context,{pin}){
   		if(this.state.noOfElems > 0){
@@ -126,9 +110,7 @@ const store = new Vuex.Store({
   			else {
   				
   				context.commit('close');
-
   			}
-  			
   		}
   	}
   },

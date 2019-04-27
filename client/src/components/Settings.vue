@@ -89,10 +89,7 @@ Save
 		},
 		methods:{
 			save(){
-				if(this.enableSharing!=false){
-					this.$store.dispatch('toggleEnableSharing',{enableSharing:this.enableSharing})
-
-				}
+				
 
 			}
 		}
