@@ -11,19 +11,40 @@ const io = req.app.get('socketio');
 	var enabled;
 		if(req.body.enabled){
 			await storage.setItem('enabled',req.body.enabled);
+			await storage.setItem('workspace',req.body.workspace);
 			enabled = req.body.enabled;
 			var url = ip.address();
 			io.emit("wsSharing",{enabled:req.body.enabled,url:url,msg:"Sharing enabled!"});
+			res.sendStatus(200)
 		}
 		else{
-
-			io.emit("wsUpdated",{msg:"Workspace updated."});
+			enabled = await storage.getItem('enabled');
+			if(enabled == true){
+				io.emit("wsUpdated",{msg:"Workspace updated."});
+				await storage.setItem('workspace',req.body.workspace);
+				res.sendStatus(200)
+			}else{
+				res.sendStatus(403)
+			}
 		}
-		await storage.setItem('workspace',req.body.workspace);
 		
+});
+
+router.get('/',async function(req, res, next) {
+const io = req.app.get('socketio');
+	var enabled;
+
+			enabled = await storage.getItem('enabled');
+			if(enabled == true){
+				io.emit("wsUpdated",{msg:"Workspace updated."});
+				var workspace = await storage.setItem('workspace',req.body.workspace);
+				
+				res.json(workspace)
+			}else{
+				res.sendStatus(403)
+			}
+
 		
-		
-		res.sendStatus(200)
 });
 
 
