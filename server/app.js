@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/gpio', gpioRouter);
-app.use('/workspace', wworkspaceRouter);
+app.use('/workspace', workspaceRouter);
 
 const speedLimiter = slowDown({
   windowMs: 2000, // 15 minutes
