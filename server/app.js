@@ -54,7 +54,7 @@ app.get('*',async (req, res) => {
   if(req.connection.remoteAddress !== "127.0.0.1"){
     console.log(req.connection.remoteAddress)
     const enabled = await storage.getItem('enabled');
-    if(enabled){
+    if(enabled == true){
       res.sendFile(path.join(__dirname, 'dist/index.html'));
       io.emit("wsConnection");
     }
