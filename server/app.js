@@ -50,7 +50,7 @@ app.use(history({
 }));
 
 app.use(bodyParser.json({ limit: '15mb' }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 app.get('*',async (req, res) => {
 
