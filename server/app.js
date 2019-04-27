@@ -16,7 +16,6 @@ const staticFileMiddleware = express.static(path.join(__dirname, '/dist/'));
 
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var gpioRouter  = require('./routes/gpio');
 var sharingRouter  = require('./routes/sharing');
 
