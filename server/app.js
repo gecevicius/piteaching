@@ -7,6 +7,12 @@ var cors = require('cors')
 const slowDown = require("express-slow-down");
 const bodyParser = require('body-parser');
 
+var history = require('connect-history-api-fallback');
+const hostname = 'localhost';
+const port = 3000;
+
+
+const staticFileMiddleware = express.static(path.join(__dirname, '/dist/'));
 
 
 var indexRouter = require('./routes/index');
@@ -40,6 +46,19 @@ const speedLimiter = slowDown({
   delayAfter: 1, // allow 100 requests per 15 minutes, then...
   delayMs: 2000 // begin adding 500ms of delay per request above 100:
 });
+
+
+app.use(staticFileMiddleware);
+
+app.use(history({
+  index:'dist/index.html',
+}));
+
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+
 
 app.use(speedLimiter);
 
