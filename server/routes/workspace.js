@@ -9,12 +9,12 @@ router.get('/', function(req, res, next) {
 	res.send('respond with a resource');
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   
-
-
-
-	console.log(await storage.getItem('username'));
+			await storage.setItem('username',req.body.username);
+  	await storage.setItem('workspace',req.body.workspace);
+  	const username = await storage.getItem('username')
+  	console.log(username)
 
 	res.sendStatus(200)
 });
@@ -22,8 +22,7 @@ router.post('/', function(req, res, next) {
 
 
 async function setUserWorkspace(workspace,username){
-		await storage.setItem('username',req.body.username);
-  	await storage.setItem('workspace',req.body.workspace);
+
 }
 
 
