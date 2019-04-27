@@ -4,10 +4,10 @@ var ip = require('ip');
 const storage = require('node-persist');
 storage.init();
 const bodyParser = require('body-parser');
-const io = req.app.get('socketio');
+
 
 router.post('/',async function(req, res, next) {
-
+const io = req.app.get('socketio');
 	var enabled;
 		if(req.body.enabled){
 			await storage.setItem('enabled',req.body.enabled);
