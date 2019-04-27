@@ -49,8 +49,8 @@ app.use(history({
   index:'dist/index.html',
 }));
 
-app.use(bodyParser.json({ limit: '15mb' }));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
+app.use(bodyParser.json({ limit: '15mb' ,type:'application/json'}));
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000,type:'application/json'}));
 
 app.get('*',async (req, res) => {
 
