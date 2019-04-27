@@ -37,7 +37,7 @@ const io = req.app.get('socketio');
 			enabled = await storage.getItem('enabled');
 			if(enabled == true){
 				io.emit("wsUpdated",{msg:"Workspace updated."});
-				var workspace = await storage.setItem('workspace',req.body.workspace);
+				const workspace = await storage.getItem('workspace',req.body.workspace);
 				
 				res.json(workspace)
 			}else{
