@@ -69,16 +69,14 @@ export class APIService{
 		})
 	}
 
-	shareWorkspace(workspace,username,enabled){
+	shareWorkspace(workspace,enabled){
 		console.log(workspace)
-		console.log(username)
 		console.log(enabled)
 
 		var stringifiedWs = stringify(workspace);
-
+		console.log(stringifiedWs)
 		 axios.post(this.API_URL+"/workspace",{
 			"workspace":stringifiedWs,
-			"username":username,
 			"enabled":true
 		}).then(function(response){
 
