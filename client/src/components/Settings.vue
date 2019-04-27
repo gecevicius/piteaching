@@ -28,6 +28,9 @@
 		<v-flex xs12>
 			<v-text-field label="Username" solo v-model="username" placeholder="Your username"></v-text-field>
 		</v-flex>
+		<v-flex xs12>
+			<v-text-field label="Your key : " solo v-model="url" ></v-text-field>
+		</v-flex>
 
 	</v-layout>
 </v-card-text>
@@ -66,9 +69,12 @@ Save
 				username:'',
 				enableSharing:false,
 				dialog:false,
+				url:"Please enable sharing to get your key!"
 			}
 		},
-
+		wsenable(data){
+        this.url = data.url
+      },
 		methods:{
 			save(){
 				if(this.enableSharing!=false && this.username !== ''){

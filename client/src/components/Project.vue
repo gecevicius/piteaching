@@ -192,8 +192,9 @@
       error(data){
         alert(data)
       },
-      wsenable(data){
-        alert(data)
+      
+      wsConnections(data){
+        alert(data.username + " has connected to your workspace!");
       }
     },
     computed: {
