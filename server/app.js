@@ -10,7 +10,7 @@ var history = require('connect-history-api-fallback');
 const hostname = 'localhost';
 const port = 3000;
 const storage = require('node-persist');
-
+const bodyParser = require('body-parser');
 
 const staticFileMiddleware = express.static(path.join(__dirname, '/dist/'));
 
