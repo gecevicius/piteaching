@@ -6,6 +6,7 @@
 	<template v-slot:activator="{ on }">
 		<v-btn
 		flat
+		id="settings-btn"
 		v-on="on"
 		>
 		Settings

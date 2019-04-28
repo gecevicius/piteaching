@@ -1,0 +1,56 @@
+<template>
+	<v-container fluid>
+		<h1 class="my-3">Console Dashboard</h1>
+		<v-divider></v-divider>
+		<v-layout row wrap id="environment">
+			<v-flex xs12><h2>Generated code</h2></v-flex>
+			<v-flex xs8>
+				<p>The first console window displays the generated code in <b>JavaScript.</b> Even though JavaScript is not widely used in schools, this was the only option due to lack of knowledge in more popular languages in education like Python. </p>
+				<p>The console displays generated code with syntax highlighting enabled, which will make it easier to understand what different pieces of code do.</p>
+				<p>The code is regenerated on each run and the console is cleared. The console can also be cleared manually by clicking 'Clear'</p>
+
+			</v-flex>
+			<v-flex xs4>
+				<img :src="getComponentImg('console1')">
+			</v-flex>
+		</v-layout>
+		<v-divider></v-divider>
+		<v-layout row wrap id="environment">
+			<v-flex xs12><h2>Generated code</h2></v-flex>
+			<v-flex xs8>
+				<p>The first console window displays the generated code in <b>JavaScript.</b> Even though JavaScript is not widely used in schools, this was the only option due to lack of knowledge in more popular languages in education like Python. </p>
+				<p>The console displays generated code with syntax highlighting enabled, which will make it easier to understand what different pieces of code do.</p>
+				<p>The code is regenerated on each run and the console is cleared. The console can also be cleared manually by clicking 'Clear'</p>
+
+			</v-flex>
+			<v-flex xs4>
+				<img :src="getComponentImg('console1')">
+			</v-flex>
+		</v-layout>
+	</v-layout>
+	<v-divider></v-divider>
+
+</v-container>
+</template>
+<script>
+	export default{
+		name:'Introduction',
+		data(){
+			return {
+
+			}
+		},
+		methods:{
+			openSettings(){
+				document.getElementById('settings-btn').click()
+			},
+			getComponentImg(type){
+				var img = require("../../assets/staticimg/"+type+".png")
+				return img
+			}
+		}
+	}
+</script>
+
+<style>
+</style>

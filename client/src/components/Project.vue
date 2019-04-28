@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar>
+    <v-toolbar class="elevation-0 pt-2 workspace-toolbar">
       <v-container pa-0>
         <v-layout align-center justify-start>
           <v-flex xs2>
@@ -115,6 +115,7 @@
 
 
 <div id="code">
+  <h2 class="mb-2">Code console</h2>
   <v-expansion-panel>
     <v-expansion-panel-content
     >

@@ -55,3 +55,32 @@ body {
 	background: #C51A4A;
 	color: #fff;
 }
+.v-list__tile{
+	border-bottom: 1px solid #ececec33 !important;
+
+}
+
+.workspace-toolbar{
+	border-bottom: 1px solid #ececec;
+}
+h1.primary{
+	background-color: none !important;
+	background:none !important;
+}
+.example{
+	display: block;
+	color: #19154f;
+	padding: 2px;
+	font-size: 13px;
+	border-radius: 2px;
+	background: #ececec;
+	margin:8px 0;
+}
+
+#tutorial li{
+	margin-bottom:20px;
+}
+
+img{
+	max-width: 100%;
+}

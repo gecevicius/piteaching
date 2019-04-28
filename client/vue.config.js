@@ -33,19 +33,19 @@ module.exports = {
   // where to output built files
 
   outputDir: 'dist',
- module: {
+  module: {
     rules: [
+    {
+      test: /\.(png|jpg|gif)$/,
+      use: [
       {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              outputPath: '/static/img',
-            },
-          },
-        ],
+        loader: 'file-loader',
+        options: {
+          outputPath: '/static/img',
+        },
       },
+      ],
+    },
     ],
   },
   plugins:[
@@ -63,7 +63,7 @@ module.exports = {
   // babel-loader skips `node_modules` deps by default.
   // explicitly transpile a dependency with this option.
   transpileDependencies: [
-    /* string or regex */
+  /* string or regex */
   ],
 
   // generate sourceMap for production build?
@@ -82,25 +82,25 @@ module.exports = {
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   chainWebpack: config => {
     config.resolve.alias
-      .set('vue$', 'vue/dist/vue.esm.js')
-      .set('@helper', resolveRealPath('src/helper'))
-      .set('@pages', resolveRealPath('src/pages'))
-      .set('@assets', resolveRealPath('src/assets'))
-      .set('@router', resolveRealPath('src/router'))
-      .set('@mixins', resolveRealPath('src/mixins'))
-      .set('@components', resolveRealPath('src/components'))
+    .set('vue$', 'vue/dist/vue.esm.js')
+    .set('@helper', resolveRealPath('src/helper'))
+    .set('@pages', resolveRealPath('src/pages'))
+    .set('@assets', resolveRealPath('src/assets'))
+    .set('@router', resolveRealPath('src/router'))
+    .set('@mixins', resolveRealPath('src/mixins'))
+    .set('@components', resolveRealPath('src/components'))
 
     // remove the old loader & add new one
     config.module.rules.delete('svg')
     config.module
-      .rule('svg')
-      .test(/\.svg$/)
-      .use('svg-sprite-loader')
-      .loader('svg-sprite-loader')
-      .options({
-        name: '[name]-[hash:7]',
-        prefixize: true
-      })
+    .rule('svg')
+    .test(/\.svg$/)
+    .use('svg-sprite-loader')
+    .loader('svg-sprite-loader')
+    .options({
+      name: '[name]-[hash:7]',
+      prefixize: true
+    })
 
     const splitOptions = config.optimization.get('splitChunks')
     config.optimization.splitChunks(
@@ -129,19 +129,19 @@ module.exports = {
           }
         }
       })
-    )
+      )
 
     // https://github.com/webpack-contrib/webpack-bundle-analyzer
     if (process.env.npm_config_report) {
       config
-        .plugin('webpack-bundle-analyzer')
-        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+      .plugin('webpack-bundle-analyzer')
+      .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
     }
   },
 
   configureWebpack: {
     plugins: [
-      isProductionEnvFlag ? new PrerenderSPAPlugin({
+    isProductionEnvFlag ? new PrerenderSPAPlugin({
         // Required - The path to the webpack-outputted app to prerender.
         staticDir: path.join(__dirname, 'dist'),
         // Required - Routes to render.
@@ -150,8 +150,8 @@ module.exports = {
       // NEED FIX 🚧 : HardSourceWebpackPlugin Will Cause Error.
       // new HardSourceWebpackPlugin(),
       isProductionEnvFlag ? new SizePlugin() : () => {}
-    ]
-  },
+      ]
+    },
 
   // use thread-loader for babel & TS in production build
   // enabled by default if the machine has more than 1 cores
