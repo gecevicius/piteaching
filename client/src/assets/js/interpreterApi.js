@@ -28,26 +28,7 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     interpreter.createNativeFunction(wrapper));
 
   /* GPIO Api */
-  wrapper = function(item,code) {
-    var watcher = new EventEmitter();
-    var self = this;
-    console.log("watching at interpreter")
-    console.log(item)
-    item.toggleInterpreterListener(watcher);
-    watcher.on('watcherUpdate',function(){
-      console.log("interpreter watcher updated")
-      interpreter.appendCode(code.data);
-      console.log(code.data)
-      if (interpreter.step()) { 
-        setTimeout(function(){
-          self.runner()
 
-        }, 35); 
-      } 
-    })
-  };
-  interpreter.setProperty(scope, 'enableWatcher',
-    interpreter.createNativeFunction(wrapper));
 
   wrapper = function() {
     var self = this;
@@ -64,6 +45,22 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     }
   };
   interpreter.setProperty(scope, 'runner',
+    interpreter.createNativeFunction(wrapper));
+
+    wrapper = function(item,code) {
+    var watcher = new EventEmitter();
+    console.log("watching at interpreter")
+    console.log(item)
+    item.toggleInterpreterListener(watcher);
+    watcher.on('watcherUpdate',function(){
+      interpreter.appendCode(code.data);
+      while(interpreter.step()){
+
+      }
+     
+    })
+  };
+  interpreter.setProperty(scope, 'enableWatcher',
     interpreter.createNativeFunction(wrapper));
 
       //block highlight

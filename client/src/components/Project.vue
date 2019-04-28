@@ -100,7 +100,7 @@
   <v-btn v-if="this.noOfElems > 0" icon @click="stop">
     <v-icon color="error" medium>mdi-square</v-icon>
   </v-btn>
-  <v-btn v-else disabled  icon @click="stop">
+  <v-btn v-else disabled  icon >
     <v-icon medium>mdi-square</v-icon>
   </v-btn>
   <v-btn icon  @click="clearWs">
@@ -283,10 +283,12 @@
         }
       },
       generate(){
-        this.$store.commit('clearPiMessages')
         if(this.noOfElems > 0){
+          console.log(this.noOfElems)
           this.stop()
         }
+        this.$store.commit('clearPiMessages')
+        
         Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , Blockly.mainWorkspace);
         var code = Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
         this.console.code = code;
