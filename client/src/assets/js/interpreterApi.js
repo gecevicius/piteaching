@@ -108,10 +108,18 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
 
     wrapper = function(pin,type) {
       console.log("interpreter pin:")
+      if(type ==='RGB'){
       var pinData = JSON.parse(pin.data)
       store.dispatch('pushElem',{pin:pinData,type:type.data})
-      console.log(store.getters.elem[pinData.rpin])
+      
       return store.getters.elem[pinData.rpin];
+      }
+      else {
+        var pinData = pin.data;
+        store.dispatch('pushElem',{pin:pinData,type:type.data})
+        console.log(store.getters.elem[pinData])
+        return store.getters.elem[pinData];
+      }
     };
     interpreter.setProperty(scope, 'newElem',
       interpreter.createNativeFunction(wrapper));

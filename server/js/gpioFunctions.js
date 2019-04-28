@@ -16,13 +16,12 @@ class gpiojs{
 		if(type === "RGB"){
 			console.log(type)
 			this.setRgb(pin,output,io)
-
 		}
 		else{
 			if(!this.gpioArray[pin]){
 				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
-				this.gpioArray[pin].type = type;
 				this.gpioArray[pin] = gpio
+				this.gpioArray[pin].type = type;
 				gpio.digitalWrite(output);
 
 			}
