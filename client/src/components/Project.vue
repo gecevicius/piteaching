@@ -252,6 +252,9 @@
     },
 
     computed: {
+      pinUpdate(){
+        console.log('here')
+      },
       piMessages(){
         return this.$store.getters.piMessages
       },
@@ -289,8 +292,10 @@
         this.console.code = code;
         var interpreter = new Interpreter(code, initApi);
         this.interpreter = interpreter
+        this.$store.commit('piMessages',{type:"START",message:"Program running!"});
         this.runner();
         this.$store.dispatch('blocklyWs',{blocklyWs: Blockly.mainWorkspace});
+
       },
 
       runner() { 

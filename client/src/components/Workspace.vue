@@ -14,7 +14,7 @@
           <block v-for="block in this.computedProject.blocks.loops" :type="block"></block>
         </category>
         <category colour="180" name="Variables and Elements">
-          <button text="Add new variable" callbackKey="TEST"></button>
+          <button text="Add new variable" callbackKey="newVar"></button>
           <block v-for="block in this.computedProject.blocks.vars" :type="block"></block>
         </category>
         <category colour="150" name="Text">
@@ -51,6 +51,7 @@
     props: ['project'],
     mounted(){
       this.checkIfWorkspaceIsShared();
+      
 
     },
 
@@ -79,6 +80,9 @@
       }
     },
     methods : {
+      newVar(){
+        alert("lol")
+      },
       createBlockly(xmlWs){
 
         var blocklyArea = document.getElementById('blocklyArea')
@@ -105,6 +109,7 @@
     blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
     blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
     Blockly.svgResize(workspace);
+    Blockly.mainWorkspace.registerButtonCallback('newVar',function(){ Blockly.Variables.createVariable(Blockly.mainWorkspace, null, '')});
 
   };
   if(xmlWs){

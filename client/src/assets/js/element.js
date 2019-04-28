@@ -56,6 +56,7 @@ class Element{
 	}
 
 	toggleInterpreterListener(watcher){
+		console.log('listening at element');
 		this.interpreterListener = watcher;
 		this.initListener();
 	}

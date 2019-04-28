@@ -37,7 +37,7 @@ class gpiojs{
 			}
 			}
 			catch(error){
-				io.emit('printMessage',{type:'ERROR',msg:type+ "Invalid output ("+output+") value supplied for pin " + pin});
+				io.emit('printMessage',{type:'ERROR',msg:"Invalid output ("+output+") value supplied for pin " + pin});
 			}
 
 	}
@@ -64,6 +64,10 @@ getByPin(pin){
 
 	//
 	senseGpio(pin,type,io){
+		console.log("senseGpio");
+		console.log(pin);
+		console.log(type);
+		
 		const sensor = new Gpio(pin, 'in', 'rising', {
  		 mode: Gpio.INPUT,
  		pullUpDown: Gpio.PUD_UP,
@@ -74,6 +78,9 @@ getByPin(pin){
 		this.gpioArray[pin] = sensor
 		io.emit('printMessage',{type:'Watch ',msg:"Watching "+type+" element at pin "+pin});
 		sensor.on('alert',(level, tick) => {
+			console.log("here");
+			console.log(level);
+			console.log(tick)
 			io.emit('pinUpdate', {pin:pin,val:level})
 		});
 	}

@@ -29,11 +29,13 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
 
   /* GPIO Api */
   wrapper = function(item,code) {
-    console.log(code)
     var watcher = new EventEmitter();
     var self = this;
+    console.log("watching at interpreter")
+    console.log(item)
     item.toggleInterpreterListener(watcher);
     watcher.on('watcherUpdate',function(){
+      console.log("interpreter watcher updated")
       interpreter.appendCode(code.data);
       console.log(code.data)
       if (interpreter.step()) { 
