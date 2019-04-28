@@ -10,15 +10,12 @@ function initApi(interpreter, scope) {
 
 //alert
 var wrapper = function(obj) {
-  console.log('interpreter alert fn:')
-  console.log(obj)
-
   if(typeof obj === 'object' && obj !== null && obj!== undefined){
     obj = obj.data
   }
-  return interpreter.createPrimitive(window.alert(obj));
+  store.commit('piMessages',{type:'Print block',message:obj});
 };
-interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
+interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper));
 
 
 
@@ -112,12 +109,12 @@ interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper
     wrapper = function(pin,type) {
       console.log("interpreter pin:")
       var pinData = JSON.parse(pin.data)
-     store.dispatch('pushElem',{pin:pinData,type:type.data})
-     console.log(store.getters.elem[pinData.rpin])
-     return store.getters.elem[pinData.rpin];
-   };
-   interpreter.setProperty(scope, 'newElem',
-    interpreter.createNativeFunction(wrapper));
+      store.dispatch('pushElem',{pin:pinData,type:type.data})
+      console.log(store.getters.elem[pinData.rpin])
+      return store.getters.elem[pinData.rpin];
+    };
+    interpreter.setProperty(scope, 'newElem',
+      interpreter.createNativeFunction(wrapper));
 
       //read gpio pin val 
       var wrapper =  function(gpio,sense,callback){

@@ -15,6 +15,7 @@ router.post('/',async function(req, res, next) {
 		io.emit("wsUpdated",{msg:"Workspace updated.",workspace:workspace,url:url});
 	}).catch(error =>{
 		console.log(error)
+		io.emit('printMessage',{type:'ERROR ',message:"Error updating workspace. Let your supervisor know! " + error.message});
 	});
 	
 	res.sendStatus(200)

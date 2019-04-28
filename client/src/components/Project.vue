@@ -149,13 +149,13 @@
     <v-card>
       <v-card-text>
         <v-label >Output from <b>Raspberry Pi</b></v-label>
-        <MessageConsole :messages="console.pi">
+        <MessageConsole :messages="piMessages">
         </MessageConsole>
 
       </v-card-text>
       <v-card-actions class="pr-3 pt-1">
         <v-spacer></v-spacer>
-        <v-btn  color="warning"  @click="this.console.pi=[]">
+        <v-btn  color="warning"  @click="this.$store.commit('clearPiMessages')">
           CLEAR
         </v-btn>
       </v-card-actions>
@@ -238,26 +238,22 @@
       this.projects = Projects ;
 
     },
-    watch:{
-      'console.code': function(){
-        console.log(this.console.code)
-
-      }
-    },
     sockets: {
-      pinUpdate (data) {
-        this.console.pi.push({msg:data.msg,type:"pin"});
-      },
-      error(data){
-        alert(data)
+      pinUpdate(data){
+        //this.$store.commit()
       },
       wsConnection(data){
-        console.log(data)
-        this.$store.commit('url',{url:data.url})
+        this.$store.commit('url',{url:data.url});
+      },
+      printMessage(data){
+        this.$store.commit('piMessages',{type:data.type,message:data.msg});
       }
     },
 
     computed: {
+      piMessages(){
+        return this.$store.getters.piMessages
+      },
       noOfElems(){
         return this.$store.getters.getNoOfElems
       },
@@ -280,6 +276,7 @@
         }
       },
       generate(){
+        this.$store.commit('clearPiMessages')
         if(this.noOfElems > 0){
           this.stop()
         }
@@ -307,6 +304,7 @@
       },
 
       stop() {
+        this.$store.commit('clearPiMessages')
         this.$store.dispatch('close',{pin:""})
         APIService.close().then((data) => {
           console.log(data)
@@ -317,6 +315,7 @@
         return img
       },
       clearWs(){
+        this.$store.commit('clearPiMessages')
         APIService.cleanWorkspace();
       },
       updateConsole(text){

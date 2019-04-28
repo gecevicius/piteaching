@@ -205,7 +205,7 @@ Blockly.Blocks['read_gpio'] = {
 Blockly.JavaScript['text_print'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block,"TEXT",Blockly.JavaScript.ORDER_NONE);
   console.log('blockly text print : ' + text)
-  var code = 'window.alert('+text+');';
+  var code = 'print('+text+');';
   return code;
 };
 

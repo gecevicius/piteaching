@@ -16,10 +16,17 @@ const store = new Vuex.Store({
 		noOfElems:0,
 		username:'',
 		url:'',
+		piMessages:[]
 	},
 	mutations: {
 		url(state,{url}){
 			state.url = url;
+		},
+		piMessages(state,{type,message}){
+			state.piMessages.push({type:type,message:message});
+		},
+		clearPiMessages(state){
+			state.piMessages.length = 0;
 		},
 		pushElem(state,{newElem}){
 			console.log(newElem)
@@ -63,6 +70,9 @@ const store = new Vuex.Store({
 		}
 	},
 	getters: {
+		piMessages(state){
+			return state.piMessages;
+		},
 		url(state){
 			return state.url;
 		},

@@ -15,23 +15,23 @@ class gpiojs{
 		console.log(type)
 		if(type === "RGB"){
 			console.log(type)
-			this.setRgb(pin,output,type)
+			this.setRgb(pin,output,io)
+
 		}
 		else{
 			if(!this.gpioArray[pin]){
 				const gpio = new Gpio(pin, {mode:Gpio.OUTPUT}) 
 				this.gpioArray[pin].type = type;
 				this.gpioArray[pin] = gpio
-				
-				gpio.digitalWrite(output)
+				gpio.digitalWrite(output);
+
 			}
 			else {
 				const gpio = this.gpioArray[pin]
 				gpio.digitalWrite(output);			
 			}
-			if(io){
-				io.emit('pinUpdate',{pin:pin,val:output})
-			}
+			io.emit('pinUpdate',{pin:pin,val:output})
+			io.emit('printMessage',{type:'Element Set Output',message:"Component at pin" + pin+" changed output to "+output});
 			return true
 			}
 			
@@ -41,8 +41,11 @@ class gpiojs{
 	readVal(pin){
 		if ( pin !== undefined && typeof pin !== undefined && pin!== null){
 			var val = this.gpioArray[pin].digitalRead();
+			io.emit('printMessage',{type:'Element Read Output',message:"Component at pin" + pin+" value is "+val});
 			return val
+
 		}
+		io.emit('printMessage',{type:'Element Read Output',message:"Error reading element output at pin "+pin});
 		else return false
 			
 	}
@@ -63,14 +66,17 @@ getByPin(pin){
 
 		sensor.glitchFilter(5000);
 		this.gpioArray[pin] = sensor
+		io.emit('printMessage',{type:'Watch ',msg:"Watcing "+type+" element at pin "+pin});
 		sensor.on('alert',(level, tick) => {
 			io.emit('pinUpdate', {pin:pin,val:level})
+			io.emit('printMessage',{type:'Watcher update',message:"Watched "+type+" element at pin "+pin+" triggered"});
 		});
 	}
-	close(pin){
+	close(pin,io){
 		if(pin != undefined && this.gpioArray[pin] != null){
 			this.gpioArray[pin].digitalWrite(0)
 			this.gpioArray[pin] = null;
+			io.emit('printMessage',{type:'CLOSE ',msg:"Pin "+pin+" closed connection!"});
 		}
 		else{
 			this.gpioArray.forEach(function(i){
@@ -78,7 +84,9 @@ getByPin(pin){
 				i.digitalWrite(0)
 				i = null;
 			}
+
 		})
+			io.emit('printMessage',{type:'CLOSE ',msg:"Closed all pin connections!"});
 		this.gpioArray = []
 		}
 		return true
@@ -86,7 +94,7 @@ getByPin(pin){
 
 
 
-    setRgb(pins,output){
+    setRgb(pins,output,io){
     	console.log(pins)
     	var rgb = hexRgb(output,{format:'array'});
     	if(!this.gpioArray[pins.rpin] && !this.gpioArray[pins.bpin] && !this.gpioArray[pins.gpin]){
@@ -107,7 +115,7 @@ getByPin(pin){
 	    	rGpio.pwmWrite(rgb[0])
 	    	bGpio.pwmWrite(rgb[1])
 	    	gGpio.pwmWrite(rgb[2])
-
+	    	
 	    }
 	    else{
 	    	if(this.gpioArray[pins.rpin] && this.gpioArray[pins.bpin] && this.gpioArray[pins.bpin]){
@@ -122,9 +130,12 @@ getByPin(pin){
 
 	    	}
 	    	else{
+	    		io.emit('printMessage',{type:'ERROR ',message:"RGB LED at pin" + pins +" failed to update output to "+output});
 	    		return false
 	    	}
 	    }
+	    io.emit('pinUpdate',{pin:pin,val:output})
+			io.emit('printMessage',{type:'Element Set Output',message:"RGB LED at pin" + pins +" changed output to "+output});
     }
 
 
