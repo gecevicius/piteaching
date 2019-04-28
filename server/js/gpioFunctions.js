@@ -67,11 +67,11 @@ getByPin(pin){
 		console.log("senseGpio");
 		console.log(pin);
 		console.log(type);
-		
-		const sensor = new Gpio(pin, 'in', 'rising', {
- 		 mode: Gpio.INPUT,
- 		pullUpDown: Gpio.PUD_UP,
- 		 alert: true
+
+		const sensor = new Gpio(pin, {
+		  mode: Gpio.INPUT,
+		  pullUpDown: Gpio.PUD_UP,
+		  alert: true
 		});
 
 		sensor.glitchFilter(5000);
