@@ -30,7 +30,7 @@ class gpiojs{
 				gpio.digitalWrite(output);			
 			}
 			io.emit('pinUpdate',{pin:pin,val:output})
-			io.emit('printMessage',{type:'Element Set Output',message:"Component at pin" + pin+" changed output to "+output});
+			io.emit('printMessage',{type:'Element Set Output',msg:type+ " Element at pin " + pin+" changed output to "+output});
 			return true
 			}
 			
@@ -68,7 +68,7 @@ getByPin(pin){
 
 		sensor.glitchFilter(5000);
 		this.gpioArray[pin] = sensor
-		io.emit('printMessage',{type:'Watch ',msg:"Watcing "+type+" element at pin "+pin});
+		io.emit('printMessage',{type:'Watch ',msg:"Watching "+type+" element at pin "+pin});
 		sensor.on('alert',(level, tick) => {
 			io.emit('pinUpdate', {pin:pin,val:level})
 			io.emit('printMessage',{type:'Watcher update',message:"Watched "+type+" element at pin "+pin+" triggered"});

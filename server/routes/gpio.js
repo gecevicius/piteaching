@@ -13,11 +13,10 @@ router.post('/', function(req, res, next) {
 	console.log(req.body)
 	if (gpiojs.setOutput(pin,output,type,io)) {
 		res.send(pin+' LED with value ' + output);
-		io.emit('printMessage',{type:'Element ',msg:type+" at pin "+pin+" set output to "+output});
 	}
 	else {
 		res.send(pin+' pin GPIO not supported. please check pin numbers. App must be hosted on a RaspberryPi.');
- 	
+ 		
 }
 
 });

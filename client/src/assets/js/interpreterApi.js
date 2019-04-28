@@ -83,7 +83,7 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
          gpio.setOutput(output.data) 
        }
        else{
-        alert('gpio variable is not initiated. please create a variable for this pin to use it!')
+        store.commit('piMessages',{type:'ERROR',message:"Initiate the Element before setting an output!"});
         return false
       }
     };
@@ -99,7 +99,7 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
          gpio.toggleOutput(); 
        }
        else{
-        alert('gpio variable is not initiated. please create a variable for this pin to use it!')
+       tore.commit('piMessages',{type:'ERROR',message:"Initiate the Element before setting an output!"});
         return false
       }
     };
@@ -133,6 +133,7 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
 
       var wrapper = function(d, next) {
         window.setTimeout(function() {
+          tore.commit('piMessages',{type:'Waiting',message:"Waiting for ..."+d +" seconds"});
           next();
         }, d);
       };

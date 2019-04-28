@@ -246,6 +246,7 @@
         this.$store.commit('url',{url:data.url});
       },
       printMessage(data){
+        console.log(data)
         this.$store.commit('piMessages',{type:data.type,message:data.msg});
       }
     },
@@ -267,6 +268,9 @@
         }
 
       }
+    },
+    mounted(){
+      this.$store.commit('clearPiMessages')
     },
     methods : {
       step(direction){
