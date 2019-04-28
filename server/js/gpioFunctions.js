@@ -37,7 +37,7 @@ class gpiojs{
 			}
 			}
 			catch(error){
-				io.emit('printMessage',{type:'ERROR',msg:type+ "Invalid output ("+output+") value supplied for pin " + pin;
+				io.emit('printMessage',{type:'ERROR',msg:type+ "Invalid output ("+output+") value supplied for pin " + pin});
 			}
 
 	}
