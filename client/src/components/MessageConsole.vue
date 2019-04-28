@@ -5,7 +5,7 @@
 				<v-flex xs3><b>Type</b></v-flex>
 				<v-flex xs0><b>Message</b></v-flex>
 			</v-layout>
-			<v-layout align="left" row-wrap v-for="msg in this.messages">
+			<v-layout align="left" class="msg" row-wrap v-for="msg in this.messages">
 				<v-flex xs3 class="print-type">{{msg.type}}</v-flex>
 				<v-flex xs9 class="print-msg">{{msg.message}}</v-flex>
 			</v-layout>
@@ -31,7 +31,11 @@
 .print-type{
 	color:rebeccapurple;
 }
+.msg{
+	padding-bottom: 5px;
+	border-bottom: 1px solid #cbcbcb;
 
+}
 .print-msg{
 
 }

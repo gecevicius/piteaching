@@ -125,10 +125,11 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
       interpreter.createNativeFunction(wrapper));
 
       //read gpio pin val 
-      var wrapper =  function(gpio,sense,callback){
-        return gpio.getVal()
+      var wrapper =  function(gpio){
+        console.log(gpio)
+      return gpio.getVal()
       };
-      interpreter.setProperty(scope, 'readGpio', interpreter.createAsyncFunction(wrapper));
+      interpreter.setProperty(scope, 'readGpio', interpreter.createNativeFunction(wrapper));
 
 
       var wrapper = function(d, next) {

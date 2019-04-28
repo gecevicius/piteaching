@@ -57,15 +57,7 @@ Blockly.JavaScript['toggle_gpio'] = function(block) {
   return code;
 };
 
-Blockly.Blocks['read_gpio'] = {
-  init: function() {
-   this.appendDummyInput()
-   .appendField('get value of GPIO')
-   .appendField(new Blockly.FieldNumber('0', -128, 127, 1), 'PIN')
-   this.setColour(285);
-   this.setOutput(true);
- }
-};
+
 
 Blockly.Blocks['colour_picker'] = {
   init: function() {
@@ -103,7 +95,7 @@ Blockly.Blocks['new_element'] = {
 Blockly.JavaScript['new_element'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = block.getFieldValue('TYPE');
-  var code = 'newElem(' + pin + ',"' + type  + '");';
+  var code = 'newElem(' + pin + ',"' + type  + '")';
   return [code,Blockly.JavaScript.ORDER_CALL];
 };
 
@@ -160,7 +152,7 @@ Blockly.JavaScript['new_rgb'] = function(block) {
   }
 
   var type = 'RGB';
-  var code = "newElem('" + JSON.stringify(pins) + "','" + type  + "');";
+  var code = "newElem('" + JSON.stringify(pins) + "','" + type  + "')";
   return [code,Blockly.JavaScript.ORDER_CALL];
 };
 
@@ -181,7 +173,7 @@ Blockly.Blocks['new_button'] = {
 Blockly.JavaScript['new_button'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = 'BUTTON';
-  var code = 'newElem(' + pin + ',"' + type  + '");';
+  var code = 'newElem(' + pin + ',"' + type  + '")';
   return [code,Blockly.JavaScript.ORDER_CALL];
 };
 
@@ -191,9 +183,8 @@ Blockly.Blocks['read_gpio'] = {
   init: function() {
    this
    .appendValueInput('GPIO')
-   .appendField('read GPIO')
+   .appendField('read value of Element')
    this.appendDummyInput()  
-   .appendField('value') 
    this.setColour(280);
    this.setOutput(true);
  }
@@ -211,6 +202,7 @@ Blockly.JavaScript['text_print'] = function(block) {
 
 Blockly.JavaScript['read_gpio'] = function(block) {
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
+  console.log(selectedVar)
   var code = 'readGpio(' + selectedVar  + ',' + false + ')';
   return [code, Blockly.JavaScript.ORDER_CALL];
 };
@@ -299,7 +291,7 @@ Blockly.defineBlocksWithJsonArray([ {
   },
 
   ],
-  "output": null
+  "output": true
 }])
 
 

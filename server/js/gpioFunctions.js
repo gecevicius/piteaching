@@ -30,7 +30,8 @@ class gpiojs{
 				gpio.digitalWrite(output);			
 			}
 			io.emit('pinUpdate',{pin:pin,val:output})
-			io.emit('printMessage',{type:'Element Set Output',msg:type+ " Element at pin " + pin+" changed output to "+output});
+			//Output enable for testing, otherwise should probably be disabled.
+			//io.emit('printMessage',{type:'Element Set Output',msg:type+ " Element at pin " + pin+" changed output to "+output});
 			return true
 			}
 			
@@ -40,7 +41,6 @@ class gpiojs{
 	readVal(pin){
 		if ( pin !== undefined && typeof pin !== undefined && pin!== null){
 			var val = this.gpioArray[pin].digitalRead();
-			io.emit('printMessage',{type:'Element Read Output',message:"Component at pin" + pin+" value is "+val});
 			return val
 
 		}
@@ -71,7 +71,6 @@ getByPin(pin){
 		io.emit('printMessage',{type:'Watch ',msg:"Watching "+type+" element at pin "+pin});
 		sensor.on('alert',(level, tick) => {
 			io.emit('pinUpdate', {pin:pin,val:level})
-			io.emit('printMessage',{type:'Watcher update',message:"Watched "+type+" element at pin "+pin+" triggered"});
 		});
 	}
 	close(pin,io){
