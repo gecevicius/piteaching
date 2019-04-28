@@ -26,7 +26,6 @@ const store = new Vuex.Store({
 			if(newElem.getType() === 'RGB'){
 				var pinList = newElem.getMultiPins();
 				for (var pin in pinList){
-					console.log(pinList[pin])
 					Vue.set(state.elemsArray,pinList[pin],newElem);
 				}
 				console.log(state.elemsArray[pinList.rpin]);
@@ -34,6 +33,9 @@ const store = new Vuex.Store({
 			else{
 				Vue.set(state.elemsArray,newElem.getPin(),newElem);
 			}
+			console.log(state.elemsArray)
+			console.log(newElem.getPin())
+			console.log(state.elemsArray,newElem.getPin(),newElem)
 			
 		},
 		username(state,{username}){
@@ -86,6 +88,7 @@ const store = new Vuex.Store({
   		if(pin !=undefined && type != null){
   			if(this.state.elemsArray[pin] == undefined || this.state.elemsArray[pin] == null ){
   				var newElem = new Element(pin,type);
+  				console.log(newElem)
   				var noOfElems = this.state.noOfElems + 1;
   				console.log(noOfElems);
   				context.commit('noOfElems',{noOfElems});

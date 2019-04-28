@@ -5,8 +5,7 @@
 			<v-spacer></v-spacer>
 			<v-toolbar-items class="hidden-sm-and-down">
 				<Settings></Settings>
-				<v-btn flat>Link Two</v-btn>
-				<v-btn flat>Link Three</v-btn>
+				<v-btn flat>Tutorial</v-btn>
 			</v-toolbar-items>
 		</v-toolbar>
 	</div>

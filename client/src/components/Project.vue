@@ -92,73 +92,110 @@
 </v-container>
 <v-spacer></v-spacer>
 <v-toolbar-items class="hidden-sm-and-down">
+
   <v-btn icon  @click="generate">
-    <v-icon large>mdi-play</v-icon>
+    <v-icon color="success" large>mdi-play</v-icon>
   </v-btn>
 
   <v-btn v-if="this.noOfElems > 0" icon @click="stop">
-    <v-icon medium>mdi-square</v-icon>
+    <v-icon color="error" medium>mdi-square</v-icon>
   </v-btn>
   <v-btn v-else disabled  icon @click="stop">
     <v-icon medium>mdi-square</v-icon>
+  </v-btn>
+  <v-btn icon  @click="clearWs">
+    <v-icon color="warning" large>mdi-delete</v-icon>
   </v-btn>
 </v-toolbar-items>
 </v-toolbar>
 <Workspace :project="this.projects[currentProj]"></Workspace>
 
+
+
+
+
 <div id="code">
-  <div id="code-generation">
-    <v-textarea
-    solo
-    id="js-code"
-    name="input-7-4"
-    label="Generated Python code"
-    v-model="code">
-  </v-textarea>
-  <div id="console">
-    <v-textarea
-    solo
-    id="console-text"
-    label="RaspberryPi Console Output"
-    v-model="console">
-  </v-textarea>
+  <v-expansion-panel>
+    <v-expansion-panel-content
+    >
+    <template v-slot:header>
+      <h3>Generated Code</h3>
+    </template>
+    <v-card>
+      <v-card-text>
+        <div id="code-generation" elevation-1>
+          <v-label>Code generated in <b>JavaScript</b></v-label>
+          <pre  v-highlightjs="console.code"> <code class="javascript"></code>
+          </pre> </div>
+        </v-card-text>
+        <v-card-actions class="pr-3 pt-1">
+          <v-spacer></v-spacer>
+          <v-btn  color="warning"  @click="this.console.code=''">
+            CLEAR
+          </v-btn>
+        </v-card-actions>
+      </v-card>
 
-</div>
-<div id="chat">
-  <v-layout row wrap>
-    <v-flex xs12>
-      <v-text-field readonly flat label="Please set your Username in settings to use the chat!" v-model="username" ></v-text-field>
-    </v-flex>
 
-  </v-layout>
+    </v-expansion-panel-content>
 
-  <div class="chat-area">
 
-  </div>
+    <v-expansion-panel-content
+    >
+    <template v-slot:header>
+      <h3>Raspberry Pi Console Output</h3>
+    </template>
+    <v-card>
+      <v-card-text>
+        <v-label >Output from <b>Raspberry Pi</b></v-label>
+        <MessageConsole :messages="console.pi">
+        </MessageConsole>
 
-</div>
-<div id="elements" v-if="this.noOfElems>0">
-  <v-container px-0 pb-3>
+      </v-card-text>
+      <v-card-actions class="pr-3 pt-1">
+        <v-spacer></v-spacer>
+        <v-btn  color="warning"  @click="this.console.pi=[]">
+          CLEAR
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-expansion-panel-content>
+
+
+
+
+  <v-expansion-panel-content
+  >
+  <template v-slot:header>
     <h3>Active Components</h3>
-    <v-layout>
-      <v-flex xs2  v-for="element in this.elemsArray" v-if="element!=undefined"   class="element-block text-xs-center">
-        <div class="gpio-element">
-          <div>{{element.getType()}}</div>
-          <div><img width="50px" :src="getComponentImg(element.getType())"></div>
+  </template>
+  <v-card >
+    <v-card-text>
+      <v-label class="mb-2  ">Components currently registered on <b>Raspberry Pi</b></v-label>  
+      <div id="elements" v-if="this.noOfElems>0">
+        <v-container px-0 pb-3>
           <v-layout>
-            <v-flex xs6><div text="center" style="font-weight:bold">{{element.getPin()}}</div></v-flex>
-            <v-flex xs6> <div text="center" style="font-weight:bold">{{element.getVal()}}</div></v-flex>
+
+            <ActiveElement v-for="elem in this.elemsArray" v-if="elem!=null && elem !=undefined" :element="elem"></ActiveElement>
+
+
           </v-layout>
+        </v-container>
+      </div>
 
-        </div>
-      </v-flex>
+      <p v-else class="mt-2" style="font-size:12px"> </br>No elements are currenty active! Create a new element by using a <b>New Element</b> block and setting it to a variable.</p>
+    </v-card-text>
+  </v-card>
+</v-expansion-panel-content>
 
-    </v-layout>
-  </v-container>
-</div>
-</div>
+</v-expansion-panel>
+
+
+
+
 
 </div>
+
 </div>
 </template>
 
@@ -170,16 +207,22 @@
   import io from 'socket.io-client';
   import Projects from '../assets/Projects';
   import APIService from '../services/APIService';
-
+  import MessageConsole from './MessageConsole';
+  import ActiveElement from './ActiveElement';
   export default {
     name: 'Project',
     components:{
-      'Workspace':Workspace
+      'Workspace':Workspace,
+      'ActiveElement':ActiveElement,
+      'MessageConsole':MessageConsole
     },
     data () {
       return {
         code:'',
-        console:'',
+        console:{
+          pi:[],
+          code:''
+        },
         interpreter:'',
         setCalls:0,
         currentProj:0,
@@ -187,15 +230,22 @@
         projects:'',
         showTut:false,
         projectNames:[],
+        message:''
       }
     },
     beforeMount (){
       this.projects = Projects ;
 
     },
+    watch:{
+      'console.code': function(){
+        console.log(this.console.code)
+
+      }
+    },
     sockets: {
       pinUpdate (data) {
-        this.updateConsole("Sensor update. *PIN :"+data.pin+" , VAL:"+data.val+"*");
+        this.console.pi.push({msg:data.msg,type:"pin"});
       },
       error(data){
         alert(data)
@@ -232,15 +282,15 @@
         if(this.noOfElems > 0){
           this.stop()
         }
-        Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , this.$store.getters.blocklyWs);
-        var code = Blockly.JavaScript.workspaceToCode(this.$store.getters.blocklyWs);
-        this.code = code;
+        Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , Blockly.mainWorkspace);
+        var code = Blockly.JavaScript.workspaceToCode(Blockly.mainWorkspace);
+        this.console.code = code;
         var interpreter = new Interpreter(code, initApi);
         this.interpreter = interpreter
         this.runner();
-        this.$store.dispatch('blocklyWs',{blocklyWs: this.workspace});
-
+        this.$store.dispatch('blocklyWs',{blocklyWs: Blockly.mainWorkspace});
       },
+
       runner() { 
         try{
           if (this.interpreter.run()) { 
@@ -261,14 +311,17 @@
           console.log(data)
         });
       },
-
-      updateConsole(text){
-        this.console = this.console +text+"\n";
-      },
       getComponentImg(type){
         var img = require("../assets/staticimg/"+type+".png")
         return img
-      }
+      },
+      clearWs(){
+        APIService.cleanWorkspace();
+      },
+      updateConsole(text){
+        this.console = this.console +text+"\n";
+      },
+
 
 
     }
@@ -277,3 +330,6 @@
   }
 
 </script>
+<style scoped>
+
+</style>

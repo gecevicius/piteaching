@@ -6,6 +6,7 @@ class APIService{
 	constructor(){
 		this.API_URL = 'http://192.168.1.247:3001';
 		this.gpioUrl = this.API_URL+`/gpio`;
+		this.sharingUrl = this.API_URL + '/sharing';
 	}
 
 	setOutput (pin,output,type) {
@@ -71,17 +72,28 @@ getLocals(){
 }
 
 shareWorkspace(xmlWs){
-	console.log(xmlWs)
-	axios.post(this.API_URL+"/sharing",{
+	axios.post(this.sharingUrl,{
 		"workspace":xmlWs,
 	}).then(response =>{
 
+	}).catch(e =>{
+		
 	})
 }
 
 async getWorkspace(){
-	return await axios.get(this.API_URL+"/sharing").then(response => {
+	return await axios.get(this.sharingUrl).then(response => {
 		return response.data;
+	}).catch(e =>{
+
+	})
+}
+
+cleanWorkspace(){
+	axios.delete(this.sharingUrl).then(response => {
+
+	}).catch(e =>{
+		
 	})
 }
 

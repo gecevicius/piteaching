@@ -17,21 +17,25 @@
 	class="headline grey lighten-2"
 	primary-title
 	>
-	User Settings
+	Workspace Sharing
 </v-card-title>
 
 <v-card-text>
-	<v-layout row wrap>
-
-		<v-flex xs12>
-			<v-label>Set your username : </v-label>
-			<v-text-field label="Username" solo v-model="username" placeholder="Your username"></v-text-field>
-		</v-flex>
-		<v-flex xs12>
+	<v-layout row wrap 	>
+		<v-flex xs12 mb-4>
 			<v-label>Share access to your Rasperry Pi with this link : </v-label>
-			<v-text-field solo v-model="url" ></v-text-field>
 		</v-flex>
-
+		<v-flex xs8  pr-1  d-flex>
+			
+			<v-text-field hide-details ma-0 readonly disabled  v-model="url"  ></v-text-field>
+			
+		</v-flex>
+		<v-flex xs4  pl-1 ma-0 >
+			<v-btn
+			primary
+			block
+			v-clipboard="() => this.url">Copy</v-btn>
+		</v-flex>
 	</v-layout>
 </v-card-text>
 
@@ -46,13 +50,7 @@
 	Close
 </v-btn>
 <v-spacer></v-spacer>
-<v-btn
-color="primary"
-flat
-@click="dialog = false"
->
-Save
-</v-btn>
+
 </v-card-actions>
 </v-card>
 </v-dialog>

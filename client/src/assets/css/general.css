@@ -5,6 +5,8 @@
 
 body {
 	font-family:SourceSansPro;
+	min-height: 100vh;
+	background: #f3f3f3;
 }
 
 #blocklyArea{
@@ -21,10 +23,7 @@ body {
 	float: right;
 	display: inline-block;
 	z-index: 1000;
-	background: white;
-	height: 600px;
 	width: 33%;
-	background: #f3f3f3;
 	padding: 20px;
 }
 .element-block{
@@ -37,4 +36,22 @@ body {
 .v-menu__content{
 
 	z-index:10000 !important;
+}
+.primary{
+	color:#C51A4A;
+}
+#code-generation pre{
+	max-height: 320px;
+}
+#code-generation code,.msg-console{
+	background-color: #d7d7d759;
+	padding:15px;
+	font-size: 12px;
+	min-height: 300px;
+	width: 100%;
+	border-radius: 0;
+}
+.v-expansion-panel__header{
+	background: #C51A4A;
+	color: #fff;
 }

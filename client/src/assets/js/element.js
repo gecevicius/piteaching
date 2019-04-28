@@ -12,8 +12,9 @@ class Element{
 		if(pin.rpin){
 			this.pin = pin.rpin;
 			this.multiPins = pin;
+		} else{
+			this.pin = pin
 		}
-		
 		this.val = 0;
 		this.interpreterListener = false;
 	}
@@ -72,7 +73,7 @@ class Element{
 			console.log('RGB is here!')
 			console.log(this.getPin())
 			APIService.setOutput(this.getMultiPins(),output,this.getType()).then((data) => {
-			console.log(data) 
+				console.log(data) 
 			})
 		}
 		else{

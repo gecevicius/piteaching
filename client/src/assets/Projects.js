@@ -29,7 +29,6 @@ var Projects = [
 		'text_print'
 		],
 		vars:[
-		'new_element',
 		'new_button',
 		'new_rgb',
 		'new_led',
