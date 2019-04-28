@@ -45,8 +45,11 @@ class gpiojs{
 			return val
 
 		}
-		io.emit('printMessage',{type:'Element Read Output',message:"Error reading element output at pin "+pin});
-		else return false
+		
+		else {
+			io.emit('printMessage',{type:'Element Read Output',message:"Error reading element output at pin "+pin});
+			return false
+		}
 			
 	}
 
