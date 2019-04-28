@@ -13,6 +13,7 @@ class gpiojs{
 	setOutput(pin,output,type,io){
 		
 		console.log(type)
+		try{
 		if(type === "RGB"){
 			console.log(type)
 			this.setRgb(pin,output,io)
@@ -34,7 +35,10 @@ class gpiojs{
 			//io.emit('printMessage',{type:'Element Set Output',msg:type+ " Element at pin " + pin+" changed output to "+output});
 			return true
 			}
-			
+			}
+			catch(error){
+				io.emit('printMessage',{type:'ERROR',msg:type+ "Invalid output ("+output+") value supplied for pin " + pin;
+			}
 
 	}
 
