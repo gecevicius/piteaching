@@ -116,7 +116,7 @@ Blockly.Blocks['new_led'] = {
 Blockly.JavaScript['new_led'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = 'LED';
-  var code = 'newElem(' + pin + ',"' + type  + '");';
+  var code = 'newElem(' + pin + ',"' + type  + '")';
   return [code,Blockly.JavaScript.ORDER_CALL];
 };
 
@@ -292,6 +292,7 @@ Blockly.defineBlocksWithJsonArray([ {
 
   ],
   "output": true
+
 }])
 
 
@@ -317,7 +318,61 @@ Blockly.defineBlocksWithJsonArray([{
   "previousStatement": true,
   "nextStatement": true,
 
-}])
+},
+
+{
+    "type": "controls_repeat_ext",
+    "message0": "%{BKY_CONTROLS_REPEAT_TITLE}",
+    "args0": [{
+      "type": "input_value",
+      "name": "TIMES",
+    }],
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "loop_blocks",
+    "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
+  },
+   {
+    "type": "math_arithmetic",
+    "message0": "%1 %2 %3",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "A",
+      },
+      {
+        "type": "field_dropdown",
+        "name": "OP",
+        "options": [
+          ["%{BKY_MATH_ADDITION_SYMBOL}", "ADD"],
+          ["%{BKY_MATH_SUBTRACTION_SYMBOL}", "MINUS"],
+          ["%{BKY_MATH_MULTIPLICATION_SYMBOL}", "MULTIPLY"],
+          ["%{BKY_MATH_DIVISION_SYMBOL}", "DIVIDE"],
+          ["%{BKY_MATH_POWER_SYMBOL}", "POWER"]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "B",
+        "check": "Number"
+      }
+    ],
+    "inputsInline": true,
+    "output": "Number",
+    "style": "math_blocks",
+    "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
+    "extensions": ["math_op_tooltip"]
+  },
+
+])
+
+
 
 
 

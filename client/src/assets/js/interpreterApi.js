@@ -54,10 +54,13 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     item.toggleInterpreterListener(watcher);
     watcher.on('watcherUpdate',function(){
       interpreter.appendCode(code.data);
-      while(interpreter.step()){
+      window.setTimeout(function(){
+        while(interpreter.step()){
 
       }
      
+      },300)
+      
     })
   };
   interpreter.setProperty(scope, 'enableWatcher',
@@ -133,9 +136,9 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
 
       var wrapper = function(d, next) {
         window.setTimeout(function() {
-          tore.commit('piMessages',{type:'Waiting',message:"Waiting for ..."+d +" seconds"});
+          store.commit('piMessages',{type:'Waiting',message:"Waiting for ..."+d +" seconds"});
           next();
-        }, d);
+        }, d * 1000);
       };
       interpreter.setProperty(scope, 'wait',
         interpreter.createAsyncFunction(wrapper));
