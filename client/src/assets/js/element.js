@@ -42,6 +42,7 @@ class Element{
 		})
 		var self = this;
 		socketInstance.on('pinUpdate', function(data){
+			console.log("test")
 			if(self.getPin() == data.pin){
 				if(self.getType() != 'BUTTON'){
 					self.getVal = data.val;

@@ -53,9 +53,13 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     console.log(item)
     item.toggleInterpreterListener(watcher);
     watcher.on('watcherUpdate',function(){
+      
+        console.log("inside clicked")
       interpreter.appendCode(code.data);
       window.setTimeout(function(){
-        interpreter.run();
+        while(interpreter.step()){
+
+      }
      
       },300)
       
