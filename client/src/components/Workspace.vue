@@ -51,8 +51,6 @@
     props: ['project'],
     mounted(){
       this.checkIfWorkspaceIsShared();
-      
-
     },
 
     watch: { 
@@ -67,7 +65,6 @@
      },
      sockets:{
       wsUpdated(data){
-
         console.log(data)
         this.xmlToWs(data.workspace);
         

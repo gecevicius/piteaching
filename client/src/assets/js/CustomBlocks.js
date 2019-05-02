@@ -291,6 +291,7 @@ Blockly.defineBlocksWithJsonArray([ {
   },
 
   ],
+
   "output": true
 
 }])
@@ -322,6 +323,7 @@ Blockly.defineBlocksWithJsonArray([{
 
 {
     "type": "controls_repeat_ext",
+    "colour":120,
     "message0": "%{BKY_CONTROLS_REPEAT_TITLE}",
     "args0": [{
       "type": "input_value",
@@ -340,6 +342,7 @@ Blockly.defineBlocksWithJsonArray([{
   },
    {
     "type": "math_arithmetic",
+    "colour":220,
     "message0": "%1 %2 %3",
     "args0": [
       {

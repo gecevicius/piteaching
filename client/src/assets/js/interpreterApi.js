@@ -55,9 +55,7 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     watcher.on('watcherUpdate',function(){
       interpreter.appendCode(code.data);
       window.setTimeout(function(){
-        while(interpreter.step()){
-
-      }
+        interpreter.run();
      
       },300)
       

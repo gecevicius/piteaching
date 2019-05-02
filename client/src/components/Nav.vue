@@ -6,7 +6,7 @@
 			<v-toolbar-items class="hidden-sm-and-down">
 				<v-btn flat @click="$router.push({name:'Project'})">Workspace</v-btn>
 				<Settings></Settings>
-				<v-btn flat @click="$router.push({name:'Documentation'})">Documentation</v-btn>
+				<v-btn flat @click="$router.push({name:'Documentation'})">Help</v-btn>
 			</v-toolbar-items>
 		</v-toolbar>
 	</div>

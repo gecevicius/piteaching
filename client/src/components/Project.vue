@@ -14,7 +14,7 @@
            <h2></h2>
          </v-flex>
          <v-flex xs3>
-          <v-dialog v-model="showTut" width="500">
+          <v-dialog v-model="showTut" width="700">
             <template v-slot:activator="{ on }">
               <v-btn
               color="red lighten-2"
@@ -27,7 +27,7 @@
 
           <v-card>
            <v-card-title
-           class="headline grey lighten-2"
+           class="display-1 grey lighten-2"
            primary-title
            >
            {{this.projects[currentProj].name}}
@@ -41,8 +41,15 @@
 
        <v-card-text>
         <v-container>
-          {{this.projects[currentProj].steps[currentStep].desc}}
-          <img v-if="this.projects[currentProj].steps[currentStep].media" :src="getComponentImg(this.projects[currentProj].steps[currentStep].media)">
+          <v-layout row wrap>
+            <v-flex xs12>
+              {{this.projects[currentProj].steps[currentStep].desc}}
+            </v-flex>
+            <v-flex xs10 offset-xs1 my-4 style="text-align:center">
+              <img style="max-height:300px;" v-if="this.projects[currentProj].steps[currentStep].media" :src="getComponentImg(this.projects[currentProj].steps[currentStep].media)">
+            </v-flex>
+
+          </v-layout>
         </v-container>
       </v-card-text>
 
@@ -116,7 +123,7 @@
 
 <div id="code">
   <h2 class="mb-2">Code console</h2>
-  <v-expansion-panel>
+  <v-expansion-panel value="0">
     <v-expansion-panel-content
     >
     <template v-slot:header>

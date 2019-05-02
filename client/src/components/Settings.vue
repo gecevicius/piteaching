@@ -18,7 +18,7 @@
 	class="headline grey lighten-2"
 	primary-title
 	>
-	Workspace Sharing
+	Settings
 </v-card-title>
 
 <v-card-text>

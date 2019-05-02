@@ -84,3 +84,7 @@ h1.primary{
 img{
 	max-width: 100%;
 }
+.v-card__title--primary,{
+	background: #C51A4A;
+	color: #fff;
+}
