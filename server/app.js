@@ -88,6 +88,8 @@ const io = require('socket.io')(server);
 
 app.set('socketio', io);
 server.listen(3001);
-
+var ip = require('ip');
+console.log("PiBlocks running on:");
+console.log(ip.address() + ":"+port);
 
 module.exports = app;

@@ -10,7 +10,6 @@ router.post('/', function(req, res, next) {
 	var output = req.body.output;
 	var type = req.body.type;
 	const io = req.app.get('socketio');
-	console.log(req.body)
 	if (gpiojs.setOutput(pin,output,type,io)) {
 		res.send(pin+' LED with value ' + output);
 	}
@@ -46,7 +45,6 @@ router.post('/sensor', function(req, res, next) {
 
 /* DELETE close GPIO connections. */
 router.get('/close', function(req, res, next) {
-	console.log(req.body)
 	const io = req.app.get('socketio');
 	if(req.query.pin >= 0){
 		var pin = req.query.pin
