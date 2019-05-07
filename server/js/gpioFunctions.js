@@ -72,7 +72,9 @@ getByPin(pin){
 		sensor.glitchFilter(5000);
 		this.gpioArray[pin] = sensor
 		io.emit('printMessage',{type:'Watch ',msg:"Watching "+type+" element at pin "+pin});
-			sensor.on('alert',(level, tick) => {
+	
+		sensor.enableAlert();
+		sensor.on('alert',(level, tick) => {
 			console.log(type)
 			if(type === 'BUTTON' && level === 0){
 				io.emit('pinUpdate', {pin:pin,val:level})
