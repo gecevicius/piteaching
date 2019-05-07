@@ -10,6 +10,8 @@ import Blockly from '../assets/js/CustomBlocks';
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+
+	//initialize state variables
 	state: {
 		elemsArray:[],
 		blocklyWs:'',
@@ -18,6 +20,8 @@ const store = new Vuex.Store({
 		url:'',
 		piMessages:[]
 	},
+
+	//perform mutations on those variables
 	mutations: {
 		url(state,{url}){
 			state.url = url;
@@ -29,20 +33,15 @@ const store = new Vuex.Store({
 			state.piMessages.length = 0;
 		},
 		pushElem(state,{newElem}){
-			console.log(newElem)
 			if(newElem.getType() === 'RGB'){
 				var pinList = newElem.getMultiPins();
 				for (var pin in pinList){
 					Vue.set(state.elemsArray,pinList[pin],newElem);
 				}
-				console.log(state.elemsArray[pinList.rpin]);
 			}
 			else{
 				Vue.set(state.elemsArray,newElem.getPin(),newElem);
 			}
-			console.log(state.elemsArray)
-			console.log(newElem.getPin())
-			console.log(state.elemsArray,newElem.getPin(),newElem)
 			
 		},
 		username(state,{username}){
@@ -94,13 +93,11 @@ const store = new Vuex.Store({
 	},
 	actions:{
 		pushElem(context,{pin,type}){
-  		//
+  		//is the pin not taken already?
   		if(pin !=undefined && type != null){
   			if(this.state.elemsArray[pin] == undefined || this.state.elemsArray[pin] == null ){
   				var newElem = new Element(pin,type);
-  				console.log(newElem)
   				var noOfElems = this.state.noOfElems + 1;
-  				console.log(noOfElems);
   				context.commit('noOfElems',{noOfElems});
   				context.commit('pushElem',{newElem});
   			}
@@ -114,14 +111,12 @@ const store = new Vuex.Store({
   	},
   	blocklyWs(context,{blocklyWs}){
   		if(blocklyWs !== this.state.blocklyWs){
-  			console.log(blocklyWs)
   			context.commit('blocklyWs',{blocklyWs});
   		}
   	},
 
   	close(context,{pin}){
   		if(this.state.noOfElems > 0){
-  			console.log(pin)
   			if(pin != undefined && pin !== "")
   			{
 

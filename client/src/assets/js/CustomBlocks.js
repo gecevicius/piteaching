@@ -11,10 +11,11 @@ import Interpreter from 'js-interpreter';
 import initApi from './interpreterApi';
 
 
+//set element output block
 Blockly.Blocks['set_gpio'] = {
 	init: function() {
    this.appendValueInput('GPIO')
-   .appendField('set GPIO ')
+   .appendField('set Eleemnt ')
     this.appendDummyInput()
    .appendField(' output to')
    this.appendValueInput('OUTPUT')
@@ -27,38 +28,37 @@ Blockly.Blocks['set_gpio'] = {
 };
 
 
-
+//set element output JS
 Blockly.JavaScript['set_gpio'] = function(block) {
-
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
   var output = Blockly.JavaScript.valueToCode(block, 'OUTPUT', Blockly.JavaScript.ORDER_ADDITION) || '0';
-  console.log(selectedVar)
-   console.log(output)
+
   var code = 'setOutput(' + selectedVar + ',' + output  + ');';
   return code;
 };
 
+//toggle element output block
 Blockly.Blocks['toggle_gpio'] = {
   init: function() {
    this.appendValueInput('GPIO')
-   .appendField('toggle GPIO output')
+   .appendField('toggle Element output')
    this.appendDummyInput()
    this.setColour(275);
-   this.setPreviousStatement(true, 'Action');
-   this.setNextStatement(true, 'Action');
+   this.setPreviousStatement(true);
+   this.setNextStatement(true);
  }
 };
-
+//toggle element output JS
 Blockly.JavaScript['toggle_gpio'] = function(block) {
 
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
- 
+  console.log(selectedVar);
   var code = 'toggleOutput(' + selectedVar + ');';
   return code;
 };
 
 
-
+//colour picker block
 Blockly.Blocks['colour_picker'] = {
   init: function() {
     this.appendDummyInput()
@@ -100,6 +100,7 @@ Blockly.JavaScript['new_element'] = function(block) {
 };
 
 
+//new LED block
 Blockly.Blocks['new_led'] = {
   init: function() {
    this.appendDummyInput()
@@ -113,6 +114,7 @@ Blockly.Blocks['new_led'] = {
  }
 };
 
+//new LED JS
 Blockly.JavaScript['new_led'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = 'LED';
@@ -121,7 +123,7 @@ Blockly.JavaScript['new_led'] = function(block) {
 };
 
 
-
+//new RGB Led JS
 Blockly.Blocks['new_rgb'] = {
   init: function() {
    this.appendDummyInput()
@@ -140,6 +142,7 @@ Blockly.Blocks['new_rgb'] = {
  }
 };
 
+//new RGB Led block
 Blockly.JavaScript['new_rgb'] = function(block) {
   var rpin = block.getFieldValue('RED');
   var bpin = block.getFieldValue('BLUE');
@@ -157,6 +160,7 @@ Blockly.JavaScript['new_rgb'] = function(block) {
 };
 
 
+//create new button block 
 Blockly.Blocks['new_button'] = {
   init: function() {
    this.appendDummyInput()
@@ -170,6 +174,7 @@ Blockly.Blocks['new_button'] = {
  }
 };
 
+//create new button block JS
 Blockly.JavaScript['new_button'] = function(block) {
   var pin = block.getFieldValue('PIN');
   var type = 'BUTTON';
@@ -178,7 +183,7 @@ Blockly.JavaScript['new_button'] = function(block) {
 };
 
 
-
+//read gpio value
 Blockly.Blocks['read_gpio'] = {
   init: function() {
    this
@@ -192,22 +197,23 @@ Blockly.Blocks['read_gpio'] = {
 
 
 
-
+//print block JS
 Blockly.JavaScript['text_print'] = function(block) {
   var text = Blockly.JavaScript.valueToCode(block,"TEXT",Blockly.JavaScript.ORDER_NONE);
-  console.log('blockly text print : ' + text)
+
   var code = 'print('+text+');';
   return code;
 };
 
+//read element value JS
 Blockly.JavaScript['read_gpio'] = function(block) {
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
-  console.log(selectedVar)
+ 
   var code = 'readGpio(' + selectedVar  + ',' + false + ')';
   return [code, Blockly.JavaScript.ORDER_CALL];
 };
 
-
+//wait block
 Blockly.defineBlocksWithJsonArray([{
   "type": "wait_seconds",
   "message0": " Wait %1 seconds",
@@ -223,10 +229,7 @@ Blockly.defineBlocksWithJsonArray([{
   "colour":360,
 }]);
 
-/**
- * Generator for wait block creates call to new method
- * <code>waitForSeconds()</code>.
- */
+//wait JS
  Blockly.JavaScript['wait_seconds'] = function(block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
   var code = 'wait(' + seconds + ')';
@@ -234,7 +237,7 @@ Blockly.defineBlocksWithJsonArray([{
 };
 
 
-
+//sense element / watch element output change 
 Blockly.Blocks['sense_gpio'] = {
   init: function() {
    this
@@ -250,11 +253,10 @@ Blockly.Blocks['sense_gpio'] = {
 };
 
 
-
+//sense element / watch element output change JS
 Blockly.JavaScript['sense_gpio'] = function(block) {
   var sense = true;
   var selectedVar = Blockly.JavaScript.valueToCode(block, 'GPIO', Blockly.JavaScript.ORDER_ADDITION) || '0';
-  console.log(selectedVar);
   var innerCode = '"' + Blockly.JavaScript.statementToCode(block, 'DO') + '"';
   innerCode =   innerCode.replace(/\n/g, " ");
   console.log(innerCode);
@@ -265,12 +267,10 @@ Blockly.JavaScript['sense_gpio'] = function(block) {
 function varsDropdown(){
   var options = [];
   var allVars = store.getters.blocklyWs.getAllVariables();
-  console.log(allVars)
   allVars.forEach(function(element) {
     options.push([element.name,element.id_])
 
   });
-console.log(allVars[0])
   if(options.length == 0){
     options.push(['Variables appear here','0'])
   }
@@ -320,7 +320,7 @@ Blockly.defineBlocksWithJsonArray([{
   "nextStatement": true,
 
 },
-
+//loops, copied from core Blockly but removed input checks
 {
     "type": "controls_repeat_ext",
     "colour":120,

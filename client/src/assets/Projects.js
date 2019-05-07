@@ -54,6 +54,7 @@ var Projects = [
 		"logic_operation",
 		"logic_boolean",
 		"logic_negate",
+		
 		],
 		loops:[
 		'controls_repeat_ext',
@@ -77,7 +78,6 @@ var Projects = [
 		'sense_gpio',
 		],
 		other:[
-		'wait_seconds',
 		'colour_picker'
 		]
 	}
