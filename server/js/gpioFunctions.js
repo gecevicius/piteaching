@@ -75,6 +75,7 @@ getByPin(pin){
 		console.log(type)
 		console.log(pin)
 		console.log(io)
+		sensolr.enableAlert();
 		sensor.on('alert',(level, tick) => {
 			console.log(type)
 			if(type === 'BUTTON' && level === 0){
