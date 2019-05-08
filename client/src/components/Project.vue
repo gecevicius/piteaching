@@ -324,6 +324,11 @@
       stop() {
         this.$store.commit('clearPiMessages')
         this.$store.dispatch('close',{pin:""})
+        for(var i in this.$store.getters.elemsArray){
+          if(i!=null && i!=undefined){
+            this.$store.getters.elemsArray[i].removeInterpreterListener();
+          }
+        }
         APIService.close().then((data) => {
           console.log(data)
         });

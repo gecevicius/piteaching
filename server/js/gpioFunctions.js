@@ -73,7 +73,7 @@ getByPin(pin){
 		this.gpioArray[pin] = sensor
 		io.emit('printMessage',{type:'Watch ',msg:"Watching "+type+" element at pin "+pin});
 	
-		sensor.enableAlert();
+	
 		sensor.on('alert',(level, tick) => {
 			console.log(type)
 			if(type === 'BUTTON' && level === 0){

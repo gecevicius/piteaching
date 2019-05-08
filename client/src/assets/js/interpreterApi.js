@@ -50,11 +50,12 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     var watcher = new EventEmitter();
     item.toggleInterpreterListener(watcher);
     watcher.on('watcherUpdate',function(){
+
       interpreter.appendCode(code.data);
       window.setTimeout(function(){
         interpreter.run()
      
-      },200)
+      },300)
       
     })
   };
