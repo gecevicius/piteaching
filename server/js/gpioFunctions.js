@@ -75,8 +75,9 @@ getByPin(pin){
 	
 	
 		sensor.on('alert',(level, tick) => {
-			console.log(type)
+			console.log(level)
 			if(type === 'BUTTON' && level === 0){
+				console.log(type)
 				io.emit('pinUpdate', {pin:pin,val:level})
 			}
 			else if(type !== 'BUTTON'){
@@ -87,7 +88,6 @@ getByPin(pin){
 	close(pin,io){
 		if(pin != undefined && this.gpioArray[pin] != null){
 			this.gpioArray[pin].digitalWrite(0)
-			this.gpioArray[pin].disableAlert();
 			this.gpioArray[pin] = null;
 			io.emit('printMessage',{type:'CLOSE ',msg:"Pin "+pin+" closed connection!"});
 		}
@@ -95,7 +95,6 @@ getByPin(pin){
 			this.gpioArray.forEach(function(i){
 				if(i!=null){
 				i.digitalWrite(0)
-				i.disableAlert();
 				i = null;
 			}
 
