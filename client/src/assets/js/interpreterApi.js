@@ -50,11 +50,12 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
     var watcher = new EventEmitter();
     item.toggleInterpreterListener(watcher);
     watcher.on('watcherUpdate',function(){
-
+      console.log("watcher updated yet again...")
       interpreter.appendCode(code.data);
       window.setTimeout(function(){
-        interpreter.run()
-     
+        while(interpreter.step()){
+          
+        }
       },300)
       
     })
@@ -87,9 +88,9 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
       interpreter.createNativeFunction(wrapper));
 
       //Set Pin Output
-      wrapper = function(gpio,output) {
+      wrapper = function(gpio) {
         if(gpio!= 'undefined' && gpio != null ) {
-          console.log(gpio)
+         console.log(gpio)
          gpio.toggleOutput(); 
        }
        else{

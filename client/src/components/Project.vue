@@ -290,10 +290,7 @@
         }
       },
       generate(){
-        if(this.noOfElems > 0){
-          console.log(this.noOfElems)
-          this.stop()
-        }
+        this.stop()
         this.$store.commit('clearPiMessages')
         
         Blockly.Xml.domToWorkspace(document.getElementById('blocklyDiv') , Blockly.mainWorkspace);
@@ -326,6 +323,7 @@
         this.$store.dispatch('close',{pin:""})
         for(var i in this.$store.getters.elemsArray){
           if(i!=null && i!=undefined){
+
             this.$store.getters.elemsArray[i].removeInterpreterListener();
           }
         }

@@ -28,7 +28,7 @@ class gpiojs{
 				const gpio = this.gpioArray[pin]
 				gpio.digitalWrite(output);			
 			}
-			io.emit('pinUpdate',{pin:pin,val:output})
+			//io.emit('pinUpdate',{pin:pin,val:output})
 			//Output enable for testing, otherwise should probably be disabled.
 			//io.emit('printMessage',{type:'Element Set Output',msg:type+ " Element at pin " + pin+" changed output to "+output});
 			return true

@@ -42,12 +42,14 @@ class Element{
 		})
 		var self = this;
 		socketInstance.on('pinUpdate', function(data){
+			console.log("test")
 			if(self.getPin() == data.pin){
 				if(self.getType() != 'BUTTON'){
 					self.getVal = data.val;
 				}
-				console.log(self.interpreterListener)
+				
 				if(self.interpreterListener){
+					
 					self.interpreterListener.emit('watcherUpdate');
 				}
 
@@ -56,7 +58,6 @@ class Element{
 	}
 
 	toggleInterpreterListener(watcher){
-		console.log('listening at element');
 		this.interpreterListener = watcher;
 		this.initListener();
 	}
@@ -71,7 +72,6 @@ class Element{
 	}
 	setOutput(output){
 		if(this.getType() === "RGB"){
-			console.log('RGB is here!')
 			console.log(this.getPin())
 			APIService.setOutput(this.getMultiPins(),output,this.getType()).then((data) => {
 				console.log(data) 
@@ -90,8 +90,9 @@ class Element{
 
 	removeInterpreterListener(){
 		this.interpreterListener = false;
+		console.log("removing")
 		this.interpreterListener.removeAllListeners('watcherUpdate');
-		socketInstance.off("pinUpdate");
+		socketInstance.off('pinUpdate');
 	}
 	close(){
 		this.removeInterpreterListener();
