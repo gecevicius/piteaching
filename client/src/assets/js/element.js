@@ -91,7 +91,13 @@ class Element{
 	}
 
 	removeInterpreterListener(){
-		this.interpreterListener = false;
+		if(this.interpreterListener != false){
+			this.interpreterListener.removeAllListeners('watcherUpdate');
+			this.interpreterListener = false;
+		}
+		socketInstance.off('pinUpdate');
+		console.log("removing")
+		
 	}
 	close(){
 		this.removeInterpreterListener();

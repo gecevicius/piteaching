@@ -27,14 +27,39 @@ interpreter.setProperty(scope, 'print', interpreter.createNativeFunction(wrapper
 
   /* GPIO Api */
 
+  //runner, currently unused
+  wrapper = function() {
+    var self = this;
+    try{
+      if (interpreter.step()) { 
+        setTimeout(function(){
+          self.runner()
 
+        }, 35); 
+      } 
+    }
+    catch(e){
+
+    }
+  };
+  interpreter.setProperty(scope, 'runner',
+    interpreter.createNativeFunction(wrapper));
 
   //watcher function. - runs code whenever watcherUpdate is triggered ( from element.js)
     wrapper = function(item,code) {
     var watcher = new EventEmitter();
     item.toggleInterpreterListener(watcher);
-   // interpreter.appendCode(code.data);
- 
+   
+    watcher.on('watcherUpdate',function(){
+      console.log("watcher updated yet again...")
+      interpreter.appendCode(code.data);
+      window.setTimeout(function(){
+        while(interpreter.step()){
+          console.log("stepping")
+        }
+      },300)
+      
+    })
   };
   interpreter.setProperty(scope, 'enableWatcher',
     interpreter.createNativeFunction(wrapper));

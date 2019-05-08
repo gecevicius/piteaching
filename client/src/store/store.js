@@ -56,7 +56,11 @@ const store = new Vuex.Store({
 			}
 		},
 		close(state){
+			state.elemsArray.forEach(function(entry){
+				entry.removeInterpreterListener();
+			})
 			state.elemsArray = [];
+
 			state.noOfElems = 0;
 		},
 		blocklyWs(state,blocklyWs){
