@@ -10,6 +10,7 @@ class APIService{
 	}
 
 	setOutput (pin,output,type) {
+		console.log("API toggleOutput");
 		console.log(pin)
 		return axios.post(this.gpioUrl,{
 			"pin":pin,

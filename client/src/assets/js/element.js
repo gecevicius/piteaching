@@ -49,7 +49,7 @@ class Element{
 				}
 				
 				if(self.interpreterListener){
-					
+
 					self.interpreterListener.emit('watcherUpdate');
 				}
 
@@ -61,19 +61,21 @@ class Element{
 		this.interpreterListener = watcher;
 		this.initListener();
 	}
-	toggleOutput(){
+	async toggleOutput(){
+		console.log("element toggleOutput");
 		var output = this.val;
 		if(output === 1 ) output = 0;
 		else if(output === 0 ) output = 1;
 		this.val = output;
-		APIService.setOutput(this.getPin(),output).then((data) => {
+		await APIService.setOutput(this.getPin(),output).then((data) => {
 			console.log(data)
 		})
 	}
-	setOutput(output){
+	async setOutput(output){
+		console.log("element setOutput");
 		if(this.getType() === "RGB"){
 			console.log(this.getPin())
-			APIService.setOutput(this.getMultiPins(),output,this.getType()).then((data) => {
+			await APIService.setOutput(this.getMultiPins(),output,this.getType()).then((data) => {
 				console.log(data) 
 			})
 		}
@@ -81,7 +83,7 @@ class Element{
 			console.log(this.getPin())
 			console.log(output)
 			this.val = output
-			APIService.setOutput(this.getPin(),output,this.getType()).then((data) => {
+			await APIService.setOutput(this.getPin(),output,this.getType()).then((data) => {
 				console.log(data)
 
 			})
@@ -90,9 +92,6 @@ class Element{
 
 	removeInterpreterListener(){
 		this.interpreterListener = false;
-		console.log("removing")
-		this.interpreterListener.removeAllListeners('watcherUpdate');
-		socketInstance.off('pinUpdate');
 	}
 	close(){
 		this.removeInterpreterListener();
